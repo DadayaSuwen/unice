@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//
+// Run `prisma validate` to validate the schema
+// Run `prisma format` to format the schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  parent_id   Int?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  is_active   Boolean  @default(true)
+  products    Product[]
+
+  @@index([parent_id])
+  @@index([is_active])
+}
+
+model Product {
+  id           Int      @id @default(autoincrement())
+  name         String
+  cas_no       String?
+  category_id  Int?
+  description  String?
+  details      Json?
+  image_url    String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  is_active    Boolean  @default(true)
+
+  category     Category? @relation(fields: [category_id], references: [id])
+
+  @@index([category_id])
+  @@index([is_active])
+  @@index([cas_no])
+}
+
+model News {
+  id            Int      @id @default(autoincrement())
+  title         String
+  content       String?
+  excerpt       String?
+  type          String   @default("news")
+  publish_date  DateTime @default(now())
+  is_published  Boolean  @default(false)
+  author_id     Int?
+  image_url     String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([publish_date])
+  @@index([is_published])
+  @@index([type])
+}
+
+model Career {
+  id                    Int      @id @default(autoincrement())
+  position              String
+  department            String?
+  location              String?
+  type                  String   @default("full_time")
+  experience_requirement String?
+  description           String?
+  requirements          Json?
+  responsibilities      Json?
+  application_deadline  DateTime?
+  is_active             Boolean  @default(true)
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  @@index([is_active])
+  @@index([department])
+  @@index([position])
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  password_hash String
+  role         String   @default("user")
+  first_name   String?
+  last_name    String?
+  phone        String?
+  is_active    Boolean  @default(true)
+  last_login   DateTime?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@index([role])
+  @@index([is_active])
+}
+
+model ContactSubmission {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String
+  phone        String?
+  company      String?
+  message      String
+  ip_address   String?
+  user_agent   String?
+  is_read      Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  @@index([created_at])
+  @@index([is_read])
+}
+
+model HeroBanner {
+  id           Int      @id @default(autoincrement())
+  title        String
+  subtitle     String?
+  image_url    String
+  button_text  String?
+  button_url   String?
+  is_active    Boolean  @default(true)
+  sort_order   Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@index([is_active])
+  @@index([sort_order])
+}
