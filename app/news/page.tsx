@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { prisma } from '@/lib/prisma';
+import { useState, useEffect } from "react";
 
 export default function NewsPage() {
   const [news, setNews] = useState<any[]>([]);
@@ -10,43 +9,41 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchNews = async () => {
+    const fetchProducts = async () => {
       try {
-        // 获取所有发布的新闻
-        const newsData = await prisma.news.findMany({
-          where: { is_published: true },
-          orderBy: { publish_date: 'desc' }
-        });
+        // Fetch data from the API route
+        const response = await fetch("/api/news");
+        const data = await response.json();
 
-        // 获取所有新闻分类
-        const categoriesData = await prisma.news.distinct('type');
-
-        // 获取分类名称数组（去重）
-        const categoryNames = [...new Set(categoriesData.map(item => item.type))];
-
-        setNews(newsData);
-        setCategories(['全部类别', ...categoryNames]);
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch products");
+        }
+        setNews(data.news);
+        setCategories(data.categories);
         setLoading(false);
       } catch (error) {
-        console.error('获取新闻数据失败:', error);
+        console.error("获取产品数据失败:", error);
         setLoading(false);
       }
     };
 
-    fetchNews();
+    fetchProducts();
   }, []);
 
   // 过滤新闻
-  const filteredNews = selectedCategory === "全部类别"
-    ? news
-    : news.filter(item => item.type === selectedCategory);
+  const filteredNews =
+    selectedCategory === "全部类别"
+      ? news
+      : news.filter((item) => item.type === selectedCategory);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--main-purple)] mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">加载新闻数据中...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">
+            加载新闻数据中...
+          </p>
         </div>
       </div>
     );
@@ -66,13 +63,13 @@ export default function NewsPage() {
         {/* Category Filter */}
         <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <div className="flex flex-wrap gap-2">
-            {categories.map(category => (
+            {categories.map((category) => (
               <button
                 key={category}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'bg-[var(--main-purple)] text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? "bg-[var(--main-purple)] text-white"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                 }`}
                 onClick={() => setSelectedCategory(category)}
               >
@@ -84,26 +81,44 @@ export default function NewsPage() {
 
         {/* News List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {filteredNews.map(item => (
-            <div key={item.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow">
+          {filteredNews.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow"
+            >
               <div className="p-6">
                 <div className="flex justify-between items-start mb-3">
                   <span className="bg-[var(--main-purple)] text-white text-xs px-2 py-1 rounded-full">
-                    {item.type || '新闻'}
+                    {item.type || "新闻"}
                   </span>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(item.publish_date).toLocaleDateString('zh-CN')}
+                    {new Date(item.publish_date).toLocaleDateString("zh-CN")}
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-[var(--main-purple)] mb-3">{item.title}</h2>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">{item.excerpt || item.content?.substring(0, 100) + '...'}</p>
+                <h2 className="text-xl font-bold text-[var(--main-purple)] mb-3">
+                  {item.title}
+                </h2>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  {item.excerpt || item.content?.substring(0, 100) + "..."}
+                </p>
                 <a
                   href={`/news/${item.id}`}
                   className="text-[var(--main-purple)] hover:text-[var(--tech-blue)] font-medium flex items-center"
                 >
                   阅读全文
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 ml-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </a>
               </div>
@@ -114,9 +129,15 @@ export default function NewsPage() {
         {/* Pagination */}
         <div className="flex justify-center">
           <nav className="flex space-x-2">
-            <button className="px-4 py-2 bg-[var(--main-purple)] text-white rounded-lg">1</button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">2</button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">3</button>
+            <button className="px-4 py-2 bg-[var(--main-purple)] text-white rounded-lg">
+              1
+            </button>
+            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+              2
+            </button>
+            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+              3
+            </button>
             <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
               下一页 →
             </button>
