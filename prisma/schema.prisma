@@ -36,6 +36,9 @@ model Product {
   description  String?
   details      Json?
   image_url    String?
+  features     Json?
+  applications Json?
+  safety_info  Json?
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
   is_active    Boolean  @default(true)

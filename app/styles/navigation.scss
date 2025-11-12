@@ -6,7 +6,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 9997;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   background: transparent;
 }
@@ -196,15 +196,17 @@
 // 移动端导航菜单
 .nav-mobile-menu {
   position: fixed;
-  top: 64px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: var(--background);
   transform: translateX(-100%);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 40;
+  z-index: 9999;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 64px;
 }
 
 @media (min-width: 1024px) {
@@ -215,6 +217,65 @@
 
 .nav-mobile-menu.active {
   transform: translateX(0);
+}
+
+// 移动端菜单遮罩层
+.nav-mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  animation: fadeIn 0.3s ease-out;
+}
+
+// 移动端菜单关闭按钮
+.nav-mobile-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 10000;
+}
+
+.nav-mobile-close:hover {
+  background: var(--primary-gold-light);
+}
+
+.nav-mobile-close:active {
+  transform: scale(0.95);
+}
+
+.nav-mobile-close svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--text-secondary);
+  transition: stroke 0.3s ease;
+}
+
+.nav-mobile-close:hover svg {
+  stroke: var(--primary-gold-dark);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .nav-mobile-links {
