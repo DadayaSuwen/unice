@@ -315,7 +315,17 @@
   border-radius: 4px;
 }
 
-// 暗色模式支持（可选）
+// 暗色模式支持
+.dark .nav-header.scrolled {
+  background: rgba(26, 26, 26, 0.9);
+  border-bottom-color: rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark .nav-mobile-menu {
+  background: var(--background);
+}
+
 @media (prefers-color-scheme: dark) {
   .nav-header.scrolled {
     background: rgba(26, 26, 26, 0.8);

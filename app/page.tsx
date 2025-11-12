@@ -349,7 +349,7 @@ export default function Home() {
             <div
               className="aspect-video bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1535025639604-9a804d34b728?q=80&w=1974')`,
+                backgroundImage: `url('/uniche.png')`,
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

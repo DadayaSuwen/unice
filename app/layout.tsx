@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-bg-primary text-text-primary`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
       >
         <div className="flex flex-col min-h-screen">
           {/* 苹果风格导航栏 */}
@@ -39,7 +39,7 @@ export default function RootLayout({
           <main className="flex-grow pt-16">{children}</main>
 
           {/* 苹果风格页脚 */}
-          <footer className="bg-bg-secondary border-t border-gray-200 dark:border-gray-800">
+          <footer className="bg-background-secondary border-t border-border-color">
             <div className="  mx-auto px-6 py-16">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {/* 公司信息 */}
@@ -54,7 +54,7 @@ export default function RootLayout({
                         className="object-contain"
                       />
                     </div>
-                    <h3 className="text-lg font-semibold text-text-primary">
+                    <h3 className="text-lg font-semibold text-foreground">
                       联合化工
                     </h3>
                   </div>
@@ -62,7 +62,7 @@ export default function RootLayout({
                     专业的化工企业，致力于为客户提供高质量的产品和创新解决方案。
                   </p>
                   <div className="flex space-x-4">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-brand-primary hover:text-white transition-colors cursor-pointer">
+                    <div className="w-10 h-10 bg-background-secondary border border-border-color rounded-lg flex items-center justify-center hover:bg-primary-gold hover:text-foreground transition-colors cursor-pointer">
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -71,7 +71,7 @@ export default function RootLayout({
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                       </svg>
                     </div>
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-brand-primary hover:text-white transition-colors cursor-pointer">
+                    <div className="w-10 h-10 bg-background-secondary border border-border-color rounded-lg flex items-center justify-center hover:bg-primary-gold hover:text-foreground transition-colors cursor-pointer">
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -85,12 +85,12 @@ export default function RootLayout({
 
                 {/* 快速链接 */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-text-primary">产品服务</h4>
+                  <h4 className="font-semibold text-foreground">产品服务</h4>
                   <ul className="space-y-3">
                     <li>
                       <Link
                         href="/products"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         化工原料
                       </Link>
@@ -98,7 +98,7 @@ export default function RootLayout({
                     <li>
                       <Link
                         href="/products"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         精细化学品
                       </Link>
@@ -106,7 +106,7 @@ export default function RootLayout({
                     <li>
                       <Link
                         href="/products"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         专用化学品
                       </Link>
@@ -114,7 +114,7 @@ export default function RootLayout({
                     <li>
                       <Link
                         href="/products"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         定制解决方案
                       </Link>
@@ -124,12 +124,12 @@ export default function RootLayout({
 
                 {/* 关于我们 */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-text-primary">关于</h4>
+                  <h4 className="font-semibold text-foreground">关于</h4>
                   <ul className="space-y-3">
                     <li>
                       <a
                         href="/about"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         公司简介
                       </a>
@@ -137,7 +137,7 @@ export default function RootLayout({
                     <li>
                       <a
                         href="/about"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         企业文化
                       </a>
@@ -145,7 +145,7 @@ export default function RootLayout({
                     <li>
                       <a
                         href="/about"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         发展历程
                       </a>
@@ -153,7 +153,7 @@ export default function RootLayout({
                     <li>
                       <a
                         href="/careers"
-                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                        className="text-text-secondary hover:text-primary-gold transition-colors"
                       >
                         加入我们
                       </a>
@@ -163,11 +163,11 @@ export default function RootLayout({
 
                 {/* 联系信息 */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-text-primary">联系方式</h4>
+                  <h4 className="font-semibold text-foreground">联系方式</h4>
                   <div className="space-y-3 text-text-secondary">
                     <div className="flex items-center space-x-3">
                       <svg
-                        className="w-5 h-5 text-brand-primary"
+                        className="w-5 h-5 text-primary-gold"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -189,7 +189,7 @@ export default function RootLayout({
                     </div>
                     <div className="flex items-center space-x-3">
                       <svg
-                        className="w-5 h-5 text-brand-primary"
+                        className="w-5 h-5 text-primary-gold"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -205,7 +205,7 @@ export default function RootLayout({
                     </div>
                     <div className="flex items-center space-x-3">
                       <svg
-                        className="w-5 h-5 text-brand-primary"
+                        className="w-5 h-5 text-primary-gold"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -224,7 +224,7 @@ export default function RootLayout({
               </div>
 
               {/* 版权信息 */}
-              <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8">
+              <div className="border-t border-border-color mt-12 pt-8">
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                   <p className="text-text-secondary text-sm">
                     © {new Date().getFullYear()} 联合化工. 保留所有权利.
@@ -232,19 +232,19 @@ export default function RootLayout({
                   <div className="flex space-x-6 text-sm">
                     <a
                       href="#"
-                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                      className="text-text-secondary hover:text-primary-gold transition-colors"
                     >
                       隐私政策
                     </a>
                     <a
                       href="#"
-                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                      className="text-text-secondary hover:text-primary-gold transition-colors"
                     >
                       服务条款
                     </a>
                     <a
                       href="#"
-                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                      className="text-text-secondary hover:text-primary-gold transition-colors"
                     >
                       网站地图
                     </a>

@@ -9,13 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'brand-primary': '#6366f1',
-        'brand-secondary': '#8b5cf6',
-        'brand-accent': '#ec4899',
-        'bg-primary': '#ffffff',
-        'bg-secondary': '#f5f5f7',
-        'text-primary': '#1d1d1f',
-        'text-secondary': '#86868b',
+        // 淡金黄主题色系
+        'primary-gold': 'var(--primary-gold)',
+        'primary-gold-hover': 'var(--primary-gold-hover)',
+        'primary-gold-light': 'var(--primary-gold-light)',
+        'primary-gold-dark': 'var(--primary-gold-dark)',
+
+        // 语义化颜色
+        'background': 'var(--background)',
+        'background-secondary': 'var(--background-secondary)',
+        'foreground': 'var(--foreground)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-muted': 'var(--text-muted)',
+        'border-color': 'var(--border-color)',
+        'border-light': 'var(--border-light)',
+
+        // 兼容旧版本
+        'brand-primary': 'var(--primary-gold)',
+        'brand-secondary': 'var(--text-secondary)',
+        'bg-primary': 'var(--background)',
+        'bg-secondary': 'var(--background-secondary)',
+        'text-primary': 'var(--foreground)',
+      },
+      backgroundImage: {
+        'primary-gold-gradient': 'var(--primary-gold-gradient)',
+      },
+      boxShadow: {
+        'gold': 'var(--shadow-gold)',
+        'color': 'var(--shadow-color)',
       },
       fontFamily: {
         'sans': [
