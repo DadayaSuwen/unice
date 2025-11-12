@@ -1,0 +1,328 @@
+// 导航栏样式 - 淡金黄主题
+
+// 主要导航容器
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: transparent;
+}
+
+.nav-header.scrolled {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.nav-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+@media (min-width: 734px) {
+  .nav-content {
+    padding: 0 50px;
+  }
+}
+
+@media (min-width: 1068px) {
+  .nav-content {
+    padding: 0 80px;
+  }
+}
+
+// Logo样式
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 24px;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-gold-gradient);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-logo:hover .nav-logo-image {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.nav-logo-name {
+  color: var(--foreground);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
+}
+
+.nav-logo:hover .nav-logo-name {
+  color: var(--primary-gold-dark);
+}
+
+// 导航链接
+.nav-desktop {
+  display: none;
+  align-items: center;
+  gap: 48px;
+}
+
+@media (min-width: 1024px) {
+  .nav-desktop {
+    display: flex;
+  }
+}
+
+.nav-link {
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 8px 0;
+}
+
+.nav-link:hover {
+  color: var(--primary-gold-dark);
+}
+
+.nav-link-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gold-gradient);
+  transform-origin: left;
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-link:hover .nav-link-underline {
+  width: 100%;
+}
+
+// 移动端菜单按钮
+.nav-mobile-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .nav-mobile-toggle {
+    display: none;
+  }
+}
+
+.nav-mobile-toggle:hover {
+  background: var(--primary-gold-light);
+}
+
+.nav-mobile-toggle:active {
+  transform: scale(0.95);
+}
+
+.nav-mobile-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 20px;
+  height: 14px;
+  justify-content: center;
+}
+
+.nav-mobile-line {
+  width: 100%;
+  height: 2px;
+  background: var(--foreground);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-mobile-toggle.active .nav-mobile-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-mobile-toggle.active .nav-mobile-line:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-mobile-toggle.active .nav-mobile-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+// 移动端导航菜单
+.nav-mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 40;
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .nav-mobile-menu {
+    display: none;
+  }
+}
+
+.nav-mobile-menu.active {
+  transform: translateX(0);
+}
+
+.nav-mobile-links {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px;
+  gap: 8px;
+}
+
+.nav-mobile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.nav-mobile-link:hover {
+  color: var(--primary-gold-dark);
+  background: var(--primary-gold-light);
+  border-color: var(--primary-gold);
+  transform: translateX(4px);
+}
+
+.nav-mobile-link-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+}
+
+.nav-mobile-link:hover .nav-mobile-link-arrow {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+// CTA按钮
+.nav-cta {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-cta {
+    display: flex;
+  }
+}
+
+.nav-cta-button {
+  padding: 10px 20px;
+  background: var(--primary-gold-gradient);
+  color: var(--gray-800);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+}
+
+.nav-cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.nav-cta-button:active {
+  transform: translateY(0);
+}
+
+// 动画
+@keyframes navSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-header.scrolled .nav-content {
+  animation: navSlideIn 0.4s ease-out;
+}
+
+// 焦点状态
+.nav-link:focus-visible,
+.nav-mobile-link:focus-visible,
+.nav-cta-button:focus-visible {
+  outline: 2px solid var(--primary-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// 暗色模式支持（可选）
+@media (prefers-color-scheme: dark) {
+  .nav-header.scrolled {
+    background: rgba(26, 26, 26, 0.8);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-mobile-menu {
+    background: var(--gray-900);
+  }
+}

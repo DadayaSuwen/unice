@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import Image from "next/image";
+import Link from "next/link";
+import "./globals.scss";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +19,8 @@ export const metadata: Metadata = {
   description: "专业的化工企业官方网站",
 };
 
+import Navigation from "./components/navigation";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,73 +29,227 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-bg-primary text-text-primary`}
       >
         <div className="flex flex-col min-h-screen">
-          {/* Header */}
-          <header className="bg-[var(--main-purple)] text-white shadow-lg">
-            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-white rounded-full"></div>
-                <h1 className="text-xl font-bold">联合化工</h1>
-              </div>
-              <nav className="hidden md:block">
-                <ul className="flex space-x-6">
-                  <li><a href="/" className="hover:text-[var(--tech-blue)] transition-colors">首页</a></li>
-                  <li><a href="/products" className="hover:text-[var(--tech-blue)] transition-colors">产品中心</a></li>
-                  <li><a href="/about" className="hover:text-[var(--tech-blue)] transition-colors">关于我们</a></li>
-                  <li><a href="/news" className="hover:text-[var(--tech-blue)] transition-colors">新闻中心</a></li>
-                  <li><a href="/careers" className="hover:text-[var(--tech-blue)] transition-colors">加入我们</a></li>
-                  <li><a href="/contact" className="hover:text-[var(--tech-blue)] transition-colors">联系我们</a></li>
-                </ul>
-              </nav>
-              <button className="md:hidden text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
-          </header>
+          {/* 苹果风格导航栏 */}
+          <Navigation />
 
-          <main className="flex-grow">
-            {children}
-          </main>
+          {/* 主要内容 */}
+          <main className="flex-grow pt-16">{children}</main>
 
-          {/* Footer */}
-          <footer className="bg-gray-800 text-white py-8">
-            <div className="container mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                  <h3 className="text-lg font-bold mb-4">联合化工</h3>
-                  <p className="text-gray-300">专业的化工企业，致力于提供高质量的产品和服务。</p>
+          {/* 苹果风格页脚 */}
+          <footer className="bg-bg-secondary border-t border-gray-200 dark:border-gray-800">
+            <div className="  mx-auto px-6 py-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* 公司信息 */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-xl overflow-hidden">
+                      <Image
+                        src="/logo.jpg"
+                        alt="联合化工"
+                        width={32}
+                        height={32}
+                        className="object-contain"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold text-text-primary">
+                      联合化工
+                    </h3>
+                  </div>
+                  <p className="text-text-secondary leading-relaxed">
+                    专业的化工企业，致力于为客户提供高质量的产品和创新解决方案。
+                  </p>
+                  <div className="flex space-x-4">
+                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-brand-primary hover:text-white transition-colors cursor-pointer">
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                      </svg>
+                    </div>
+                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-brand-primary hover:text-white transition-colors cursor-pointer">
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold mb-4">产品中心</h4>
-                  <ul className="space-y-2 text-gray-300">
-                    <li><a href="/products" className="hover:text-[var(--tech-blue)] transition-colors">化工原料</a></li>
-                    <li><a href="/products" className="hover:text-[var(--tech-blue)] transition-colors">精细化学品</a></li>
-                    <li><a href="/products" className="hover:text-[var(--tech-blue)] transition-colors">专用化学品</a></li>
+
+                {/* 快速链接 */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-text-primary">产品服务</h4>
+                  <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/products"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        化工原料
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/products"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        精细化学品
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/products"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        专用化学品
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/products"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        定制解决方案
+                      </Link>
+                    </li>
                   </ul>
                 </div>
-                <div>
-                  <h4 className="font-semibold mb-4">关于我们</h4>
-                  <ul className="space-y-2 text-gray-300">
-                    <li><a href="/about" className="hover:text-[var(--tech-blue)] transition-colors">公司简介</a></li>
-                    <li><a href="/about" className="hover:text-[var(--tech-blue)] transition-colors">企业文化</a></li>
-                    <li><a href="/about" className="hover:text-[var(--tech-blue)] transition-colors">发展历程</a></li>
+
+                {/* 关于我们 */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-text-primary">关于</h4>
+                  <ul className="space-y-3">
+                    <li>
+                      <a
+                        href="/about"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        公司简介
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/about"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        企业文化
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/about"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        发展历程
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/careers"
+                        className="text-text-secondary hover:text-brand-primary transition-colors"
+                      >
+                        加入我们
+                      </a>
+                    </li>
                   </ul>
                 </div>
-                <div>
-                  <h4 className="font-semibold mb-4">联系我们</h4>
-                  <address className="not-italic text-gray-300">
-                    <p>地址：北京市朝阳区化工路123号</p>
-                    <p>电话：010-12345678</p>
-                    <p>邮箱：info@unicechemical.com</p>
-                  </address>
+
+                {/* 联系信息 */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-text-primary">联系方式</h4>
+                  <div className="space-y-3 text-text-secondary">
+                    <div className="flex items-center space-x-3">
+                      <svg
+                        className="w-5 h-5 text-brand-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      <span>北京市朝阳区化工路123号</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <svg
+                        className="w-5 h-5 text-brand-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
+                      </svg>
+                      <span>010-12345678</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <svg
+                        className="w-5 h-5 text-brand-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>info@unicechemical.com</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
-                <p>&copy; {new Date().getFullYear()} 联合化工. 保留所有权利.</p>
+
+              {/* 版权信息 */}
+              <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8">
+                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                  <p className="text-text-secondary text-sm">
+                    © {new Date().getFullYear()} 联合化工. 保留所有权利.
+                  </p>
+                  <div className="flex space-x-6 text-sm">
+                    <a
+                      href="#"
+                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                    >
+                      隐私政策
+                    </a>
+                    <a
+                      href="#"
+                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                    >
+                      服务条款
+                    </a>
+                    <a
+                      href="#"
+                      className="text-text-secondary hover:text-brand-primary transition-colors"
+                    >
+                      网站地图
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </footer>

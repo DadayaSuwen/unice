@@ -25,6 +25,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("全部类别");
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -40,6 +41,7 @@ export default function ProductsPage() {
         setProducts(data.products);
         setCategories(data.categories);
         setLoading(false);
+        setTimeout(() => setIsLoaded(true), 100);
       } catch (error) {
         console.error("获取产品数据失败:", error);
         setLoading(false);
@@ -49,153 +51,176 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  // 过滤产品
-  const filteredProducts = products.filter((product: Product) => {
+  const filteredProducts = products.filter((product) => {
     const matchesCategory =
-      selectedCategory === "全部类别" ||
-      product.category?.name === selectedCategory;
+      selectedCategory === "全部类别" || product.category?.name === selectedCategory;
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (product.cas_no &&
-        product.cas_no.toLowerCase().includes(searchTerm.toLowerCase()));
+      product.cas_no?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--main-purple)] mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
-            加载产品数据中...
-          </p>
-        </div>
+      <div className="app-wrapper">
+        <section className="products-loading-section">
+          <div className="container">
+            <div className="loading-content">
+              <div className="loading-spinner">
+                <div className="spinner-ring"></div>
+                <div className="spinner-dot"></div>
+              </div>
+              <p className="loading-text">加载产品数据中...</p>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Page Header */}
-      <div className="bg-gradient-to-r from-[var(--main-purple)] to-[var(--tech-blue)] text-white py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold">产品中心</h1>
-          <p className="mt-2 text-lg opacity-90">为您提供高品质的化工产品</p>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Search and Filter Section */}
-        <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="按产品名称或CAS号搜索..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[var(--main-purple)] focus:border-transparent dark:bg-gray-700 dark:text-white"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="w-full md:w-64">
-              <select
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[var(--main-purple)] focus:border-transparent dark:bg-gray-700 dark:text-white"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <div className="h-48 bg-gradient-to-r from-[var(--main-purple)] to-[var(--tech-blue)] flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">
-                    产品图片
-                  </span>
-                </div>
-                <div className="p-6">
-                  <div className="flex justify-between items-start">
-                    <h3 className="text-xl font-semibold text-[var(--main-purple)]">
-                      {product.name}
-                    </h3>
-                    <span className="bg-[var(--main-purple)] text-white text-xs px-2 py-1 rounded-full">
-                      {product.category?.name || "未知分类"}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-300 mt-2">
-                    CAS号: {product.cas_no || "N/A"}
-                  </p>
-                  <p className="text-gray-700 dark:text-gray-200 mt-3">
-                    {product.description || "暂无描述"}
-                  </p>
-                  <div className="mt-4 flex justify-between items-center">
-                    <a
-                      href={`/products/${product.id}`}
-                      className="text-[var(--main-purple)] hover:text-[var(--tech-blue)] font-medium flex items-center"
-                    >
-                      查看详情
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </a>
-                    <button className="bg-[var(--main-purple)] hover:bg-[var(--tech-blue)] text-white px-4 py-2 rounded-lg transition-colors">
-                      立即咨询
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-300 text-lg">
-              未找到匹配的产品
+    <div className="app-wrapper">
+      {/* Hero Section */}
+      <section className="hero-section-products">
+        <div className="container-small">
+          <div className={`hero-content ${isLoaded ? "loaded" : ""}`}>
+            <h1 className="page-title">产品中心</h1>
+            <p className="page-subtitle">
+              探索我们完整的化工产品系列，为各行业提供高品质的解决方案
             </p>
           </div>
-        )}
-
-        {/* Pagination */}
-        <div className="mt-8 flex justify-center">
-          <nav className="flex space-x-2">
-            <button className="px-4 py-2 bg-[var(--main-purple)] text-white rounded-lg">
-              1
-            </button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-              2
-            </button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-              3
-            </button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-              下一页 →
-            </button>
-          </nav>
         </div>
-      </div>
+      </section>
+
+      {/* Search and Filter Section */}
+      <section className={`filter-section ${isLoaded ? "loaded" : ""}`}>
+        <div className="container">
+          <div className="filter-content">
+            {/* Category Filter */}
+            <div className="category-filter">
+              <label className="filter-label">产品类别</label>
+              <div className="category-buttons">
+                <button
+                  className={`category-btn ${
+                    selectedCategory === "全部类别" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedCategory("全部类别")}
+                >
+                  全部类别
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    className={`category-btn ${
+                      selectedCategory === category ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Search Bar */}
+            <div className="search-filter">
+              <div className="search-input-wrapper">
+                <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="搜索产品名称或CAS号..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
+      <section className="products-grid-section">
+        <div className="container">
+          {filteredProducts.length === 0 ? (
+            <div className="no-products">
+              <div className="no-products-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 21a9 9 0 110-18 9 9 0 010 18z" />
+                </svg>
+              </div>
+              <h3 className="no-products-title">未找到匹配的产品</h3>
+              <p className="no-products-description">
+                请尝试调整搜索条件或选择不同的产品类别
+              </p>
+            </div>
+          ) : (
+            <div className="products-grid">
+              {filteredProducts.map((product, index) => (
+                <div
+                  key={product.id}
+                  className="product-card"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  {/* Product Image */}
+                  <div className="product-image-area">
+                    <div className="product-image-bg"></div>
+                    <div className="product-image-placeholder">
+                      <div className="product-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
+                    </div>
+                    {/* Category Badge */}
+                    <div className="product-category-badge">
+                      <span>{product.category?.name || "未分类"}</span>
+                    </div>
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="product-info-area">
+                    <h3 className="product-name">{product.name}</h3>
+                    {product.cas_no && (
+                      <p className="product-cas">CAS: {product.cas_no}</p>
+                    )}
+                    <p className="product-description">
+                      {product.description || "这是一款优质的化工产品，具有广泛的应用前景和卓越的性能表现。"}
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div className="product-actions">
+                      <a
+                        href={`/products/${product.id}`}
+                        className="product-button-primary"
+                      >
+                        查看详情
+                        <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </a>
+                      <a
+                        href="/contact"
+                        className="product-button-secondary"
+                      >
+                        咨询价格
+                        <svg className="button-phone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Hover Accent Line */}
+                  <div className="product-accent-line"></div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

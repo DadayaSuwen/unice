@@ -1,0 +1,708 @@
+// 入场动画
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-2rem);
+  animation: fadeInLeft 1s ease-out forwards;
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(2rem);
+  animation: fadeInRight 1s ease-out forwards;
+}
+
+.fade-in-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeInScale 1s ease-out forwards;
+}
+
+.slide-up {
+  transform: translateY(100%);
+  animation: slideUp 0.8s ease-out forwards;
+}
+
+.slide-down {
+  transform: translateY(-100%);
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+.slide-left {
+  transform: translateX(100%);
+  animation: slideLeft 0.8s ease-out forwards;
+}
+
+.slide-right {
+  transform: translateX(-100%);
+  animation: slideRight 0.8s ease-out forwards;
+}
+
+// 循环动画
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.bounce {
+  animation: bounce 1s infinite;
+}
+
+.wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+// 悬停动画
+.hover-lift {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-0.25rem);
+  }
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.hover-grow {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 10;
+  }
+}
+
+.hover-rotate {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: rotate(5deg);
+  }
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(99, 102, 241, 0.3);
+  }
+}
+
+// 渐变动画
+.gradient-shift {
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  animation: gradientShift 3s ease infinite;
+}
+
+.color-shift {
+  animation: colorShift 4s ease-in-out infinite;
+}
+
+.opacity-shift {
+  animation: opacityShift 2s ease-in-out infinite;
+}
+
+// 错误状态动画
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.error-flash {
+  animation: errorFlash 0.3s ease-in-out;
+}
+
+// 成功状态动画
+.success-check {
+  animation: successCheck 0.6s ease-in-out;
+}
+
+// 加载动画
+.loading-dots {
+  display: inline-flex;
+  gap: 0.25rem;
+
+  span {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: currentColor;
+    border-radius: 50%;
+    animation: loadingDots 1.4s ease-in-out infinite both;
+
+    &:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+  }
+}
+
+.loading-bar {
+  position: relative;
+  height: 0.25rem;
+  background: #f3f4f6;
+  border-radius: 0.125rem;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    animation: loadingBar 1.5s ease-in-out infinite;
+  }
+}
+
+// 打字机效果
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid;
+  white-space: nowrap;
+  animation: typewriter 3s steps(30) 1s 1s both;
+  animation-timing-function: steps(30, end);
+}
+
+.cursor {
+  animation: cursor 1s infinite;
+}
+
+// 技能条动画
+.skill-bar {
+  height: 1.5rem;
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  position: relative;
+
+  .skill-progress {
+    height: 100%;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 0.75rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: skillShine 2s infinite;
+    }
+  }
+}
+
+// 渐显动画
+.reveal {
+  opacity: 0;
+  transform: translateY(3rem);
+  transition: all 0.8s ease;
+
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 关键帧定义
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.25rem);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-1rem);
+  }
+  70% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes wiggle {
+  0%, 7% {
+    transform: rotateZ(0);
+  }
+  15% {
+    transform: rotateZ(-15deg);
+  }
+  20% {
+    transform: rotateZ(10deg);
+  }
+  25% {
+    transform: rotateZ(-10deg);
+  }
+  30% {
+    transform: rotateZ(6deg);
+  }
+  35% {
+    transform: rotateZ(-6deg);
+  }
+  40%, 100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes colorShift {
+  0%, 100% {
+    color: #6366f1;
+  }
+  50% {
+    color: #8b5cf6;
+  }
+}
+
+@keyframes opacityShift {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-0.5rem);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(0.5rem);
+  }
+}
+
+@keyframes errorFlash {
+  0%, 100% {
+    background-color: inherit;
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+}
+
+@keyframes successCheck {
+  0% {
+    transform: scale(0) rotate(-45deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(0);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes loadingBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cursor {
+  0%, 50% {
+    border-color: transparent;
+  }
+  51%, 100% {
+    border-color: currentColor;
+  }
+}
+
+@keyframes skillShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// 动画延迟类
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-900 {
+  animation-delay: 0.9s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+// 动画持续时间类
+.duration-fast {
+  animation-duration: 0.5s;
+}
+
+.duration-normal {
+  animation-duration: 1s;
+}
+
+.duration-slow {
+  animation-duration: 2s;
+}
+
+// 动画缓动函数
+.ease-linear {
+  animation-timing-function: linear;
+}
+
+.ease-in {
+  animation-timing-function: ease-in;
+}
+
+.ease-out {
+  animation-timing-function: ease-out;
+}
+
+.ease-in-out {
+  animation-timing-function: ease-in-out;
+}
+
+.ease-bounce {
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.ease-elastic {
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+// 无限循环
+.infinite {
+  animation-iteration-count: infinite;
+}
+
+// 反向动画
+.reverse {
+  animation-direction: reverse;
+}
+
+// 暂停动画
+.paused {
+  animation-play-state: paused;
+}
+
+// 视口动画 - 优雅版本
+.viewport-animate {
+  opacity: 0;
+  transform: translateY(3rem) scale(0.95);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.viewport-animate.in-viewport {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+// 淡金黄主题动画
+@keyframes goldShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes elegantFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes goldGlow {
+  0%, 100% {
+    box-shadow: 0 4px 15px 0 rgba(212, 175, 55, 0.15);
+  }
+  50% {
+    box-shadow: 0 6px 25px 0 rgba(212, 175, 55, 0.25);
+  }
+}
+
+@keyframes staggerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 优雅的动画类
+.gold-shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212, 175, 55, 0.3),
+      transparent
+    );
+    animation: goldShimmer 2s infinite;
+  }
+}
+
+.elegant-float {
+  animation: elegantFloat 4s ease-in-out infinite;
+}
+
+.gold-glow {
+  animation: goldGlow 3s ease-in-out infinite;
+}
+
+// 滚动触发动画
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+// 延迟动画
+.stagger-animation {
+  > * {
+    opacity: 0;
+    animation: staggerFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  > *:nth-child(1) { animation-delay: 0.1s; }
+  > *:nth-child(2) { animation-delay: 0.2s; }
+  > *:nth-child(3) { animation-delay: 0.3s; }
+  > *:nth-child(4) { animation-delay: 0.4s; }
+  > *:nth-child(5) { animation-delay: 0.5s; }
+  > *:nth-child(6) { animation-delay: 0.6s; }
+}

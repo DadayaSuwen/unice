@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 // Define TypeScript interfaces for better type safety
 interface Product {
@@ -48,68 +49,95 @@ export default function PopularProductsPreview() {
 
   if (loading) {
     return (
-      <div className="col-span-1 md:col-span-3 text-center py-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--main-purple)] mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-300">
-          加载热门产品中...
-        </p>
+      <div className="popular-products-loading">
+        <div className="loading-spinner">
+          <div className="spinner-ring"></div>
+          <div className="spinner-dot"></div>
+        </div>
+        <p className="loading-text">加载精选产品中...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="col-span-1 md:col-span-3 text-center py-8">
-        <p className="text-red-500">{error}</p>
+      <div className="popular-products-error">
+        <div className="error-card">
+          <div className="error-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <p className="error-message">{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <>
-      {products.map((product) => (
+    <div className="popular-products-grid">
+      {products.map((product, index) => (
         <div
           key={product.id}
-          className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+          className="popular-product-card"
+          style={{ animationDelay: `${index * 150}ms` }}
         >
-          <div className="h-48 bg-gradient-to-r from-[var(--main-purple)] to-[var(--tech-blue)] flex items-center justify-center">
-            <span className="text-white text-2xl font-bold">产品图片</span>
-          </div>
-          <div className="p-6">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-xl font-semibold text-[var(--main-purple)]">
-                {product.name}
-              </h3>
-              <span className="bg-[var(--main-purple)] text-white text-xs px-2 py-1 rounded-full">
-                {product.category?.name || "未知分类"}
+          {/* 产品图片区域 */}
+          <div className="product-visual-area">
+            <div className="product-background-gradient"></div>
+            <div className="product-overlay"></div>
+
+            {/* 产品图片占位符 */}
+            <div className="product-image-placeholder">
+              <div className="product-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <p className="product-image-text">产品图片</p>
+            </div>
+
+            {/* 分类标签 */}
+            <div className="product-category">
+              <span className="category-tag">
+                {product.category?.name || "未分类"}
               </span>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              {product.description || "暂无描述"}
-            </p>
-            <a
-              href={`/products/${product.id}`}
-              className="text-[var(--main-purple)] hover:text-[var(--tech-blue)] font-medium flex items-center"
-            >
-              了解更多
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 ml-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
           </div>
+
+          {/* 产品信息 */}
+          <div className="product-info">
+            <div className="product-header">
+              <h3 className="product-name">
+                {product.name}
+              </h3>
+              {product.cas_no && (
+                <p className="product-cas">
+                  CAS: {product.cas_no}
+                </p>
+              )}
+            </div>
+
+            <p className="product-description">
+              {product.description || "这是一款优质的化工产品，具有广泛的应用前景和卓越的性能表现。"}
+            </p>
+
+            {/* 了解更多按钮 */}
+            <Link
+              href={`/products/${product.id}`}
+              className="product-button"
+            >
+              <span>了解详情</span>
+              <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* 悬浮时的装饰性元素 */}
+          <div className="product-accent-line"></div>
         </div>
       ))}
-    </>
+    </div>
   );
 }

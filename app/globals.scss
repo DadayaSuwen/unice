@@ -1,0 +1,110 @@
+@use "tailwindcss";
+@use "./styles/layout.scss";
+@use "./styles/components.scss";
+@use "./styles/animations.scss";
+@use "./styles/navigation.scss";
+@use "./styles/pages.scss";
+
+// Apple-style font imports
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  // 淡金黄主题色系
+  --primary-gold: #d4af37;  // 淡金黄主色
+  --primary-gold-hover: #c9a12e;  // 深金黄悬停
+  --primary-gold-light: #f9f5e7;  // 淡金黄背景
+  --primary-gold-dark: #b8941f;  // 深金黄
+  --primary-gold-gradient: linear-gradient(135deg, #d4af37 0%, #f4e4a6 50%, #d4af37 100%);
+
+  // 中性色系统
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-400: #a3a3a3;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-800: #262626;
+  --gray-900: #171717;
+
+  // 语义化颜色
+  --background: #ffffff;
+  --background-secondary: #fafafa;
+  --background-accent: var(--primary-gold-light);
+  --foreground: var(--gray-800);
+  --text-secondary: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --border-color: var(--gray-200);
+  --border-light: var(--gray-100);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-gold: rgba(212, 175, 55, 0.15);
+
+  // 品牌色
+  --brand-primary: var(--primary-gold);
+  --brand-secondary: var(--gray-600);
+  --accent-color: var(--primary-gold);
+
+  // 状态色
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* 兼容旧版本 */
+  --main-purple: #6A0DAD;
+  --tech-blue: #00BFFF;
+  --white: #FFFFFF;
+  --dark-gray: #333333;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-main-purple: var(--main-purple);
+  --color-tech-blue: var(--tech-blue);
+  --color-white: var(--white);
+  --color-dark-gray: var(--dark-gray);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+// Sass 变量定义 - 可以在SASS代码中使用
+$primary-color: #6366f1;
+$secondary-color: #8b5cf6;
+$accent-color: #ec4899;
+$background-primary: #ffffff;
+$background-secondary: #f5f5f7;
+$text-primary: #1d1d1f;
+$text-secondary: #86868b;
+
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
