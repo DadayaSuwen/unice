@@ -23,6 +23,9 @@ export async function GET(
       where: {
         id: newsId,
         is_published: true
+      },
+      include: {
+        category: true
       }
     });
 
@@ -67,7 +70,7 @@ export async function GET(
       tags: parsedTags,
       read_time: news.read_time || (news.content ? Math.ceil(news.content.length / 500) : 3),
       views_count: news.views_count || 1, // 本次访问已经+1了
-      category: news.category || getNewsCategory(news.type),
+      category: news.category?.name || getNewsCategory(news.type),
       featured: news.featured || false,
       created_at: news.created_at,
       updated_at: news.updated_at
@@ -102,7 +105,10 @@ export async function POST(
 
     // 获取当前新闻
     const currentNews = await prisma.news.findUnique({
-      where: { id: newsId }
+      where: { id: newsId },
+      include: {
+        category: true
+      }
     });
 
     if (!currentNews) {
@@ -120,11 +126,14 @@ export async function POST(
           { is_published: true },
           {
             OR: [
-              { category: currentNews.category },
+              { category_id: currentNews.category_id },
               { type: currentNews.type }
             ]
           }
         ]
+      },
+      include: {
+        category: true
       },
       orderBy: [
         { featured: 'desc' },
@@ -161,7 +170,7 @@ export async function POST(
         tags: parsedTags,
         read_time: item.read_time || (item.content ? Math.ceil(item.content.length / 500) : 3),
         views_count: item.views_count || 0,
-        category: item.category || getNewsCategory(item.type),
+        category: item.category?.name || getNewsCategory(item.type),
         featured: item.featured || false
       };
     });

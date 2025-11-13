@@ -15,7 +15,7 @@ export default function Pagination({
 }: PaginationProps) {
   // 生成页码数组
   const getPageNumbers = () => {
-    const pages = [];
+    const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
