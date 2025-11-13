@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -54,6 +55,27 @@ async function main() {
           "水分含量": "<0.01%",
           "灰分": "<0.01%"
         }),
+        image_url: '/images/products/polypropylene.jpg',
+        features: JSON.stringify([
+          "优异的机械强度",
+          "良好的耐化学性",
+          "加工性能稳定",
+          "成本低廉",
+          "可回收利用"
+        ]),
+        applications: JSON.stringify([
+          "汽车零部件",
+          "家用电器外壳",
+          "包装容器",
+          "医疗器械",
+          "建筑材料"
+        ]),
+        safety_info: JSON.stringify({
+          "危险性": "低毒、不易燃",
+          "储存条件": "干燥通风环境",
+          "防护措施": "佩戴防尘口罩",
+          "急救措施": "接触后用清水冲洗"
+        }),
         is_active: true
       },
       {
@@ -67,6 +89,26 @@ async function main() {
           "沸点": "145°C",
           "密度": "0.906 g/cm³",
           "折射率": "1.5469"
+        }),
+        image_url: '/images/products/styrene.jpg',
+        features: JSON.stringify([
+          "高纯度",
+          "化学性质稳定",
+          "聚合反应活性强",
+          "储存稳定性好"
+        ]),
+        applications: JSON.stringify([
+          "聚苯乙烯生产",
+          "ABS树脂合成",
+          "丁苯橡胶制备",
+          "不饱和聚酯树脂",
+          "合成纤维单体"
+        ]),
+        safety_info: JSON.stringify({
+          "危险性": "易燃、有毒",
+          "储存条件": "阴凉通风、密封保存",
+          "防护措施": "佩戴防毒面具、防护手套",
+          "急救措施": "溅入眼中立即用大量清水冲洗"
         }),
         is_active: true
       },
@@ -82,6 +124,26 @@ async function main() {
           "密度": "0.854 g/cm³",
           "爆炸极限": "3.6-100%"
         }),
+        image_url: '/images/products/ethylene-oxide.jpg',
+        features: JSON.stringify([
+          "高反应活性",
+          "环氧化能力强",
+          "纯度高达99%",
+          "溶解性能好"
+        ]),
+        applications: JSON.stringify([
+          "乙二醇生产",
+          "表面活性剂合成",
+          "乙醇胺制备",
+          "消毒剂生产",
+          "纺织助剂"
+        ]),
+        safety_info: JSON.stringify({
+          "危险性": "易燃易爆、有毒致癌",
+          "储存条件": "压力容器、阴凉通风",
+          "防护措施": "全面防护装备、防爆设备",
+          "急救措施": "立即脱离现场、紧急医疗救助"
+        }),
         is_active: true
       },
       {
@@ -96,6 +158,26 @@ async function main() {
           "密度": "0.867 g/cm³",
           "闪点": "4°C"
         }),
+        image_url: '/images/products/toluene.jpg',
+        features: JSON.stringify([
+          "优异的溶解性能",
+          "挥发速度快",
+          "化学性质稳定",
+          "性价比高"
+        ]),
+        applications: JSON.stringify([
+          "油漆涂料溶剂",
+          "胶粘剂稀释剂",
+          "油墨清洗剂",
+          "化学合成原料",
+          "医药中间体"
+        ]),
+        safety_info: JSON.stringify({
+          "危险性": "易燃、低毒",
+          "储存条件": "密封保存、远离火源",
+          "防护措施": "防静电、通风良好",
+          "急救措施": "皮肤接触用肥皂水清洗"
+        }),
         is_active: true
       },
       {
@@ -109,6 +191,27 @@ async function main() {
           "密度": "1.84 g/cm³",
           "沸点": "337°C",
           "凝固点": "10.37°C"
+        }),
+        image_url: '/images/products/sulfuric-acid.jpg',
+        features: JSON.stringify([
+          "强酸性",
+          "脱水能力强",
+          "氧化性强",
+          "化学性质稳定",
+          "价格低廉"
+        ]),
+        applications: JSON.stringify([
+          "化肥生产",
+          "石油精炼",
+          "金属表面处理",
+          "电池制造",
+          "实验室试剂"
+        ]),
+        safety_info: JSON.stringify({
+          "危险性": "强腐蚀性、强氧化性",
+          "储存条件": "耐酸容器、干燥通风",
+          "防护措施": "防酸服、护目镜、耐酸手套",
+          "急救措施": "立即用大量清水冲洗、就医"
         }),
         is_active: true
       }
