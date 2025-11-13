@@ -2,7 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+
+// 为不同应用领域提供不同的图标
+const getIndustryIcon = (index: number) => {
+  const icons = [
+    "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z", // 化工
+    "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6", // 建筑
+    "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253", // 制药
+    "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z", // 汽车
+    "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9", // 电子
+    "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707", // 农业
+  ];
+  return icons[index % icons.length];
+};
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -73,7 +87,7 @@ export default function ProductDetailPage() {
               </div>
               <h3 className="empty-title">产品未找到</h3>
               <p className="empty-description">抱歉，找不到对应的产品信息。</p>
-              <a href="/products" className="back-button">
+              <Link href="/products" className="back-button">
                 <svg
                   className="button-arrow"
                   fill="none"
@@ -88,7 +102,7 @@ export default function ProductDetailPage() {
                   />
                 </svg>
                 返回产品列表
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -106,9 +120,9 @@ export default function ProductDetailPage() {
           <div className={`product-hero-content ${isLoaded ? "loaded" : ""}`}>
             {/* Breadcrumb */}
             <nav className="product-breadcrumb">
-              <a href="/products" className="breadcrumb-link">
+              <Link href="/products" className="breadcrumb-link">
                 产品中心
-              </a>
+              </Link>
               <svg
                 className="breadcrumb-separator"
                 fill="none"
@@ -375,7 +389,7 @@ export default function ProductDetailPage() {
                   <h2 className="section-title">技术指标</h2>
                   <div className="specs-grid">
                     {Object.entries(
-                      typeof product.details === 'string'
+                      typeof product.details === "string"
                         ? JSON.parse(product.details)
                         : product.details
                     ).map(([key, value]) => (
@@ -391,16 +405,15 @@ export default function ProductDetailPage() {
                 </div>
               )}
 
-              {activeTab === "applications" && product.applications && (
+              {activeTab === "applications" && (
                 <div className="tab-pane tab-pane-applications animate-fadeIn">
                   <h2 className="section-title">应用领域</h2>
-                  <div className="applications-list">
-                    {(
-                      typeof product.applications === 'string'
+                  {product.applications ? (
+                    <div className="applications-list">
+                      {(typeof product.applications === "string"
                         ? JSON.parse(product.applications)
                         : product.applications
-                    ).map(
-                      (application: string, index: number) => (
+                      ).map((application: any, index: number) => (
                         <div key={index} className="application-item">
                           <div className="application-icon-wrapper">
                             <svg
@@ -413,32 +426,162 @@ export default function ProductDetailPage() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                                d={getIndustryIcon(index)}
                               />
                             </svg>
                           </div>
                           <div className="application-content">
                             <h3 className="application-title">
-                              应用领域 {index + 1}
+                              {typeof application === "object"
+                                ? application.name
+                                : application}
                             </h3>
                             <p className="application-description">
-                              {application}
+                              {typeof application === "object"
+                                ? application.description
+                                : application}
                             </p>
                           </div>
                         </div>
-                      )
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <div className="empty-icon">
+                        <svg
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <p className="empty-text">暂无应用领域信息</p>
+                    </div>
+                  )}
                 </div>
               )}
 
-              {activeTab === "safety" && product.safetyInfo && (
+              {activeTab === "safety" && (
                 <div className="tab-pane tab-pane-safety animate-fadeIn">
-                  <div className="safety-notice">
-                    <div className="safety-header">
-                      <div className="safety-icon-wrapper">
+                  {product.safety_info ? (
+                    <div className="safety-notice">
+                      <div className="safety-header">
+                        <div className="safety-icon-wrapper">
+                          <svg
+                            className="safety-icon"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                            />
+                          </svg>
+                        </div>
+                        <h2 className="safety-title">安全注意事项</h2>
+                      </div>
+                      <div className="safety-list">
+                        {(() => {
+                          const safetyData =
+                            typeof product.safety_info === "string"
+                              ? JSON.parse(product.safety_info)
+                              : product.safety_info;
+
+                          // 如果是对象，转换为键值对数组
+                          if (
+                            typeof safetyData === "object" &&
+                            !Array.isArray(safetyData)
+                          ) {
+                            return Object.entries(safetyData).map(
+                              ([key, value], index) => (
+                                <div key={index} className="safety-item">
+                                  <svg
+                                    className="safety-check"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                  <div className="safety-content">
+                                    <strong className="safety-key">
+                                      {key}:
+                                    </strong>
+                                    <span className="safety-value">
+                                      {String(value)}
+                                    </span>
+                                  </div>
+                                </div>
+                              )
+                            );
+                          }
+
+                          // 如果是数组，直接映射
+                          if (Array.isArray(safetyData)) {
+                            return safetyData.map(
+                              (info: string, index: number) => (
+                                <div key={index} className="safety-item">
+                                  <svg
+                                    className="safety-check"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                  <span className="safety-text">{info}</span>
+                                </div>
+                              )
+                            );
+                          }
+
+                          // 如果是字符串，作为单个安全项显示
+                          return (
+                            <div className="safety-item">
+                              <svg
+                                className="safety-check"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                              <span className="safety-text">
+                                {String(safetyData)}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <div className="empty-icon">
                         <svg
-                          className="safety-icon"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -451,33 +594,9 @@ export default function ProductDetailPage() {
                           />
                         </svg>
                       </div>
-                      <h2 className="safety-title">安全注意事项</h2>
+                      <p className="empty-text">暂无安全信息</p>
                     </div>
-                    <div className="safety-list">
-                      {(
-                        typeof product.safetyInfo === 'string'
-                          ? JSON.parse(product.safetyInfo)
-                          : product.safetyInfo
-                      ).map((info: string, index: number) => (
-                        <div key={index} className="safety-item">
-                          <svg
-                            className="safety-check"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span className="safety-text">{info}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  )}
                 </div>
               )}
             </div>
@@ -495,7 +614,10 @@ export default function ProductDetailPage() {
               <h2 className="related-products-title">相关产品</h2>
               <div className="related-products-grid">
                 {relatedProducts.map((relatedProduct) => (
-                  <article key={relatedProduct.id} className="related-product-card">
+                  <article
+                    key={relatedProduct.id}
+                    className="related-product-card"
+                  >
                     <div className="related-product-image">
                       <div className="related-product-image-bg"></div>
                       <div className="related-product-icon">
@@ -518,7 +640,8 @@ export default function ProductDetailPage() {
                         {relatedProduct.name}
                       </h3>
                       <p className="related-product-description">
-                        {relatedProduct.description || "高品质化工产品，广泛应用于各行业领域。"}
+                        {relatedProduct.description ||
+                          "高品质化工产品，广泛应用于各行业领域。"}
                       </p>
                       <div className="related-product-meta">
                         <span className="related-product-category">
@@ -528,7 +651,7 @@ export default function ProductDetailPage() {
                           CAS: {relatedProduct.cas_no || "暂无"}
                         </span>
                       </div>
-                      <a
+                      <Link
                         href={`/products/${relatedProduct.id}`}
                         className="related-product-link"
                       >
@@ -546,7 +669,7 @@ export default function ProductDetailPage() {
                             d="M9 5l7 7-7 7"
                           />
                         </svg>
-                      </a>
+                      </Link>
                     </div>
                     <div className="related-product-accent"></div>
                   </article>
@@ -561,7 +684,7 @@ export default function ProductDetailPage() {
       <section className="back-to-products-section">
         <div className="container">
           <div className="back-to-products-content">
-            <a href="/products" className="back-to-products-button">
+            <Link href="/products" className="back-to-products-button">
               <svg
                 className="button-arrow"
                 fill="none"
@@ -576,7 +699,7 @@ export default function ProductDetailPage() {
                 />
               </svg>
               返回产品列表
-            </a>
+            </Link>
           </div>
         </div>
       </section>

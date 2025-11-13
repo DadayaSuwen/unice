@@ -12,114 +12,135 @@ interface Job {
   description: string;
   requirements: string[];
   responsibilities: string[];
+  application_deadline?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function CareersPage() {
-  const [jobs] = useState<Job[]>([
-    {
-      id: 1,
-      position: "高级研发工程师",
-      department: "研发部",
-      location: "上海总部",
-      type: "全职",
-      experience: "3-5年经验",
-      description: "负责化工产品的新品研发和工艺改进工作，参与技术方案制定，推动技术创新。",
-      requirements: [
-        "化工、材料等相关专业本科及以上学历",
-        "3年以上化工研发工作经验",
-        "熟悉化工工艺流程和设备",
-        "具备良好的沟通能力和团队协作精神",
-        "英语读写能力良好"
-      ],
-      responsibilities: [
-        "新产品开发和实验设计",
-        "生产工艺优化和改进",
-        "技术文档编写和整理",
-        "协助解决生产中的技术问题",
-        "参与技术交流和培训"
-      ]
-    },
-    {
-      id: 2,
-      position: "销售经理",
-      department: "销售部",
-      location: "全国",
-      type: "全职",
-      experience: "2-3年经验",
-      description: "负责化工产品的市场推广和客户关系维护，制定销售策略，完成销售目标。",
-      requirements: [
-        "市场营销或化工相关专业大专以上学历",
-        "2年以上化工产品销售经验",
-        "具备较强的沟通表达能力和谈判技巧",
-        "熟悉化工行业市场状况",
-        "能适应出差"
-      ],
-      responsibilities: [
-        "开发和维护客户资源",
-        "制定销售计划和策略",
-        "完成个人及团队销售目标",
-        "参与商务谈判和合同签订",
-        "收集市场信息和竞争对手情报"
-      ]
-    },
-    {
-      id: 3,
-      position: "质量工程师",
-      department: "质控部",
-      location: "上海总部",
-      type: "全职",
-      experience: "2-4年经验",
-      description: "负责产品质量控制体系的建立和实施，确保产品质量符合国际标准和客户要求。",
-      requirements: [
-        "化学、化工或质量管理相关专业",
-        "2年以上质量管理工作经验",
-        "熟悉ISO质量管理体系",
-        "具备良好的数据分析能力",
-        "工作认真负责，原则性强"
-      ],
-      responsibilities: [
-        "制定质量控制标准和流程",
-        "执行产品质量检测和评估",
-        "分析质量问题并提出改进建议",
-        "参与质量管理体系审核",
-        "培训和指导相关人员"
-      ]
-    },
-    {
-      id: 4,
-      position: "生产主管",
-      department: "生产部",
-      location: "上海工厂",
-      type: "全职",
-      experience: "3-5年经验",
-      description: "负责生产车间的日常运营管理，优化生产流程，确保生产计划的高效执行。",
-      requirements: [
-        "化工或机械相关专业",
-        "3年以上生产管理经验",
-        "熟悉化工生产工艺流程",
-        "具备良好的组织协调能力",
-        "能接受倒班制度"
-      ],
-      responsibilities: [
-        "制定生产计划并组织实施",
-        "监督生产过程质量控制",
-        "管理生产人员和设备",
-        "优化生产工艺提高效率",
-        "确保安全生产和环保要求"
-      ]
-    }
-  ]);
-
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [expandedJob, setExpandedJob] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
+
+    const fetchCareers = async () => {
+      try {
+        const response = await fetch("/api/careers");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch careers");
+        }
+
+  
+        setJobs(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("获取招聘信息失败:", err);
+        setError("获取招聘信息失败");
+        setLoading(false);
+      }
+    };
+
+    fetchCareers();
   }, []);
 
   const toggleJobExpansion = (jobId: number) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);
   };
+
+  const handleApply = (job: Job) => {
+    // 创建邮件主题
+    const subject = encodeURIComponent(`应聘${job.position} - ${job.department}`);
+    const body = encodeURIComponent(
+      `尊敬的江西联合化学有限公司招聘团队：
+
+我想应聘贵公司的${job.position}职位。
+
+个人信息：
+- 应聘职位：${job.position}
+- 所属部门：${job.department}
+- 工作地点：${job.location}
+- 工作类型：${job.type}
+
+请查收我的简历，期待您的回复。
+
+此致
+敬礼！`
+    );
+
+    // 打开邮件客户端
+    window.location.href = `mailto:hr@unicechemical.com?subject=${subject}&body=${body}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="app-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section-careers">
+          <div className="container-small">
+            <div className={`hero-content-careers ${isLoaded ? "loaded" : ""}`}>
+              <h1 className="page-title">加入我们</h1>
+              <p className="page-subtitle">
+                江西联合化学有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Loading State */}
+        <section className="job-openings-section">
+          <div className="container">
+            <div className="careers-loading">
+              <div className="loading-spinner">
+                <div className="spinner-ring"></div>
+                <div className="spinner-dot"></div>
+              </div>
+              <p className="loading-text">加载职位信息中...</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="app-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section-careers">
+          <div className="container-small">
+            <div className={`hero-content-careers ${isLoaded ? "loaded" : ""}`}>
+              <h1 className="page-title">加入我们</h1>
+              <p className="page-subtitle">
+                江西联合化学有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Error State */}
+        <section className="job-openings-section">
+          <div className="container">
+            <div className="careers-error">
+              <div className="error-card">
+                <div className="error-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <p className="error-message">{error}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="app-wrapper">
@@ -139,7 +160,7 @@ export default function CareersPage() {
       <section className="why-join-section">
         <div className="container">
           <div className={`why-join-content ${isLoaded ? "loaded" : ""}`}>
-            <h2 className="section-title">为什么选择联合化工？</h2>
+            <h2 className="section-title">为什么选择江西联合化学？</h2>
             <div className="benefits-grid">
               <div className="benefit-card">
                 <div className="apple-icon-wrapper gold">
@@ -147,9 +168,9 @@ export default function CareersPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="benefit-title">职业发展</h3>
+                <h3 className="benefit-title">专业技术发展</h3>
                 <p className="benefit-description">
-                  完善的培训体系和晋升机制，助力员工实现职业梦想，与企业共同成长。
+                  专注树脂研发20余年，提供深入的技术培训和发展机会，在汽车涂料和原厂漆领域积累专业经验。
                 </p>
               </div>
 
@@ -201,6 +222,11 @@ export default function CareersPage() {
                         <span className="job-tag">{job.location}</span>
                         <span className="job-tag">{job.type}</span>
                         <span className="job-tag">{job.experience}</span>
+                        {job.application_deadline && (
+                          <span className="job-tag deadline">
+                            截止: {new Date(job.application_deadline).toLocaleDateString('zh-CN')}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="job-icon">
@@ -216,22 +242,28 @@ export default function CareersPage() {
                     <div className="job-detail-column">
                       <h4 className="job-detail-title">岗位职责</h4>
                       <ul className="job-detail-list">
-                        {job.responsibilities.slice(0, 3).map((resp, idx) => (
+                        {Array.isArray(job.responsibilities) && job.responsibilities.slice(0, 3).map((resp, idx) => (
                           <li key={idx}>{resp}</li>
                         ))}
-                        {job.responsibilities.length > 3 && (
+                        {Array.isArray(job.responsibilities) && job.responsibilities.length > 3 && (
                           <li className="job-detail-more">...</li>
+                        )}
+                        {!Array.isArray(job.responsibilities) && (
+                          <li>岗位职责信息加载中...</li>
                         )}
                       </ul>
                     </div>
                     <div className="job-detail-column">
                       <h4 className="job-detail-title">任职要求</h4>
                       <ul className="job-detail-list">
-                        {job.requirements.slice(0, 3).map((req, idx) => (
+                        {Array.isArray(job.requirements) && job.requirements.slice(0, 3).map((req, idx) => (
                           <li key={idx}>{req}</li>
                         ))}
-                        {job.requirements.length > 3 && (
+                        {Array.isArray(job.requirements) && job.requirements.length > 3 && (
                           <li className="job-detail-more">...</li>
+                        )}
+                        {!Array.isArray(job.requirements) && (
+                          <li>任职要求信息加载中...</li>
                         )}
                       </ul>
                     </div>
@@ -252,7 +284,10 @@ export default function CareersPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <button className="job-apply-button">
+                    <button
+                      className="job-apply-button"
+                      onClick={() => handleApply(job)}
+                    >
                       申请职位
                       <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -265,17 +300,25 @@ export default function CareersPage() {
                       <div className="job-expanded-section">
                         <h4 className="job-expanded-title">完整岗位职责</h4>
                         <ul className="job-expanded-list">
-                          {job.responsibilities.map((resp, idx) => (
-                            <li key={idx}>{resp}</li>
-                          ))}
+                          {Array.isArray(job.responsibilities) ? (
+                            job.responsibilities.map((resp, idx) => (
+                              <li key={idx}>{resp}</li>
+                            ))
+                          ) : (
+                            <li>岗位职责信息加载中...</li>
+                          )}
                         </ul>
                       </div>
                       <div className="job-expanded-section">
                         <h4 className="job-expanded-title">完整任职要求</h4>
                         <ul className="job-expanded-list">
-                          {job.requirements.map((req, idx) => (
-                            <li key={idx}>{req}</li>
-                          ))}
+                          {Array.isArray(job.requirements) ? (
+                            job.requirements.map((req, idx) => (
+                              <li key={idx}>{req}</li>
+                            ))
+                          ) : (
+                            <li>任职要求信息加载中...</li>
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -333,6 +376,50 @@ export default function CareersPage() {
                 <p className="process-description">
                   发放正式录用通知，安排入职培训和后续职业发展规划
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Information Section */}
+      <section className="careers-contact-section">
+        <div className="container">
+          <div className={`contact-content ${isLoaded ? "loaded" : ""}`}>
+            <h2 className="section-title">联系我们</h2>
+            <div className="contact-info-grid">
+              <div className="contact-info-card">
+                <div className="contact-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3>简历投递</h3>
+                <p>请将您的简历发送至我们的招聘邮箱</p>
+                <a href="mailto:hr@unicechemical.com" className="contact-link">hr@unicechemical.com</a>
+              </div>
+
+              <div className="contact-info-card">
+                <div className="contact-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <h3>电话咨询</h3>
+                <p>工作日 9:00-18:00 为您解答疑问</p>
+                <a href="tel:0791-88888888" className="contact-link">0791-88888888</a>
+              </div>
+
+              <div className="contact-info-card">
+                <div className="contact-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3>公司地址</h3>
+                <p>欢迎来访，请提前预约</p>
+                <p className="contact-link">江西省九江市星火工业园区</p>
               </div>
             </div>
           </div>

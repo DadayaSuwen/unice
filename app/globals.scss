@@ -9,12 +9,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  // 淡金黄主题色系
+  // 淡金黄主题色系 - 优化版本
   --primary-gold: #d4af37;  // 淡金黄主色
   --primary-gold-hover: #c9a12e;  // 深金黄悬停
   --primary-gold-light: #f9f5e7;  // 淡金黄背景
   --primary-gold-dark: #b8941f;  // 深金黄
+  --primary-gold-bright: #e6b84f;  // 亮金黄
+  --primary-gold-muted: #9c7a2e;  // 暗淡金黄
+
+  // 金色渐变系列
   --primary-gold-gradient: linear-gradient(135deg, #d4af37 0%, #f4e4a6 50%, #d4af37 100%);
+  --gold-gradient-subtle: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(244, 228, 166, 0.05) 50%, rgba(212, 175, 55, 0.1) 100%);
+  --gold-gradient-strong: linear-gradient(135deg, #d4af37 0%, #e6b84f 50%, #c9a12e 100%);
+
+  // Footer专用颜色
+  --footer-bg-primary: #111827;  // 深色背景
+  --footer-bg-secondary: #1f2937;  // 次级背景
+  --footer-bg-accent: #374151;  // 强调背景
+  --footer-text-primary: #f9fafb;  // 主要文字
+  --footer-text-secondary: #d1d5db;  // 次要文字
+  --footer-text-muted: #9ca3af;  // 弱化文字
+  --footer-border: rgba(212, 175, 55, 0.2);  // 金色边框
+  --footer-glow: rgba(212, 175, 55, 0.15);  // 金色光晕
 
   // 中性色系统
   --gray-50: #fafafa;
@@ -58,15 +74,14 @@
   --dark-gray: #333333;
 }
 
-@theme inline {
+/* Tailwind CSS 主题变量 */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-main-purple: var(--main-purple);
   --color-tech-blue: var(--tech-blue);
   --color-white: var(--white);
   --color-dark-gray: var(--dark-gray);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {

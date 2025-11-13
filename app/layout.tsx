@@ -9,6 +9,19 @@ export const metadata: Metadata = {
 };
 
 import Navigation from "./components/navigation";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Beaker,
+  Microscope,
+  TestTube,
+  Target,
+  Building,
+  Palette,
+  TrendingUp,
+  Rocket,
+} from "lucide-react";
 
 export default function RootLayout({
   children,
@@ -17,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body
-        className="antialiased min-h-screen bg-background text-foreground"
-      >
+      <body className="antialiased min-h-screen bg-background text-foreground">
         <div className="flex flex-col min-h-screen">
           {/* 苹果风格导航栏 */}
           <Navigation />
@@ -28,215 +39,393 @@ export default function RootLayout({
           <main className="flex-grow pt-16">{children}</main>
 
           {/* 苹果风格页脚 */}
-          <footer className="bg-background-secondary border-t border-border-color">
-            <div className="  mx-auto px-6 py-16">
+          <footer
+            className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--footer-bg-primary) 0%, var(--footer-bg-secondary) 50%, var(--footer-bg-primary) 100%)",
+            }}
+          >
+            {/* 背景装饰 */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: "var(--gold-gradient-subtle)",
+              }}
+            ></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,var(--footer-gold)_0%,transparent_60%)]"></div>
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse at top left, rgba(212, 175, 55, 0.08) 0%, transparent 40%)",
+              }}
+            ></div>
+            <div
+              className="absolute inset-0 bg-gradient-to-t to-transparent"
+              style={{
+                background:
+                  "linear-gradient(to top, var(--footer-border), transparent)",
+              }}
+            ></div>
+
+            <div className="relative container mx-auto px-6 py-20">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {/* 公司信息 */}
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-xl overflow-hidden">
+                <div className="space-y-6 footer-section">
+                  <div className="flex items-center space-x-4 group gap-6">
+                    <div className="relative w-12 h-12 bg-gradient-to-br from-primary-gold to-amber-600 rounded-2xl overflow-hidden shadow-xl group-hover:scale-110 transition-transform duration-300">
+                      <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
                       <Image
                         src="/logo.jpg"
                         alt="联合化工"
-                        width={32}
-                        height={32}
-                        className="object-contain"
+                        width={48}
+                        height={48}
+                        className="object-contain p-1.5 relative z-10"
                       />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">
-                      联合化工
-                    </h3>
+                    <div>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold-bright) 50%, var(--footer-text-primary) 100%)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text",
+                        }}
+                      >
+                        联合化工
+                      </h3>
+                      <p
+                        className="text-xs mt-0.5"
+                        style={{
+                          color: "var(--footer-text-muted)",
+                        }}
+                      >
+                        创新化学科技
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-text-secondary leading-relaxed">
+                  <p
+                    className="leading-relaxed text-sm transition-colors duration-300"
+                    style={{
+                      color: "var(--footer-text-secondary)",
+                    }}
+                  >
                     专业的化工企业，致力于为客户提供高质量的产品和创新解决方案。
                   </p>
-                  {/* <div className="flex space-x-4">
-                    <div className="w-10 h-10 bg-background-secondary border border-border-color rounded-lg flex items-center justify-center hover:bg-primary-gold hover:text-foreground transition-colors cursor-pointer">
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                      </svg>
-                    </div>
-                    <div className="w-10 h-10 bg-background-secondary border border-border-color rounded-lg flex items-center justify-center hover:bg-primary-gold hover:text-foreground transition-colors cursor-pointer">
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                      </svg>
-                    </div>
-                  </div> */}
                 </div>
 
                 {/* 快速链接 */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">产品服务</h4>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/products"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        化工原料
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/products"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        精细化学品
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/products"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        专用化学品
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/products"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        定制解决方案
-                      </Link>
-                    </li>
+                <div className="space-y-6 footer-section">
+                  <h4
+                    className="font-bold text-lg"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    产品服务
+                  </h4>
+                  <ul className="space-y-4">
+                    {[
+                      { href: "/products", text: "化工原料", icon: Beaker },
+                      {
+                        href: "/products",
+                        text: "精细化学品",
+                        icon: Microscope,
+                      },
+                      { href: "/products", text: "专用化学品", icon: TestTube },
+                      { href: "/products", text: "定制解决方案", icon: Target },
+                    ].map((item, index) => (
+                      <li key={index} className="group/link">
+                        <Link
+                          href={item.href}
+                          className="flex items-center space-x-3 text-gray-400 hover:text-white transition-all duration-300 group-hover/link:translate-x-1 transform"
+                        >
+                          <item.icon
+                            className="w-5 h-5 transition-colors duration-300 transform group-hover/link:rotate-12"
+                            style={{
+                              color: "var(--footer-text-secondary)",
+                            }}
+                            strokeWidth={2}
+                          />
+                          <span
+                            className="relative"
+                            style={{
+                              color: "var(--footer-text-secondary)",
+                            }}
+                          >
+                            {item.text}
+                            <span
+                              className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
+                              style={{
+                                background: "var(--gold-gradient-strong)",
+                              }}
+                            ></span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
                 {/* 关于我们 */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">关于</h4>
-                  <ul className="space-y-3">
-                    <li>
-                      <a
-                        href="/about"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        公司简介
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/about"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        企业文化
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/about"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        发展历程
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/careers"
-                        className="text-text-secondary hover:text-primary-gold transition-colors"
-                      >
-                        加入我们
-                      </a>
-                    </li>
+                <div className="space-y-6 footer-section">
+                  <h4
+                    className="font-bold text-lg"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    关于
+                  </h4>
+                  <ul className="space-y-4">
+                    {[
+                      { href: "/about", text: "公司简介", icon: Building },
+                      { href: "/about", text: "企业文化", icon: Palette },
+                      { href: "/about", text: "发展历程", icon: TrendingUp },
+                      { href: "/careers", text: "加入我们", icon: Rocket },
+                    ].map((item, index) => (
+                      <li key={index} className="group/link">
+                        <Link
+                          href={item.href}
+                          className="flex items-center space-x-3 text-gray-400 hover:text-white transition-all duration-300 group-hover/link:translate-x-1 transform"
+                        >
+                          <item.icon
+                            className="w-5 h-5 transition-colors duration-300 transform group-hover/link:rotate-12"
+                            style={{
+                              color: "var(--footer-text-secondary)",
+                            }}
+                            strokeWidth={2}
+                          />
+                          <span
+                            className="relative"
+                            style={{
+                              color: "var(--footer-text-secondary)",
+                            }}
+                          >
+                            {item.text}
+                            <span
+                              className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
+                              style={{
+                                background: "var(--gold-gradient-strong)",
+                              }}
+                            ></span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
                 {/* 联系信息 */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">联系方式</h4>
-                  <div className="space-y-3 text-text-secondary">
-                    <div className="flex items-center space-x-3">
-                      <svg
-                        className="w-5 h-5 text-primary-gold"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                <div className="space-y-6 footer-section">
+                  <h4
+                    className="font-bold text-lg"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    联系方式
+                  </h4>
+                  <div className="space-y-4 flex flex-col gap-2">
+                    <div
+                      className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
+                      style={{
+                        background: "var(--footer-bg-accent)",
+                        border: "1px solid var(--footer-border)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        <MapPin
+                          className="w-5 h-5 transition-colors"
+                          style={{
+                            color: "var(--primary-gold)",
+                          }}
                           strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
                         />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      <span>北京市朝阳区化工路123号</span>
+                      </div>
+                      <div className="space-y-1">
+                        <p
+                          className="font-medium"
+                          style={{
+                            color: "var(--footer-text-primary)",
+                          }}
+                        >
+                          办公地址
+                        </p>
+                        <p
+                          className="text-sm transition-colors"
+                          style={{
+                            color: "var(--footer-text-secondary)",
+                          }}
+                        >
+                          北京市朝阳区化工路123号
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <svg
-                        className="w-5 h-5 text-primary-gold"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+
+                    <div
+                      className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
+                      style={{
+                        background: "var(--footer-bg-accent)",
+                        border: "1px solid var(--footer-border)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        <Phone
+                          className="w-5 h-5 transition-colors"
+                          style={{
+                            color: "var(--primary-gold)",
+                          }}
                           strokeWidth={2}
-                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                         />
-                      </svg>
-                      <span>010-12345678</span>
+                      </div>
+                      <div className="space-y-1">
+                        <p
+                          className="font-medium"
+                          style={{
+                            color: "var(--footer-text-primary)",
+                          }}
+                        >
+                          联系电话
+                        </p>
+                        <p
+                          className="text-sm transition-colors"
+                          style={{
+                            color: "var(--footer-text-secondary)",
+                          }}
+                        >
+                          010-12345678
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <svg
-                        className="w-5 h-5 text-primary-gold"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+
+                    <div
+                      className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
+                      style={{
+                        background: "var(--footer-bg-accent)",
+                        border: "1px solid var(--footer-border)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        <Mail
+                          className="w-5 h-5 transition-colors"
+                          style={{
+                            color: "var(--primary-gold)",
+                          }}
                           strokeWidth={2}
-                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                         />
-                      </svg>
-                      <span>info@unicechemical.com</span>
+                      </div>
+                      <div className="space-y-1">
+                        <p
+                          className="font-medium"
+                          style={{
+                            color: "var(--footer-text-primary)",
+                          }}
+                        >
+                          电子邮箱
+                        </p>
+                        <p
+                          className="text-sm transition-colors"
+                          style={{
+                            color: "var(--footer-text-secondary)",
+                          }}
+                        >
+                          info@unicechemical.com
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* 版权信息 */}
-              <div className="border-t border-border-color mt-12 pt-8">
-                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                  <p className="text-text-secondary text-sm">
-                    © {new Date().getFullYear()} 联合化工. 保留所有权利.
-                  </p>
-                  <div className="flex space-x-6 text-sm">
-                    <a
-                      href="#"
-                      className="text-text-secondary hover:text-primary-gold transition-colors"
+              <div
+                className="mt-16 pt-8"
+                style={{
+                  borderTop: "1px solid var(--footer-border)",
+                }}
+              >
+                <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
+                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-center lg:text-left">
+                    <p
+                      className="text-sm flex items-center space-x-2"
+                      style={{
+                        color: "var(--footer-text-secondary)",
+                      }}
                     >
-                      隐私政策
-                    </a>
-                    <a
-                      href="#"
-                      className="text-text-secondary hover:text-primary-gold transition-colors"
-                    >
-                      服务条款
-                    </a>
-                    <a
-                      href="#"
-                      className="text-text-secondary hover:text-primary-gold transition-colors"
-                    >
-                      网站地图
-                    </a>
+                      <span>© {new Date().getFullYear()} 联合化工</span>
+                      <span style={{ color: "var(--primary-gold)" }}>•</span>
+                      <span>保留所有权利</span>
+                    </p>
+                    <div className="flex items-center space-x-1">
+                      <span style={{ color: "var(--primary-gold)" }}>♥</span>
+                      <span
+                        className="text-xs"
+                        style={{
+                          color: "var(--footer-text-muted)",
+                        }}
+                      >
+                        用心服务每一个客户
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap justify-center lg:justify-end items-center gap-6 text-sm">
+                    {[
+                      { href: "#", text: "隐私政策" },
+                      { href: "#", text: "服务条款" },
+                      { href: "#", text: "网站地图" },
+                      { href: "#", text: "法律声明" },
+                    ].map((item, index) => (
+                      <a
+                        key={index}
+                        href={item.href}
+                        className="relative group hover:scale-105 transition-all duration-300"
+                        style={{
+                          color: "var(--footer-text-secondary)",
+                        }}
+                      >
+                        {item.text}
+                        <span
+                          className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
+                          style={{
+                            background: "var(--gold-gradient-strong)",
+                          }}
+                        ></span>
+                      </a>
+                    ))}
                   </div>
                 </div>
               </div>

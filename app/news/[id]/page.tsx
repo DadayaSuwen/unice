@@ -27,82 +27,49 @@ export default function NewsDetailPage() {
   useEffect(() => {
     const fetchNewsDetail = async () => {
       try {
-        // 模拟获取新闻详情数据
-        const newsData: NewsDetail = {
-          id: parseInt(params.id as string),
-          title: "联合化工荣获2024年度化工行业创新奖",
-          excerpt: "凭借在新材料研发领域的突出贡献，联合化工荣获中国化工协会颁发的年度创新奖。",
-          content: `
-            <div class="news-article-content">
-              <p>联合化工在2024年度中国化工协会评选中荣获"化工行业创新奖"，这是对公司在新材料研发领域卓越贡献的高度认可。</p>
+        const newsId = params.id as string;
 
-              <h3>创新成果</h3>
-              <p>本次获奖的创新项目主要涉及新型环保溶剂的研发与应用。联合化工研发团队历时三年，成功开发出具有自主知识产权的新一代环保溶剂产品，其性能指标达到国际领先水平。</p>
+        // 验证newsId是否为有效数字
+        const idNum = parseInt(newsId);
+        if (isNaN(idNum) || idNum <= 0) {
+          console.error("无效的新闻ID:", newsId);
+          setLoading(false);
+          return;
+        }
 
-              <h3>技术突破</h3>
-              <p>该创新产品在以下方面实现了重大突破：</p>
-              <ul>
-                <li>挥发性有机化合物（VOC）含量降低80%以上</li>
-                <li>产品纯度达到99.9%，超越行业标准</li>
-                <li>生产能耗降低30%，实现绿色制造</li>
-                <li>产品应用范围扩大到航空航天等高端领域</li>
-              </ul>
+        console.log("Fetching news with ID:", newsId);
 
-              <h3>行业影响</h3>
-              <p>这一创新成果不仅推动了化工行业的技术进步，也为我国在高端化工材料领域赢得了国际声誉。产品已成功应用于多个重点工程项目，获得客户的一致好评。</p>
+        // 获取新闻详情
+        const response = await fetch(`/api/news/${newsId}`);
+        const data = await response.json();
 
-              <h3>未来展望</h3>
-              <p>联合化工将继续加大研发投入，依托国家级技术中心平台，在更多前沿领域实现技术突破，为化工行业的高质量发展贡献更大力量。</p>
-            </div>
-          `,
-          publish_date: "2024-01-15",
-          type: "公司新闻",
-          author: "新闻中心",
-          image_url: "",
-          tags: ["创新奖", "新材料", "环保", "研发"],
-          read_time: 5
-        };
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch news detail");
+        }
 
-        setNews(newsData);
+        setNews(data);
+        console.log("News loaded successfully");
 
-        // 模拟相关新闻
-        const relatedData: NewsDetail[] = [
-          {
-            id: 2,
-            title: "新一代环保溶剂产品正式发布",
-            excerpt: "我公司研发团队历时三年开发的新一代环保溶剂正式投产，性能达到国际领先水平。",
-            content: "",
-            publish_date: "2024-01-10",
-            type: "产品发布",
-            author: "产品部",
-            tags: ["新产品", "环保溶剂"],
-            read_time: 3
-          },
-          {
-            id: 3,
-            title: "化工行业发展趋势分析报告",
-            excerpt: "根据最新市场调研数据，绿色化工和智能制造将成为未来发展的主要方向。",
-            content: "",
-            publish_date: "2024-01-05",
-            type: "行业资讯",
-            author: "市场部",
-            tags: ["行业趋势", "市场分析"],
-            read_time: 8
-          },
-          {
-            id: 4,
-            title: "联合化工与欧洲知名企业达成战略合作",
-            excerpt: "双方将在技术研发、市场拓展等多个领域开展深度合作，共同开拓国际市场。",
-            content: "",
-            publish_date: "2023-12-28",
-            type: "公司新闻",
-            author: "商务部",
-            tags: ["战略合作", "国际化"],
-            read_time: 4
+        // 获取相关新闻
+        try {
+          const relatedResponse = await fetch(`/api/news/${newsId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ limit: 4 })
+          });
+
+          if (relatedResponse.ok) {
+            const relatedData = await relatedResponse.json();
+            setRelatedNews(Array.isArray(relatedData) ? relatedData : []);
+            console.log("Related news loaded:", relatedData.length);
           }
-        ];
+        } catch (relatedError) {
+          console.warn("获取相关新闻失败:", relatedError);
+          setRelatedNews([]);
+        }
 
-        setRelatedNews(relatedData.filter(item => item.id !== newsData.id));
         setLoading(false);
         setTimeout(() => setIsLoaded(true), 100);
       } catch (error) {
@@ -255,10 +222,33 @@ export default function NewsDetailPage() {
       <section className="news-article-section">
         <div className="container">
           <article className={`news-article ${isLoaded ? "loaded" : ""}`}>
-            <div
-              className="article-content"
-              dangerouslySetInnerHTML={{ __html: news.content }}
-            />
+            <div className="article-content">
+              {news.content.includes('<') ? (
+                <div dangerouslySetInnerHTML={{ __html: news.content }} />
+              ) : (
+                news.content.split('\n\n').map((paragraph, index) => {
+                  if (paragraph.trim()) {
+                    if (paragraph.startsWith('##')) {
+                      return <h3 key={index}>{paragraph.replace('##', '').trim()}</h3>;
+                    } else if (paragraph.startsWith('-')) {
+                      const items = paragraph.split('\n').filter(item => item.trim().startsWith('-'));
+                      return (
+                        <ul key={index} style={{ listStyle: 'none', padding: 0 }}>
+                          {items.map((item, itemIndex) => (
+                            <li key={itemIndex} style={{ marginBottom: '0.5rem', paddingLeft: '1.5rem', position: 'relative' }}>
+                              • {item.replace('-', '').trim()}
+                            </li>
+                          ))}
+                        </ul>
+                      );
+                    } else {
+                      return <p key={index}>{paragraph.trim()}</p>;
+                    }
+                  }
+                  return null;
+                })
+              )}
+            </div>
 
             {/* Tags */}
             {news.tags && news.tags.length > 0 && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Pagination from "@/components/pagination";
 
 // Define TypeScript interfaces for better type safety
 interface Product {
@@ -19,37 +20,79 @@ interface Product {
   };
 }
 
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("全部类别");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        // Fetch data from the API route
-        const response = await fetch("/api/products");
-        const data = await response.json();
+  const fetchProducts = async (page: number = 1, category: string = selectedCategory, search: string = searchTerm) => {
+    try {
+      setLoading(true);
 
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to fetch products");
-        }
+      // 构建查询参数
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '12',
+        category: category
+      });
 
-        setProducts(data.products);
-        setCategories(data.categories);
-        setLoading(false);
-        setTimeout(() => setIsLoaded(true), 100);
-      } catch (error) {
-        console.error("获取产品数据失败:", error);
-        setLoading(false);
+      // Fetch data from the API route
+      const response = await fetch(`/api/products?${params}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch products");
       }
-    };
 
+      setProducts(data.products);
+      setCategories(data.categories);
+      setPagination(data.pagination || null);
+      setLoading(false);
+      setTimeout(() => setIsLoaded(true), 100);
+    } catch (error) {
+      console.error("获取产品数据失败:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProducts();
   }, []);
+
+  // 处理页面变化
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchProducts(page, selectedCategory, searchTerm);
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 处理分类变化
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    fetchProducts(1, category, searchTerm);
+  };
+
+  // 处理搜索
+  const handleSearch = (search: string) => {
+    setSearchTerm(search);
+    setCurrentPage(1);
+    // 注意：这里我们只在前端进行搜索过滤，因为API目前不支持搜索参数
+  };
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
@@ -104,7 +147,7 @@ export default function ProductsPage() {
                   className={`category-btn ${
                     selectedCategory === "全部类别" ? "active" : ""
                   }`}
-                  onClick={() => setSelectedCategory("全部类别")}
+                  onClick={() => handleCategoryChange("全部类别")}
                 >
                   全部类别
                 </button>
@@ -114,7 +157,7 @@ export default function ProductsPage() {
                     className={`category-btn ${
                       selectedCategory === category ? "active" : ""
                     }`}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                   >
                     {category}
                   </button>
@@ -133,7 +176,7 @@ export default function ProductsPage() {
                   className="search-input"
                   placeholder="搜索产品名称或CAS号..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -221,6 +264,16 @@ export default function ProductsPage() {
           )}
         </div>
       </section>
+
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+          className="products-pagination-section"
+        />
+      )}
     </div>
   );
 }

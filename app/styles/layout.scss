@@ -118,32 +118,266 @@
   flex-direction: column;
   align-items: center;
   color: var(--gray-400);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-indicator.fade-in {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  animation: floatUpDown 1.5s ease-in-out infinite;
+}
+
+.scroll-indicator.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  pointer-events: none;
+  animation: none;
+}
+
+// 滚动进度条
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-progress-fill {
+  height: 100%;
+  background: var(--primary-gold-gradient);
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+// 高级滚动指示器
+.advanced-scroll-indicator {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.advanced-scroll-indicator.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  pointer-events: none;
+}
+
+.scroll-mouse-advanced {
+  width: 30px;
+  height: 50px;
+  border: 2px solid rgba(212, 175, 55, 0.6);
+  border-radius: 25px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 12px;
+  background: var(--primary-gold-gradient);
+  border-radius: 2px;
+  animation: wheelScroll 2s infinite;
+}
+
+.scroll-dots {
+  position: absolute;
+  top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scroll-dots .dot {
+  width: 2px;
+  height: 2px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: dotFade 2s infinite;
+}
+
+.scroll-dots .dot:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.scroll-dots .dot:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.scroll-text-advanced {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes wheelScroll {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(15px);
+    opacity: 0.3;
+  }
+}
+
+@keyframes dotFade {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    opacity: 0.6;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  }
+}
+
+// 移动端滚动优化
+@media (max-width: 768px) {
+  .scroll-progress-bar {
+    height: 2px;
+  }
+
+  .advanced-scroll-indicator {
+    bottom: 30px;
+  }
+
+  .scroll-mouse-advanced {
+    width: 25px;
+    height: 40px;
+  }
+
+  .scroll-text-advanced {
+    font-size: 10px;
+  }
 }
 
 .scroll-mouse {
-  width: 20px;
-  height: 32px;
-  border: 2px solid var(--gray-400);
+  width: 24px;
+  height: 38px;
+  border: 2px solid var(--primary-gold);
   border-radius: 24px;
   display: flex;
   justify-content: center;
   margin-bottom: 8px;
+  background: rgba(212, 175, 55, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+}
+
+.scroll-mouse:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.3);
+  border-color: var(--primary-gold);
 }
 
 .scroll-dot {
-  width: 2px;
-  height: 8px;
-  background: var(--gray-400);
-  border-radius: 4px;
+  width: 3px;
+  height: 10px;
+  background: var(--primary-gold-gradient);
+  border-radius: 6px;
   margin-top: 6px;
-  animation: bounce 2s infinite;
+  animation: scrollBounce 2s infinite ease-in-out;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
 }
 
 .scroll-text {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.05em;
-  opacity: 0.6;
+  opacity: 0.8;
+  color: var(--primary-gold);
+  text-transform: uppercase;
+  animation: textPulse 2s infinite ease-in-out;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes scrollBounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.8;
+    height: 10px;
+  }
+  50% {
+    transform: translateY(12px);
+    opacity: 1;
+    height: 12px;
+  }
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+  }
+}
+
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-15px);
+  }
+}
+
+// Footer样式
+.footer-section {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: footerFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.footer-section:nth-child(1) { animation-delay: 0.1s; }
+.footer-section:nth-child(2) { animation-delay: 0.2s; }
+.footer-section:nth-child(3) { animation-delay: 0.3s; }
+.footer-section:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes footerFadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Footer响应式设计
+@media (max-width: 768px) {
+  .footer-section {
+    animation-delay: 0.1s !important;
+  }
 }
 
 .icon-arrow {

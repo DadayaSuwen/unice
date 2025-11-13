@@ -1,14 +1,34 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Get all active products with their categories
-    const products = await prisma.product.findMany({
-      where: { is_active: true },
-      include: { category: true },
-      orderBy: { created_at: "desc" },
-    });
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '12');
+    const category = searchParams.get('category') || '';
+
+    const skip = (page - 1) * limit;
+
+    // 构建查询条件
+    const where: any = { is_active: true };
+    if (category && category !== '全部类别') {
+      where.category = {
+        name: category
+      };
+    }
+
+    // 获取分页产品数据
+    const [products, totalCount] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: { category: true },
+        orderBy: { created_at: "desc" },
+        skip,
+        take: limit
+      }),
+      prisma.product.count({ where })
+    ]);
 
     // Get all active categories
     const categories = await prisma.category.findMany({
@@ -16,10 +36,19 @@ export async function GET() {
       select: { name: true },
     });
 
+    const totalPages = Math.ceil(totalCount / limit);
+
     // Return the data
     return NextResponse.json({
       products,
-      categories: ["全部类别", ...categories.map((cat) => cat.name)],
+      categories: [...categories.map((cat) => cat.name)],
+      pagination: {
+        currentPage: page,
+        totalPages: totalPages,
+        totalCount: totalCount,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      }
     });
   } catch (error) {
     console.error("Failed to fetch products:", error);

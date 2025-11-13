@@ -131,10 +131,10 @@ export default function AboutPage() {
 
               {[
                 {
-                  year: "2003",
+                  year: "2002",
                   title: "公司成立",
                   description:
-                    "联合化工正式注册成立，专注于化工产品的研发与生产",
+                    "江西联合化学有限公司正式成立，总部设在国家级新型工业化产业示范基地——星火工业园，专注树脂产品研发生产",
                   icon: (
                     <svg
                       className="milestone-icon"
@@ -150,14 +150,14 @@ export default function AboutPage() {
                       />
                     </svg>
                   ),
-                  milestone: "起点",
+                  milestone: "创业启航",
                   color: "gold",
                 },
                 {
-                  year: "2008",
-                  title: "建立第一个生产基地",
+                  year: "2005",
+                  title: "产品线完善",
                   description:
-                    "建立占地5000平方米的现代化生产基地，年产能突破10000吨",
+                    "形成完整的树脂产品体系：丙烯酸树脂、PP树脂、触变型树脂、丙烯酸水分散体、聚酯树脂、氨基树脂、环氧磷酸酯、蜡分散体等",
                   icon: (
                     <svg
                       className="milestone-icon"
@@ -173,14 +173,14 @@ export default function AboutPage() {
                       />
                     </svg>
                   ),
-                  milestone: "产能突破",
+                  milestone: "产品矩阵",
                   color: "secondary",
                 },
                 {
-                  year: "2015",
-                  title: "获得国际认证",
+                  year: "2010",
+                  title: "技术突破",
                   description:
-                    "通过ISO9001质量管理体系认证和ISO14001环境管理体系认证",
+                    "建立强大研发团队，实现汽车内外饰件和原厂漆领域重大技术突破，积累大量成熟应用案例",
                   icon: (
                     <svg
                       className="milestone-icon"
@@ -192,18 +192,18 @@ export default function AboutPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                       />
                     </svg>
                   ),
-                  milestone: "品质保证",
+                  milestone: "技术创新",
                   color: "accent",
                 },
                 {
-                  year: "2020",
-                  title: "数字化转型",
+                  year: "2015",
+                  title: "产业升级",
                   description:
-                    "全面推进数字化管理，引入ERP系统和智能化生产装备",
+                    "新建高标准厂房，引进DCS控制设备，建立完善的质量保证体系，实现年产值8亿元目标",
                   icon: (
                     <svg
                       className="milestone-icon"
@@ -215,18 +215,18 @@ export default function AboutPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M10 20l4-16m4 4l4 16m-4-4H6"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0a1 1 0 00-1 1H3a1 1 0 00-1 1v5a1 1 0 001 1h1"
                       />
                     </svg>
                   ),
-                  milestone: "智能升级",
+                  milestone: "产能升级",
                   color: "gold",
                 },
                 {
-                  year: "2023",
-                  title: "全球化发展",
+                  year: "2020",
+                  title: "市场拓展",
                   description:
-                    "成功进入东南亚市场，设立海外销售办事处，实现国际化经营",
+                    "与国内外知名涂料厂建立深度合作，定制化树脂服务能力显著提升，客户满意度持续提高",
                   icon: (
                     <svg
                       className="milestone-icon"
@@ -238,11 +238,11 @@ export default function AboutPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h6a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1v-10a1 1 0 00-1-1h-3a1 1 0 00-1 1v4a1 1 0 001 1h3a1 1 0 001-1v-4z"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                       />
                     </svg>
                   ),
-                  milestone: "国际化",
+                  milestone: "合作共赢",
                   color: "accent",
                 },
               ].map((milestone, index) => (
@@ -292,21 +292,21 @@ export default function AboutPage() {
                 style={{ animationDelay: "400ms" }}
               >
                 <div className="stat-number">20+</div>
-                <div className="stat-label">年发展历程</div>
+                <div className="stat-label">年行业经验</div>
               </div>
               <div
                 className={`timeline-stat ${isLoaded ? "loaded" : ""}`}
                 style={{ animationDelay: "600ms" }}
               >
-                <div className="stat-number">5+</div>
-                <div className="stat-label">重要里程碑</div>
+                <div className="stat-number">8亿</div>
+                <div className="stat-label">年产值(元)</div>
               </div>
               <div
                 className={`timeline-stat ${isLoaded ? "loaded" : ""}`}
                 style={{ animationDelay: "800ms" }}
               >
-                <div className="stat-number">50+</div>
-                <div className="stat-label">国家地区</div>
+                <div className="stat-number">8+</div>
+                <div className="stat-label">产品系列</div>
               </div>
             </div>
           </div>

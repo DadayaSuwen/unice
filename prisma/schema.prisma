@@ -50,6 +50,24 @@ model Product {
   @@index([cas_no])
 }
 
+model NewsCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?  // 分类颜色
+  sort_order  Int      @default(0)
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  news        News[]
+
+  @@index([slug])
+  @@index([is_active])
+  @@index([sort_order])
+}
+
 model News {
   id            Int      @id @default(autoincrement())
   title         String
@@ -57,15 +75,29 @@ model News {
   excerpt       String?
   type          String   @default("news")
   publish_date  DateTime @default(now())
-  is_published  Boolean  @default(false)
+  is_published  Boolean  @default(true)
+  author        String?
   author_id     Int?
   image_url     String?
+  tags          Json?    // 存储标签数组
+  read_time     Int?     // 阅读时间（分钟）
+  views_count   Int      @default(0) // 浏览次数
+  category_id   Int?     // 新闻分类ID
+  seo_title     String?  // SEO标题
+  seo_description String? // SEO描述
+  featured      Boolean  @default(false) // 是否为精选新闻
+  sort_order    Int      @default(0) // 排序字段
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+
+  category     NewsCategory? @relation(fields: [category_id], references: [id])
 
   @@index([publish_date])
   @@index([is_published])
   @@index([type])
+  @@index([category_id])
+  @@index([featured])
+  @@index([sort_order])
 }
 
 model Career {
@@ -76,16 +108,24 @@ model Career {
   type                  String   @default("full_time")
   experience_requirement String?
   description           String?
-  requirements          Json?
-  responsibilities      Json?
+  requirements          Json?    // 存储数组格式的要求
+  responsibilities      Json?    // 存储数组格式的职责
   application_deadline  DateTime?
+  salary_range          String?  // 薪资范围
+  education_requirement String? // 学历要求
+  work_environment      String?  // 工作环境描述
+  career_benefits       Json?    // 职业福利（数组）
+  contact_email         String?  // 联系邮箱
+  contact_phone         String?  // 联系电话
   is_active             Boolean  @default(true)
+  sort_order            Int      @default(0) // 排序字段
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
 
   @@index([is_active])
   @@index([department])
   @@index([position])
+  @@index([sort_order])
 }
 
 model User {

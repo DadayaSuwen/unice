@@ -103,16 +103,6 @@
   }
 }
 
-// Apple-style divider
-.apple-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
-  margin: 80px 0;
-
-  @media (max-width: 768px) {
-    margin: 60px 0;
-  }
-}
 
 // Apple-style feature cards
 .apple-feature-card {
@@ -359,7 +349,7 @@
 .product-visual {
   flex: 3;
   height: 320px;
-  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+  // background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,6 +359,11 @@
   font-size: 96px;
   color: var(--gray-300);
   user-select: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
 }
 
 .product-title {
@@ -1310,5 +1305,223 @@
 
   .desktop-space-between {
     justify-content: space-between !important;
+  }
+}
+
+// Careers Page Loading & Error Styles
+.careers-loading, .careers-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.careers-loading .loading-spinner {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.careers-loading .spinner-ring {
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(212, 175, 55, 0.1);
+  border-top: 3px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.careers-loading .spinner-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.careers-loading .loading-text {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.careers-error .error-card {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+.careers-error .error-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  color: #ef4444;
+}
+
+.careers-error .error-message {
+  color: #ef4444;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// Deadline tag styling
+.job-tag.deadline {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  font-weight: 600;
+}
+
+// Job expanded details styling improvements
+.job-card {
+  // 确保卡片不会因为展开内容影响其他卡片的位置
+  .job-expanded-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+
+    .job-expanded-section {
+      margin-bottom: 1.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .job-expanded-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--foreground);
+      margin-bottom: 0.75rem;
+    }
+
+    .job-expanded-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding: 0.5rem 0;
+        color: var(--text-secondary);
+        position: relative;
+        padding-left: 1.5rem;
+
+        &:before {
+          content: "•";
+          color: var(--primary-gold);
+          position: absolute;
+          left: 0;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+// Mobile grid adjustment for job cards
+@media (max-width: 768px) {
+  .jobs-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+
+// Careers Contact Section
+.careers-contact-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, var(--background) 0%, var(--background-secondary) 100%);
+}
+
+.contact-content {
+  text-align: center;
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.contact-info-card {
+  background: var(--background);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  background: var(--primary-gold-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.contact-info-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-card p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.contact-link {
+  color: var(--primary-gold);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--primary-gold-hover);
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 768px) {
+  .careers-contact-section {
+    padding: 4rem 0;
+  }
+
+  .contact-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

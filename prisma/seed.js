@@ -1,9 +1,52 @@
-require('dotenv').config()
 const { PrismaClient } = require('@prisma/client')
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL
+    }
+  }
+})
 
 async function main() {
+  console.log('开始清空数据库所有数据...')
+
+  // 清空数据库所有表的数据（按照外键依赖顺序）
+  try {
+    // 首先清空有外键依赖的表
+    await prisma.contactSubmission.deleteMany()
+    console.log('✓ 清空联系表单表')
+
+    await prisma.product.deleteMany()
+    console.log('✓ 清空产品表')
+
+    await prisma.news.deleteMany()
+    console.log('✓ 清空新闻表')
+
+    await prisma.career.deleteMany()
+    console.log('✓ 清空招聘表')
+
+    await prisma.heroBanner.deleteMany()
+    console.log('✓ 清空首页横幅表')
+
+    await prisma.user.deleteMany()
+    console.log('✓ 清空用户表')
+
+    // 清空新闻分类表（被新闻表依赖）
+    await prisma.newsCategory.deleteMany()
+    console.log('✓ 清空新闻分类表')
+
+    // 最后清空产品分类表（被产品表依赖）
+    await prisma.category.deleteMany()
+    console.log('✓ 清空产品分类表')
+
+    console.log('🗑️ 数据库清空完成！')
+  } catch (error) {
+    console.error('清空数据库时出错:', error)
+  }
+
+  console.log('\n开始重新创建数据...')
+
   // 创建产品分类
   const categories = await prisma.category.createMany({
     data: [
@@ -38,13 +81,87 @@ async function main() {
 
   console.log(`Created ${categories.count} categories`)
 
+  // 创建新闻分类
+  const newsCategories = await prisma.newsCategory.createMany({
+    data: [
+      {
+        name: '公司新闻',
+        slug: 'company-news',
+        description: '公司内部新闻和公告',
+        color: '#d4af37',
+        sort_order: 1,
+        is_active: true
+      },
+      {
+        name: '行业资讯',
+        slug: 'industry-news',
+        description: '化工行业最新动态和政策',
+        color: '#3498db',
+        sort_order: 2,
+        is_active: true
+      },
+      {
+        name: '产品发布',
+        slug: 'product-release',
+        description: '新产品发布和更新',
+        color: '#2ecc71',
+        sort_order: 3,
+        is_active: true
+      },
+      {
+        name: '企业活动',
+        slug: 'corporate-events',
+        description: '公司举办的各类活动',
+        color: '#e74c3c',
+        sort_order: 4,
+        is_active: true
+      },
+      {
+        name: '技术创新',
+        slug: 'technology-innovation',
+        description: '技术研发和创新成果',
+        color: '#9b59b6',
+        sort_order: 5,
+        is_active: true
+      },
+      {
+        name: '社会责任',
+        slug: 'social-responsibility',
+        description: '企业社会责任相关活动',
+        color: '#f39c12',
+        sort_order: 6,
+        is_active: true
+      }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log(`Created ${newsCategories.count} news categories`)
+
+  // 获取创建后的分类数据以获取正确的ID
+  const createdCategories = await prisma.category.findMany()
+  const categoryMap = {}
+  createdCategories.forEach(cat => {
+    categoryMap[cat.slug] = cat.id
+  })
+
+  // 获取新闻分类ID映射
+  const createdNewsCategories = await prisma.newsCategory.findMany()
+  const newsCategoryMap = {}
+  createdNewsCategories.forEach(cat => {
+    newsCategoryMap[cat.slug] = cat.id
+  })
+
+  console.log('产品分类ID映射:', categoryMap)
+  console.log('新闻分类ID映射:', newsCategoryMap)
+
   // 创建产品
   const products = await prisma.product.createMany({
     data: [
       {
         name: '聚丙烯颗粒',
         cas_no: '9003-07-2',
-        category_id: 1,
+        category_id: categoryMap['polymer-materials'],
         description: '高品质聚丙烯颗粒，适用于注塑、吹塑等多种加工工艺。',
         details: JSON.stringify({
           "外观": "白色颗粒状",
@@ -64,11 +181,26 @@ async function main() {
           "可回收利用"
         ]),
         applications: JSON.stringify([
-          "汽车零部件",
-          "家用电器外壳",
-          "包装容器",
-          "医疗器械",
-          "建筑材料"
+          {
+            name: "汽车零部件",
+            description: "用于汽车保险杠、仪表盘、车门内饰板等零部件的制造"
+          },
+          {
+            name: "家用电器外壳",
+            description: "电视机、洗衣机、空调等家电产品的外壳和结构件"
+          },
+          {
+            name: "包装容器",
+            description: "食品包装盒、化妆品容器、工业零部件包装等"
+          },
+          {
+            name: "医疗器械",
+            description: "一次性医疗用品、诊断设备外壳、医用容器等"
+          },
+          {
+            name: "建筑材料",
+            description: "管道系统、绝缘材料、装饰板等建筑应用"
+          }
         ]),
         safety_info: JSON.stringify({
           "危险性": "低毒、不易燃",
@@ -81,7 +213,7 @@ async function main() {
       {
         name: '苯乙烯',
         cas_no: '100-42-5',
-        category_id: 2,
+        category_id: categoryMap['basic-chemicals'],
         description: '高纯度苯乙烯单体，广泛应用于聚合物合成领域。',
         details: JSON.stringify({
           "纯度": "≥99.5%",
@@ -98,11 +230,26 @@ async function main() {
           "储存稳定性好"
         ]),
         applications: JSON.stringify([
-          "聚苯乙烯生产",
-          "ABS树脂合成",
-          "丁苯橡胶制备",
-          "不饱和聚酯树脂",
-          "合成纤维单体"
+          {
+            name: "聚苯乙烯生产",
+            description: "作为主要单体用于聚苯乙烯的聚合反应"
+          },
+          {
+            name: "ABS树脂合成",
+            description: "合成丙烯腈-丁二烯-苯乙烯共聚物的关键原料"
+          },
+          {
+            name: "丁苯橡胶制备",
+            description: "生产丁苯橡胶的重要单体材料"
+          },
+          {
+            name: "不饱和聚酯树脂",
+            description: "用于制造玻璃钢等复合材料"
+          },
+          {
+            name: "合成纤维单体",
+            description: "生产合成纤维和聚合物的原料"
+          }
         ]),
         safety_info: JSON.stringify({
           "危险性": "易燃、有毒",
@@ -115,7 +262,7 @@ async function main() {
       {
         name: '环氧乙烷',
         cas_no: '75-81-4',
-        category_id: 3,
+        category_id: categoryMap['fine-chemicals'],
         description: '重要的有机合成中间体，用于生产乙二醇和其他化学品。',
         details: JSON.stringify({
           "纯度": "≥99.0%",
@@ -132,11 +279,26 @@ async function main() {
           "溶解性能好"
         ]),
         applications: JSON.stringify([
-          "乙二醇生产",
-          "表面活性剂合成",
-          "乙醇胺制备",
-          "消毒剂生产",
-          "纺织助剂"
+          {
+            name: "乙二醇生产",
+            description: "作为主要原料生产乙二醇，用于防冻液和聚酯纤维"
+          },
+          {
+            name: "表面活性剂合成",
+            description: "制造非离子表面活性剂，用于洗涤剂和乳化剂"
+          },
+          {
+            name: "乙醇胺制备",
+            description: "生产一乙醇胺、二乙醇胺等化工产品"
+          },
+          {
+            name: "消毒剂生产",
+            description: "用于制造医用消毒剂和卫生产品"
+          },
+          {
+            name: "纺织助剂",
+            description: "纺织品整理剂和染料中间体的生产"
+          }
         ]),
         safety_info: JSON.stringify({
           "危险性": "易燃易爆、有毒致癌",
@@ -149,7 +311,7 @@ async function main() {
       {
         name: '甲苯',
         cas_no: '108-88-3',
-        category_id: 4,
+        category_id: categoryMap['solvents'],
         description: '常用的有机溶剂，广泛应用于涂料、粘合剂等领域。',
         details: JSON.stringify({
           "纯度": "≥99.5%",
@@ -166,11 +328,26 @@ async function main() {
           "性价比高"
         ]),
         applications: JSON.stringify([
-          "油漆涂料溶剂",
-          "胶粘剂稀释剂",
-          "油墨清洗剂",
-          "化学合成原料",
-          "医药中间体"
+          {
+            name: "油漆涂料溶剂",
+            description: "作为溶剂用于油漆、涂料和清漆的配方中"
+          },
+          {
+            name: "胶粘剂稀释剂",
+            description: "稀释各种胶粘剂，调节粘度便于施工"
+          },
+          {
+            name: "油墨清洗剂",
+            description: "印刷设备的清洗剂和油墨配方成分"
+          },
+          {
+            name: "化学合成原料",
+            description: "合成TNT、苯甲酸、甲酚等化学品"
+          },
+          {
+            name: "医药中间体",
+            description: "制药工业中的溶剂和反应介质"
+          }
         ]),
         safety_info: JSON.stringify({
           "危险性": "易燃、低毒",
@@ -183,7 +360,7 @@ async function main() {
       {
         name: '硫酸',
         cas_no: '7664-93-9',
-        category_id: 5,
+        category_id: categoryMap['inorganic-acids'],
         description: '浓度98%的浓硫酸，广泛用于化工生产和实验室研究。',
         details: JSON.stringify({
           "浓度": "98%",
@@ -201,11 +378,26 @@ async function main() {
           "价格低廉"
         ]),
         applications: JSON.stringify([
-          "化肥生产",
-          "石油精炼",
-          "金属表面处理",
-          "电池制造",
-          "实验室试剂"
+          {
+            name: "化肥生产",
+            description: "制造硫酸铵、过磷酸钙等化肥产品"
+          },
+          {
+            name: "石油精炼",
+            description: "原油精炼过程中的酸洗和催化剂再生"
+          },
+          {
+            name: "金属表面处理",
+            description: "钢材酸洗、电镀前的表面清洁处理"
+          },
+          {
+            name: "电池制造",
+            description: "铅酸蓄电池电解液的配制"
+          },
+          {
+            name: "实验室试剂",
+            description: "化学实验室常用的分析试剂和催化剂"
+          }
         ]),
         safety_info: JSON.stringify({
           "危险性": "强腐蚀性、强氧化性",
@@ -221,35 +413,123 @@ async function main() {
 
   console.log(`Created ${products.count} products`)
 
-  // 创建新闻
+  // 创建新闻 - 江西联合化学有限公司新闻（使用基本字段）
   const news = await prisma.news.createMany({
     data: [
       {
-        title: '联合化工荣获2023年度优秀企业奖',
-        excerpt: '在2023年度行业评选中，联合化工凭借卓越的产品质量和创新能力，成功荣获优秀企业奖。',
-        content: '在2023年度行业评选中，联合化工凭借卓越的产品质量和创新能力，成功荣获优秀企业奖。这一荣誉不仅是对我们过去一年工作的认可，更是对未来发展的激励。我们将继续秉承质量第一、客户至上的理念，为客户提供更优质的产品和服务。',
-        type: '公司公告',
+        title: '江西联合化学荣获2024年度化工行业创新奖',
+        excerpt: '凭借在新材料研发领域的突出贡献，江西联合化学荣获中国化工协会颁发的年度创新奖，这是对公司20余年专注树脂研发的高度认可。',
+        content: `江西联合化学有限公司在2024年度中国化工协会评选中荣获"化工行业创新奖"，这是对公司在新材料研发领域卓越贡献的高度认可。
+
+本次获奖的创新项目主要涉及新型环保树脂的研发与应用。联合化学研发团队历时三年，成功开发出具有自主知识产权的新一代环保树脂产品，其性能指标达到国际领先水平。
+
+该创新产品在以下方面实现了重大突破：
+- 挥发性有机化合物（VOC）含量降低80%以上
+- 产品纯度达到99.9%，超越行业标准
+- 生产能耗降低30%，实现绿色制造
+- 产品应用范围扩大到航空航天等高端领域
+
+这一创新成果不仅推动了化工行业的技术进步，也为我国在高端化工材料领域赢得了国际声誉。产品已成功应用于多个重点工程项目，获得客户的一致好评。
+
+江西联合化学将继续加大研发投入，依托星火工业园区的产业优势，在更多前沿领域实现技术突破，为化工行业的高质量发展贡献更大力量。`,
+        type: 'news',
+        category_id: newsCategoryMap['company-news'],
+        publish_date: new Date('2024-11-10'),
         is_published: true
       },
       {
-        title: '新产品系列发布，引领行业创新',
-        excerpt: '公司最新研发的高性能聚合物系列产品正式发布，将在多个应用领域展现卓越性能。',
-        content: '公司最新研发的高性能聚合物系列产品正式发布，将在多个应用领域展现卓越性能。该系列产品具有优异的机械强度、耐化学性和加工性能，可广泛应用于汽车、电子、家电等行业。我们相信，这一创新成果将进一步巩固我们在行业内的领先地位。',
-        type: '行业动态',
+        title: '新一代汽车原厂漆树脂正式投产',
+        excerpt: '我公司研发团队历时三年开发的新一代汽车原厂漆专用树脂正式投产，性能达到国际领先水平，已获得多家知名汽车厂商认证。',
+        content: `江西联合化学有限公司研发团队历时三年开发的新一代汽车原厂漆专用树脂正式投产，标志着我国在汽车涂料领域实现了重大技术突破。
+
+新一代汽车原厂漆树脂具有以下显著特点：
+- 优异的耐候性和耐化学性
+- 出色的附着力和柔韧性
+- 低温固化性能优良
+- 环保性能突出，符合欧盟REACH法规
+
+该产品主要应用于汽车内外饰件的涂装，包括保险杠、车门、仪表盘等部件的原厂漆涂装，已通过多家国内外知名汽车制造商的严格认证。
+
+随着汽车工业的快速发展和环保要求的不断提高，高性能环保树脂的市场需求持续增长。公司预计该产品年产值将达到5亿元。`,
+        type: 'product',
+        category_id: newsCategoryMap['product-release'],
+        publish_date: new Date('2024-11-08'),
         is_published: true
       },
       {
-        title: '环保技术升级，践行可持续发展',
-        excerpt: '公司投资数百万实施环保技术改造，进一步降低生产过程中的环境影响。',
-        content: '公司投资数百万实施环保技术改造，进一步降低生产过程中的环境影响。此次升级改造包括废气处理系统优化、废水循环利用设施建设和固体废物减量化措施等。我们致力于在追求企业发展的同时，积极履行社会责任，推动可持续发展。',
-        type: '公司公告',
+        title: '联合化学与欧洲知名企业达成战略合作',
+        excerpt: '江西联合化学与德国巴斯夫公司签署战略合作协议，双方将在技术研发、市场拓展等多个领域开展深度合作。',
+        content: `江西联合化学有限公司与德国巴斯夫公司在上海签署战略合作协议，双方将在技术研发、市场拓展等多个领域开展深度合作，共同开拓全球市场。
+
+根据协议，双方将在以下方面展开合作：
+- 共建联合研发中心，开发新一代环保树脂产品
+- 共享技术专利和研发成果
+- 共同开拓欧洲和亚洲市场
+- 开展人才交流和技术培训
+
+此次战略合作标志着江西联合化学的国际化战略迈出重要一步，有助于提升公司的技术水平和国际竞争力。
+
+双方表示将充分发挥各自优势，在推动行业技术进步的同时，为全球客户提供更优质的产品和服务。`,
+        type: 'news',
+        category_id: newsCategoryMap['company-news'],
+        publish_date: new Date('2024-11-05'),
         is_published: true
       },
       {
-        title: '参加第十九届国际化工展览会',
-        excerpt: '联合化工将亮相第十九届国际化工展览会，展示最新技术和产品。',
-        content: '联合化工将亮相第十九届国际化工展览会，展示最新技术和产品。本次参展将重点展示我们在高性能聚合物、精细化学品等领域的最新研究成果。我们诚邀各界朋友莅临参观，共同探讨合作机会。',
-        type: '展会信息',
+        title: '化工行业绿色发展趋势分析报告',
+        excerpt: '根据最新市场调研数据，绿色化工和智能制造将成为未来发展的主要方向，环保法规日趋严格推动行业转型升级。',
+        content: `中国化工协会发布最新行业发展趋势报告，指出绿色化工和智能制造将成为未来发展的主要方向。
+
+报告显示，化工行业呈现以下发展趋势：
+- 环保产品需求快速增长
+- 智能制造加速普及
+- 产业链整合程度提高
+- 国际化竞争日趋激烈
+
+随着"双碳"目标的推进，环保法规日趋严格，传统化工企业面临转型升级压力。
+
+新能源汽车、航空航天等下游产业的快速发展为化工行业带来新的发展机遇。`,
+        type: 'industry',
+        category_id: newsCategoryMap['industry-news'],
+        publish_date: new Date('2024-11-01'),
+        is_published: true
+      },
+      {
+        title: '星火工业园环保技术改造项目圆满完成',
+        excerpt: '投资3000万元的环保技术改造项目正式完工，年可减少污染物排放80%以上，实现绿色生产目标。',
+        content: `江西联合化学星火工业园环保技术改造项目正式完工，标志着公司在绿色制造方面迈上新台阶。
+
+该项目总投资3000万元，主要包括：
+- 废气处理系统升级改造
+- 废水循环利用设施建设
+- 固废减量化处理设备
+- 环境监测体系建设
+
+项目实施后，预计年可减少污染物排放80%以上，废水回用率达到95%，固废综合利用率达到98%。
+
+该项目的完工不仅改善了区域环境质量，也为行业绿色发展树立了标杆。`,
+        type: 'event',
+        category_id: newsCategoryMap['corporate-events'],
+        publish_date: new Date('2024-10-25'),
+        is_published: true
+      },
+      {
+        title: '公司举办2024年度技术创新大会',
+        excerpt: '来自全国各地的技术专家齐聚星火工业园，共同探讨化工行业技术创新和未来发展。',
+        content: `江西联合化学2024年度技术创新大会在星火工业园成功举办，来自全国各地的技术专家和客户代表齐聚一堂。
+
+本次大会议程丰富，主要包括：
+- 最新技术成果展示
+- 行业专家主题演讲
+- 技术交流与合作洽谈
+- 工厂实地参观考察
+
+大会展示了公司近年来在环保树脂、智能制造等领域取得的20余项技术成果。
+
+会议期间，公司与多家企业达成技术合作协议，签约金额超过2亿元。`,
+        type: 'event',
+        category_id: newsCategoryMap['corporate-events'],
+        publish_date: new Date('2024-10-20'),
         is_published: true
       }
     ],
@@ -258,52 +538,156 @@ async function main() {
 
   console.log(`Created ${news.count} news articles`)
 
-  // 创建招聘信息
+  // 创建招聘信息 - 江西联合化学有限公司职位
   const careers = await prisma.career.createMany({
     data: [
       {
-        position: '高级研发工程师',
+        position: '树脂研发工程师',
         department: '研发部',
-        location: '北京总部',
+        location: '星火工业园',
         type: 'full_time',
         experience_requirement: '3-5年经验',
-        description: '负责化工产品的新品研发和工艺改进工作，参与技术方案制定。',
+        description: '负责丙烯酸树脂、PP树脂、触变型树脂等产品的研发工作，特别是在汽车内外饰件和原厂漆应用领域的技术开发。',
         requirements: JSON.stringify([
-          '化工、材料等相关专业本科及以上学历',
-          '3年以上化工研发工作经验',
-          '熟悉化工工艺流程和设备',
+          '化工、高分子材料、应用化学等相关专业本科及以上学历',
+          '3年以上树脂研发工作经验，熟悉汽车涂料行业者优先',
+          '掌握树脂合成工艺和配方设计，能独立开展研发工作',
+          '熟悉各类检测仪器和实验设备的操作',
           '具备良好的沟通能力和团队协作精神',
-          '英语读写能力良好'
+          '英语四级以上，能阅读英文技术资料'
         ]),
         responsibilities: JSON.stringify([
-          '新产品开发和实验设计',
-          '生产工艺优化和改进',
-          '技术文档编写和整理',
-          '协助解决生产中的技术问题',
-          '参与技术交流和培训'
+          '负责丙烯酸树脂、聚酯树脂、氨基树脂等产品的配方开发',
+          '针对汽车内外饰件和原厂漆应用进行树脂性能优化',
+          '制定和实施新产品研发计划，完成项目开发任务',
+          '编写产品技术文档、工艺文件和质量标准',
+          '配合生产和销售部门解决技术问题，提供技术支持',
+          '跟踪行业技术发展动态，提出创新性技术方案'
         ]),
         is_active: true
       },
       {
-        position: '销售经理',
-        department: '销售部',
-        location: '全国',
+        position: 'DCS控制工程师',
+        department: '生产部',
+        location: '星火工业园',
         type: 'full_time',
-        experience_requirement: '2-3年经验',
-        description: '负责化工产品的市场推广和客户关系维护，完成销售目标。',
+        experience_requirement: '2-4年经验',
+        description: '负责DCS自动化控制系统的运行维护，确保生产设备安全稳定运行，优化生产工艺参数。',
         requirements: JSON.stringify([
-          '市场营销或化工相关专业大专以上学历',
-          '2年以上化工产品销售经验',
-          '具备较强的沟通表达能力和谈判技巧',
-          '熟悉化工行业市场状况',
-          '能适应出差'
+          '自动化、化工机械、过程控制等相关专业大专及以上学历',
+          '2年以上DCS系统操作维护经验，熟悉化工生产工艺',
+          '掌握DCS系统的硬件结构、软件配置和编程方法',
+          '具备化工工艺基础知识和安全意识',
+          '能适应倒班工作，具备良好的应急处理能力',
+          '持有相关资格证书者优先'
         ]),
         responsibilities: JSON.stringify([
-          '开发和维护客户资源',
-          '制定销售计划和策略',
-          '完成个人及团队销售目标',
-          '参与商务谈判和合同签订',
-          '收集市场信息和竞争对手情报'
+          '负责DCS系统的日常监控、操作和维护工作',
+          '监控生产过程中的关键参数，及时调整工艺条件',
+          '处理DCS系统故障和报警，确保生产安全稳定',
+          '参与新设备的调试、验收和员工培训工作',
+          '优化控制方案，提高产品质量和生产效率',
+          '记录运行数据，编写技术报告和改进建议'
+        ]),
+        is_active: true
+      },
+      {
+        position: '涂料销售工程师',
+        department: '销售部',
+        location: '全国（华东、华南、华北）',
+        type: 'full_time',
+        experience_requirement: '2-3年经验',
+        description: '负责公司在涂料行业的树脂产品销售，重点开发汽车原厂漆、工业漆等领域的客户资源。',
+        requirements: JSON.stringify([
+          '市场营销、化工或相关专业大专以上学历',
+          '2年以上化工产品销售经验，有涂料行业背景者优先',
+          '熟悉汽车涂料或工业涂料市场，了解客户需求',
+          '具备较强的市场开拓能力和客户沟通技巧',
+          '能适应频繁出差，工作积极主动',
+          '具备良好的团队合作精神和抗压能力'
+        ]),
+        responsibilities: JSON.stringify([
+          '负责指定区域的涂料市场开发和客户维护工作',
+          '推广公司丙烯酸树脂、聚酯树脂等产品，完成销售目标',
+          '深入了解客户需求，提供定制化的产品解决方案',
+          '收集市场信息，分析竞争对手动态，制定销售策略',
+          '参与商务谈判，处理客户投诉和售后服务',
+          '配合技术部门为客户提供技术支持和服务'
+        ]),
+        is_active: true
+      },
+      {
+        position: '质量检验员',
+        department: '质控部',
+        location: '星火工业园',
+        type: 'full_time',
+        experience_requirement: '1-3年经验',
+        description: '负责原材料、半成品和成品的质量检验，确保产品质量符合标准要求。',
+        requirements: JSON.stringify([
+          '化工、质量管理等相关专业中专或以上学历',
+          '1年以上化工产品质量检验经验',
+          '熟悉各类检测仪器的操作和维护',
+          '了解ISO9001质量管理体系要求',
+          '工作认真负责，具备良好的质量意识',
+          '能适应实验室工作环境'
+        ]),
+        responsibilities: JSON.stringify([
+          '负责原材料进厂检验，确保符合采购技术要求',
+          '进行生产过程监控和半成品质量检验',
+          '完成成品出厂检验，出具质量检验报告',
+          '操作和维护检验设备，确保仪器正常运行',
+          '参与质量问题的分析和处理，提出改进建议',
+          '整理质量记录，维护质量管理体系文件'
+        ]),
+        is_active: true
+      },
+      {
+        position: '生产操作工',
+        department: '生产部',
+        location: '星火工业园',
+        type: 'full_time',
+        experience_requirement: '1-2年经验',
+        description: '负责树脂生产设备的操作，按照工艺要求进行生产作业，确保产品质量和生产安全。',
+        requirements: JSON.stringify([
+          '化工、机械或相关专业中专、技校学历',
+          '1年以上化工生产操作经验者优先',
+          '了解基本的化工工艺和安全知识',
+          '能适应倒班工作，具备良好的身体素质',
+          '工作责任心强，严格遵守操作规程',
+          '具备团队协作精神和学习能力'
+        ]),
+        responsibilities: JSON.stringify([
+          '严格按照工艺文件和操作规程进行生产作业',
+          '监控生产设备运行状态，及时发现和处理异常情况',
+          '准确记录生产数据和操作参数',
+          '参与设备的日常维护保养工作',
+          '遵守安全生产制度，确保生产安全和环保',
+          '配合完成生产计划，保证产品质量和产量'
+        ]),
+        is_active: true
+      },
+      {
+        position: '环保技术员',
+        department: '环保安全部',
+        location: '星火工业园',
+        type: 'full_time',
+        experience_requirement: '2-4年经验',
+        description: '负责公司环保设施的运行管理，确保废水、废气、固废处理达标排放，推进清洁生产。',
+        requirements: JSON.stringify([
+          '环境工程、化工等相关专业大专及以上学历',
+          '2年以上化工企业环保管理经验',
+          '熟悉环保法律法规和相关标准要求',
+          '掌握三废处理工艺和设备的操作维护',
+          '具备环境监测和数据分析能力',
+          '持有环保相关资格证书者优先'
+        ]),
+        responsibilities: JSON.stringify([
+          '负责废水、废气处理设施的日常运行和维护',
+          '定期监测污染物排放数据，确保达标排放',
+          '制定和实施环境保护措施，推进清洁生产',
+          '处理环保投诉和应急事件，配合环保检查',
+          '管理危险废物，确保合规处置',
+          '编写环保报告，持续改进环境管理体系'
         ]),
         is_active: true
       }
@@ -328,7 +712,7 @@ async function main() {
 
   console.log(`Created user: ${user.username}`)
 
-  console.log('Database seeding completed!')
+  console.log('\n🎉 Database seeding completed!')
 }
 
 main()

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Pagination from "@/components/pagination";
 
 interface NewsItem {
   id: number;
@@ -11,84 +12,77 @@ interface NewsItem {
   type?: string;
   author?: string;
   image_url?: string;
+  category?: string;
+}
+
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 }
 
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("全部类别");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        // Fetch data from the API route
-        const response = await fetch("/api/news");
-        const data = await response.json();
+  const fetchNews = async (page: number = 1, category: string = selectedCategory) => {
+    try {
+      setLoading(true);
 
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to fetch news");
-        }
-        setNews(data.news || []);
-        setCategories(data.categories || ["全部类别", "公司新闻", "行业资讯", "产品发布"]);
-        setLoading(false);
-        setTimeout(() => setIsLoaded(true), 100);
-      } catch (error) {
-        console.error("获取新闻数据失败:", error);
-        // 添加示例数据作为后备
-        setNews([
-          {
-            id: 1,
-            title: "联合化工荣获2024年度化工行业创新奖",
-            excerpt: "凭借在新材料研发领域的突出贡献，联合化工荣获中国化工协会颁发的年度创新奖。",
-            content: "详细内容...",
-            publish_date: "2024-01-15",
-            type: "公司新闻",
-            author: "新闻中心"
-          },
-          {
-            id: 2,
-            title: "新一代环保溶剂产品正式发布",
-            excerpt: "我公司研发团队历时三年开发的新一代环保溶剂正式投产，性能达到国际领先水平。",
-            content: "详细内容...",
-            publish_date: "2024-01-10",
-            type: "产品发布",
-            author: "产品部"
-          },
-          {
-            id: 3,
-            title: "化工行业发展趋势分析报告",
-            excerpt: "根据最新市场调研数据，绿色化工和智能制造将成为未来发展的主要方向。",
-            content: "详细内容...",
-            publish_date: "2024-01-05",
-            type: "行业资讯",
-            author: "市场部"
-          },
-          {
-            id: 4,
-            title: "联合化工与欧洲知名企业达成战略合作",
-            excerpt: "双方将在技术研发、市场拓展等多个领域开展深度合作，共同开拓国际市场。",
-            content: "详细内容...",
-            publish_date: "2023-12-28",
-            type: "公司新闻",
-            author: "商务部"
-          }
-        ]);
-        setCategories(["全部类别", "公司新闻", "行业资讯", "产品发布"]);
-        setLoading(false);
-        setTimeout(() => setIsLoaded(true), 100);
+      // 构建查询参数
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '12',
+        category: category
+      });
+
+      // Fetch data from the API route
+      const response = await fetch(`/api/news?${params}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch news");
       }
-    };
+      setNews(data.news || []);
+      setCategories(data.categories || ["全部类别"]);
+      setPagination(data.pagination || null);
+      setLoading(false);
+      setTimeout(() => setIsLoaded(true), 100);
+    } catch (error) {
+      console.error("获取新闻数据失败:", error);
+      setError("获取新闻数据失败");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchNews();
   }, []);
 
-  // 过滤新闻
-  const filteredNews =
-    selectedCategory === "全部类别"
-      ? news
-      : news.filter((item) => item.type === selectedCategory);
+  // 处理页面变化
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchNews(page, selectedCategory);
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 处理分类变化
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    fetchNews(1, category);
+  };
+
+  // 不再需要前端过滤，因为API已经处理了分类过滤
 
   if (loading) {
     return (
@@ -134,7 +128,7 @@ export default function NewsPage() {
                   className={`news-category-btn ${
                     selectedCategory === category ? "active" : ""
                   }`}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => handleCategoryChange(category)}
                 >
                   {category}
                 </button>
@@ -147,7 +141,7 @@ export default function NewsPage() {
       {/* News Grid */}
       <section className="news-grid-section">
         <div className="container">
-          {filteredNews.length === 0 ? (
+          {news.length === 0 ? (
             <div className="no-news">
               <div className="no-news-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +155,7 @@ export default function NewsPage() {
             </div>
           ) : (
             <div className="news-grid">
-              {filteredNews.map((item, index) => (
+              {news.map((item, index) => (
                 <article
                   key={item.id}
                   className="news-card"
@@ -227,24 +221,13 @@ export default function NewsPage() {
       </section>
 
       {/* Pagination */}
-      {filteredNews.length > 0 && (
-        <section className="news-pagination-section">
-          <div className="container">
-            <div className={`pagination-content ${isLoaded ? "loaded" : ""}`}>
-              <nav className="pagination-nav">
-                <button className="pagination-button active">1</button>
-                <button className="pagination-button">2</button>
-                <button className="pagination-button">3</button>
-                <button className="pagination-button">
-                  下一页
-                  <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </nav>
-            </div>
-          </div>
-        </section>
+      {pagination && pagination.totalPages > 1 && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+          className="news-pagination-section"
+        />
       )}
     </div>
   );
