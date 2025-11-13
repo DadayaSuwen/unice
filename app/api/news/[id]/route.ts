@@ -26,7 +26,7 @@ export async function GET(
       },
       include: {
         category: true
-      }
+      } as const
     });
 
     if (!news) {
@@ -108,7 +108,7 @@ export async function POST(
       where: { id: newsId },
       include: {
         category: true
-      }
+      } as const
     });
 
     if (!currentNews) {
