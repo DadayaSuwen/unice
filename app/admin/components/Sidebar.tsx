@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
@@ -10,7 +11,6 @@ import {
   Briefcase,
   Menu,
   X,
-  LogOut,
 } from "lucide-react";
 
 interface SidebarItem {
@@ -65,54 +65,26 @@ const sidebarItems: SidebarItem[] = [
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
-  onMobileMenuToggle: () => void;
-  isMobileMenuOpen: boolean;
   onMobileMenuItemClick?: () => void;
 }
 
 export default function Sidebar({
   isCollapsed,
   onToggle,
-  onMobileMenuToggle,
-  isMobileMenuOpen,
   onMobileMenuItemClick,
 }: SidebarProps) {
+  const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (typeof window !== "undefined") {
-      return (
-        window.location.pathname === href ||
-        window.location.pathname.startsWith(href + "/")
-      );
-    }
-    return false;
+    return pathname === href || pathname.startsWith(href + "/");
   };
 
   return (
     <>
       {/* 桌面端侧边栏 */}
-      <div className={`sidebar-desktop ${isCollapsed ? "collapsed" : ""}`}>
+      <div className={`${isCollapsed ? "collapsed" : ""}`}>
         {/* 侧边栏头部 */}
-        <div className="sidebar-header">
-          {!isCollapsed && (
-            <div className="sidebar-brand">
-              <div className="brand-icon">
-                <span className="text-white font-bold">联</span>
-              </div>
-              <div className="brand-text">
-                <div className="brand-title">管理后台</div>
-                <div className="brand-subtitle">联合化工管理平台</div>
-              </div>
-            </div>
-          )}
-          <button onClick={onToggle} className="toggle-button">
-            {isCollapsed ? (
-              <Menu className="w-5 h-5" />
-            ) : (
-              <X className="w-5 h-5" />
-            )}
-          </button>
-        </div>
+        <div className="sidebar-header"></div>
 
         {/* 导航菜单 */}
         <nav className="sidebar-nav">
@@ -121,9 +93,7 @@ export default function Sidebar({
               <div key={item.title} className="nav-item">
                 <Link
                   href={item.href}
-                  className={`nav-link ${
-                    isActive(item.href) ? "active" : ""
-                  }`}
+                  className={`nav-link ${isActive(item.href) ? "active" : ""}`}
                 >
                   <span className="nav-icon">{item.icon}</span>
                   {!isCollapsed && (
@@ -139,83 +109,6 @@ export default function Sidebar({
             ))}
           </div>
         </nav>
-
-        {/* 底部操作 */}
-        {!isCollapsed && (
-          <div className="sidebar-footer">
-            <button className="logout-button">
-              <LogOut className="logout-icon" />
-              <span>退出登录</span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* 移动端底部导航 */}
-      <div className="mobile-nav">
-        <div className="nav-grid">
-          {sidebarItems.slice(0, 4).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onMobileMenuItemClick}
-              className={`mobile-nav-item ${
-                isActive(item.href) ? "active" : ""
-              }`}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span>{item.title.replace(/管理/g, "")}</span>
-              {item.badge && <span className="nav-badge"></span>}
-            </Link>
-          ))}
-          {/* 更多选项按钮 */}
-          <button onClick={onMobileMenuToggle} className="mobile-nav-item">
-            <Menu className="nav-icon" />
-            <span>更多</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 移动端侧滑菜单 */}
-      <div
-        className={`mobile-menu-overlay ${isMobileMenuOpen ? "active" : ""}`}
-      >
-        <div className="overlay-backdrop" onClick={onMobileMenuToggle} />
-        <div className="mobile-menu-panel">
-          <div className="mobile-menu-header">
-            <div className="mobile-brand">
-              <div className="brand-icon">
-                <span className="text-white font-bold">联</span>
-              </div>
-              <div className="brand-text">
-                <div className="brand-title">管理后台</div>
-                <div className="brand-subtitle">联合化工管理平台</div>
-              </div>
-            </div>
-            <button onClick={onMobileMenuToggle} className="close-button">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="mobile-menu-content">
-            {sidebarItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => {
-                  onMobileMenuToggle?.();
-                  onMobileMenuItemClick?.();
-                }}
-                className={`mobile-nav-item ${
-                  isActive(item.href) ? "active" : ""
-                }`}
-              >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-text">{item.title}</span>
-                {item.badge && <span className="nav-badge">{item.badge}</span>}
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
     </>
   );

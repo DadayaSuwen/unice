@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/prisma";
+"use client";
+
 import {
   Users,
   Package,
@@ -11,41 +12,15 @@ import {
   Zap,
   Clock,
 } from "lucide-react";
+import Link from "next/link";
 
-export default async function AdminDashboard() {
-  // 获取统计数据
-  let totalProducts = 0;
-  let activeProducts = 0;
-  let publishedNews = 0;
-  let totalAdminUsers = 0;
-  let pendingContacts = 0;
-
-  try {
-    const stats = await prisma.$queryRaw`
-        SELECT
-          (SELECT COUNT(*) FROM "Product") as total_products,
-          (SELECT COUNT(*) FROM "Product" WHERE is_active = true) as active_products,
-          (SELECT COUNT(*) FROM "News" WHERE is_published = true) as published_news,
-          (SELECT COUNT(*) FROM "User" WHERE role IN ('admin', 'administrator')) as total_admin_users,
-          (SELECT COUNT(*) FROM "ContactSubmission" WHERE status = 'pending') as pending_contacts
-      `;
-
-    if (Array.isArray(stats) && stats[0]) {
-      totalProducts = Number(stats[0].total_products) || 0;
-      activeProducts = Number(stats[0].active_products) || 0;
-      publishedNews = Number(stats[0].published_news) || 0;
-      totalAdminUsers = Number(stats[0].total_admin_users) || 0;
-      pendingContacts = Number(stats[0].pending_contacts) || 0;
-    }
-  } catch (error) {
-    console.error("Dashboard stats query error:", error);
-  }
-
+export default function AdminDashboard() {
+  // 模拟统计数据
   const dashboardStats = {
-    products: { total: totalProducts, active: activeProducts },
-    news: { total: 0, published: publishedNews },
-    users: { total: totalAdminUsers, admin: totalAdminUsers },
-    contacts: { total: pendingContacts, pending: pendingContacts },
+    products: { total: 25, active: 18 },
+    news: { total: 8, published: 6 },
+    users: { total: 3, admin: 3 },
+    contacts: { total: 5, pending: 2 },
   };
 
   // 快速操作链接
@@ -226,7 +201,7 @@ export default async function AdminDashboard() {
               <div className="panel-content">
                 <div className="quick-actions-grid">
                   {quickActions.map((action, index) => (
-                    <a
+                    <Link
                       key={index}
                       href={action.href}
                       className="quick-action-item"
@@ -242,7 +217,7 @@ export default async function AdminDashboard() {
                           {action.description}
                         </p>
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>

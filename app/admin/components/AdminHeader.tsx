@@ -1,18 +1,26 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Bell, Search, User, Settings, LogOut, Menu, ChevronRight } from 'lucide-react'
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Bell, Search, User, Settings, LogOut, Menu } from "lucide-react";
+import { useMobileMenu } from "./MobileMenuProvider";
 
 export default function AdminHeader() {
-  const [showUserMenu, setShowUserMenu] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { toggleMobileMenu } = useMobileMenu();
 
   return (
-    <header className="admin-header px-4 sm:px-6 py-3 sm:py-4">
+    <header className="admin-header px-4 sm:px-6 py-3 sm:py-4 relative z-[60]">
       <div className="flex items-center justify-between gap-4">
-        {/* 左侧：品牌标识和搜索栏 */}
+        {/* 左侧：菜单按钮和品牌标识 */}
         <div className="flex items-center gap-3 sm:gap-6 flex-1 min-w-0">
+          <button
+            onClick={toggleMobileMenu}
+            className="p-2 rounded-lg hover:bg-[#f9f5e7] transition-colors"
+          >
+            <Menu className="w-5 h-5 text-gray-700" />
+          </button>
           {/* 品牌标识 - 响应式 */}
           <div className="brand-section">
             <div className="brand-icon">
@@ -52,8 +60,8 @@ export default function AdminHeader() {
           <div className="relative">
             <button
               onClick={() => {
-                setShowNotifications(!showNotifications)
-                setShowUserMenu(false)
+                setShowNotifications(!showNotifications);
+                setShowUserMenu(false);
               }}
               className="notification-bell"
             >
@@ -83,8 +91,8 @@ export default function AdminHeader() {
           <div className="user-menu relative">
             <button
               onClick={() => {
-                setShowUserMenu(!showUserMenu)
-                setShowNotifications(false)
+                setShowUserMenu(!showUserMenu);
+                setShowNotifications(false);
               }}
               className="flex items-center gap-2 sm:gap-3 p-2 hover:bg-[#f9f5e7] rounded-lg transition-all duration-200"
             >
@@ -92,55 +100,81 @@ export default function AdminHeader() {
                 <User className="w-4 h-4 text-white" />
               </div>
               <div className="text-left hidden sm:block">
-                <div className="text-sm font-semibold text-gray-900">系统管理员</div>
-                <div className="text-xs text-gray-500">admin@unicechemical.com</div>
+                <div className="text-sm font-semibold text-gray-900">
+                  系统管理员
+                </div>
+                <div className="text-xs text-gray-500">
+                  admin@unicechemical.com
+                </div>
               </div>
             </button>
 
             {/* 用户下拉菜单 */}
-            <div className={`user-dropdown ${showUserMenu ? 'active' : ''}`}>
-              <div className="dropdown-header">
-                <div className="user-info">
-                  <div className="user-avatar">
-                    <User className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="user-name">系统管理员</div>
-                    <div className="user-email">admin@unicechemical.com</div>
+            {showUserMenu && (
+              <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden">
+                <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-[#f9f5e7] to-[#fef9e7]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#d4af37] to-[#e6b84f] rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">
+                        系统管理员
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        admin@unicechemical.com
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div className="py-2">
+                  <Link
+                    href="/admin/profile"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#d4af37] hover:bg-[#f9f5e7] transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="text-sm font-medium">个人资料</span>
+                  </Link>
+                  <Link
+                    href="/admin/settings"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#d4af37] hover:bg-[#f9f5e7] transition-colors"
+                  >
+                    <Settings className="w-4 h-4" />
+                    <span className="text-sm font-medium">系统设置</span>
+                  </Link>
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <Link
+                    href="/"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#d4af37] hover:bg-[#f9f5e7] transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                      />
+                    </svg>
+                    <span className="text-sm font-medium">返回前台</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      // 退出登录逻辑
+                      window.location.href = "/admin/logout";
+                    }}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="text-sm font-medium">退出登录</span>
+                  </button>
+                </div>
               </div>
-              <div className="p-2">
-                <a
-                  href="/admin/profile"
-                  className="dropdown-item"
-                >
-                  <User className="item-icon" />
-                  <span className="text-sm font-medium">个人资料</span>
-                </a>
-                <a
-                  href="/admin/settings"
-                  className="dropdown-item"
-                >
-                  <Settings className="item-icon" />
-                  <span className="text-sm font-medium">系统设置</span>
-                </a>
-                <div className="dropdown-divider"></div>
-                <a
-                  href="/"
-                  className="dropdown-item"
-                >
-                  <svg className="item-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  <span className="text-sm font-medium">返回前台</span>
-                </a>
-                <button className="dropdown-item logout w-full">
-                  <LogOut className="item-icon" />
-                  <span className="text-sm font-medium">退出登录</span>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -155,5 +189,5 @@ export default function AdminHeader() {
         />
       </div>
     </header>
-  )
+  );
 }
