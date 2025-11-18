@@ -10,18 +10,20 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    // !!! 这是一个普通的 <div> 容器，它将嵌套在根布局的 <body>/<div> 内部 !!!
-    <div className="admin-layout min-h-screen">
-      {/* 顶部管理导航栏 */}
+    <div className="admin-layout min-h-screen bg-gray-50">
       <AdminHeader />
 
-      <div className="flex">
-        {/* 侧边栏 */}
+      <div className="flex flex-1 relative">
         <AdminSidebar />
 
-        {/* 主内容区域 */}
-        <main className="flex-1 p-6">
-          <div className="max-w-7xl mx-auto">{children}</div>
+        <main id="admin-main-content" className="flex-1 transition-all duration-300 ease-in-out bg-gray-50
+                         ml-0 lg:ml-[16rem]
+                         p-4 sm:p-6
+                         pb-24 lg:pb-6
+                         min-h-[calc(100vh-4rem)]">
+          <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>

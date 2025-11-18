@@ -2,9 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Bell, Search, User, Settings, LogOut, Menu, ChevronRight } from 'lucide-react'
+import { Bell, Search, User, Settings, LogOut, Menu } from 'lucide-react'
 
-export default function AdminHeader() {
+interface HeaderProps {
+  onMobileMenuToggle: () => void
+  isMobileMenuOpen: boolean
+}
+
+export default function Header({ onMobileMenuToggle, isMobileMenuOpen }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
 
@@ -13,6 +18,14 @@ export default function AdminHeader() {
       <div className="flex items-center justify-between gap-4">
         {/* 左侧：品牌标识和搜索栏 */}
         <div className="flex items-center gap-3 sm:gap-6 flex-1 min-w-0">
+          {/* 移动端菜单按钮 */}
+          <button
+            onClick={onMobileMenuToggle}
+            className="md:hidden p-2 text-gray-600 hover:text-[#d4af37] hover:bg-[#f9f5e7] rounded-lg transition-all duration-200"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
           {/* 品牌标识 - 响应式 */}
           <div className="brand-section">
             <div className="brand-icon">
