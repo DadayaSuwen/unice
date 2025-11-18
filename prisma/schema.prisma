@@ -129,21 +129,33 @@ model Career {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  username     String   @unique
-  email        String   @unique
-  password_hash String
-  role         String   @default("user")
-  first_name   String?
-  last_name    String?
-  phone        String?
-  is_active    Boolean  @default(true)
-  last_login   DateTime?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  username         String   @unique
+  email            String   @unique
+  password_hash    String
+  role             String   @default("user") // 保留原有role字段以向后兼容
+  first_name       String?
+  last_name        String?
+  phone            String?
+  avatar           String?  // 头像URL
+  is_active        Boolean  @default(true)
+  email_verified   Boolean  @default(false)
+  last_login       DateTime?
+  password_updated DateTime? // 密码更新时间
+  login_attempts   Int      @default(0) // 登录失败次数
+  locked_until     DateTime? // 账户锁定到期时间
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
+  // 关联关系
+  userRoles        UserRole[]
+  sessions         UserSession[]
+  auditLogs        AuditLog[]
+
+  @@index([email])
   @@index([role])
   @@index([is_active])
+  @@index([locked_until])
 }
 
 model ContactSubmission {
@@ -176,4 +188,118 @@ model HeroBanner {
 
   @@index([is_active])
   @@index([sort_order])
+}
+
+// 权限管理相关模型
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  display_name String  // 角色显示名称
+  description String?  // 角色描述
+  level       Int      @default(0) // 角色级别，数字越大权限越高
+  is_system   Boolean  @default(false) // 是否为系统角色，不可删除
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // 关联关系
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@index([level])
+  @@index([is_active])
+}
+
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // 权限标识符，如 "user.create", "product.edit"
+  display_name String  // 权限显示名称
+  description String?  // 权限描述
+  module      String   // 所属模块，如 "user", "product", "news"
+  action      String   // 操作类型，如 "create", "read", "update", "delete"
+  resource    String?  // 资源类型，如 "own", "all", "department"
+  is_system   Boolean  @default(false) // 是否为系统权限
+  created_at  DateTime @default(now())
+
+  // 关联关系
+  rolePermissions RolePermission[]
+
+  @@index([module])
+  @@index([action])
+}
+
+model UserRole {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  role_id    Int
+  assigned_by Int?    // 分配者ID
+  assigned_at DateTime @default(now())
+  expires_at  DateTime? // 角色过期时间，可选
+
+  // 关联关系
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role_id])
+  @@index([user_id])
+  @@index([role_id])
+}
+
+model RolePermission {
+  id            Int      @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+  created_at    DateTime @default(now())
+
+  // 关联关系
+  role       Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  @@unique([role_id, permission_id])
+  @@index([role_id])
+  @@index([permission_id])
+}
+
+model UserSession {
+  id           Int      @id @default(autoincrement())
+  user_id      Int
+  token        String   @unique // JWT token或session token
+  ip_address   String?
+  user_agent   String?
+  is_active    Boolean  @default(true)
+  last_activity DateTime @default(now())
+  expires_at   DateTime
+  created_at   DateTime @default(now())
+
+  // 关联关系
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token])
+  @@index([expires_at])
+  @@index([is_active])
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  user_id     Int?
+  action      String   // 操作类型，如 "login", "create", "update", "delete"
+  resource    String?  // 操作的资源类型，如 "user", "product"
+  resource_id String?  // 操作的资源ID
+  old_values  Json?    // 修改前的值
+  new_values  Json?    // 修改后的值
+  ip_address  String?
+  user_agent  String?
+  success     Boolean  @default(true) // 操作是否成功
+  error_message String? // 错误信息
+  created_at  DateTime @default(now())
+
+  // 关联关系
+  user User? @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@index([action])
+  @@index([resource])
+  @@index([created_at])
+  @@index([success])
 }

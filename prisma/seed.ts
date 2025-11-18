@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client')
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient({
   datasources: {
@@ -697,20 +697,230 @@ async function main() {
 
   console.log(`Created ${careers.count} career positions`)
 
-  // 创建初始用户
-  const user = await prisma.user.create({
-    data: {
+  // 初始化RBAC权限系统
+  console.log('\n开始初始化RBAC权限系统...')
+
+  // 创建基础权限
+  const permissions = [
+    // 用户管理权限
+    { name: 'user.read', display_name: '查看用户', module: 'user', action: 'read', resource: 'all' },
+    { name: 'user.create', display_name: '创建用户', module: 'user', action: 'create', resource: 'all' },
+    { name: 'user.update', display_name: '更新用户', module: 'user', action: 'update', resource: 'all' },
+    { name: 'user.delete', display_name: '删除用户', module: 'user', action: 'delete', resource: 'all' },
+    { name: 'user.read.own', display_name: '查看自己的信息', module: 'user', action: 'read', resource: 'own' },
+    { name: 'user.update.own', display_name: '更新自己的信息', module: 'user', action: 'update', resource: 'own' },
+
+    // 角色管理权限
+    { name: 'role.read', display_name: '查看角色', module: 'role', action: 'read', resource: 'all' },
+    { name: 'role.create', display_name: '创建角色', module: 'role', action: 'create', resource: 'all' },
+    { name: 'role.update', display_name: '更新角色', module: 'role', action: 'update', resource: 'all' },
+    { name: 'role.delete', display_name: '删除角色', module: 'role', action: 'delete', resource: 'all' },
+    { name: 'role.assign', display_name: '分配角色', module: 'role', action: 'assign', resource: 'all' },
+
+    // 产品管理权限
+    { name: 'product.read', display_name: '查看产品', module: 'product', action: 'read', resource: 'all' },
+    { name: 'product.create', display_name: '创建产品', module: 'product', action: 'create', resource: 'all' },
+    { name: 'product.update', display_name: '更新产品', module: 'product', action: 'update', resource: 'all' },
+    { name: 'product.delete', display_name: '删除产品', module: 'product', action: 'delete', resource: 'all' },
+
+    // 新闻管理权限
+    { name: 'news.read', display_name: '查看新闻', module: 'news', action: 'read', resource: 'all' },
+    { name: 'news.create', display_name: '创建新闻', module: 'news', action: 'create', resource: 'all' },
+    { name: 'news.update', display_name: '更新新闻', module: 'news', action: 'update', resource: 'all' },
+    { name: 'news.delete', display_name: '删除新闻', module: 'news', action: 'delete', resource: 'all' },
+    { name: 'news.publish', display_name: '发布新闻', module: 'news', action: 'publish', resource: 'all' },
+
+    // 招聘管理权限
+    { name: 'career.read', display_name: '查看招聘', module: 'career', action: 'read', resource: 'all' },
+    { name: 'career.create', display_name: '创建招聘', module: 'career', action: 'create', resource: 'all' },
+    { name: 'career.update', display_name: '更新招聘', module: 'career', action: 'update', resource: 'all' },
+    { name: 'career.delete', display_name: '删除招聘', module: 'career', action: 'delete', resource: 'all' },
+
+    // 系统管理权限
+    { name: 'system.dashboard', display_name: '访问仪表板', module: 'system', action: 'dashboard', resource: 'all' },
+    { name: 'system.audit', display_name: '查看审计日志', module: 'system', action: 'audit', resource: 'all' },
+    { name: 'system.settings', display_name: '系统设置', module: 'system', action: 'settings', resource: 'all' },
+  ]
+
+  console.log('创建权限...')
+  for (const permission of permissions) {
+    await prisma.permission.upsert({
+      where: { name: permission.name },
+      update: permission,
+      create: {
+        ...permission,
+        is_system: true,
+      },
+    })
+  }
+
+  // 创建基础角色
+  const roles = [
+    {
+      name: 'super_admin',
+      display_name: '超级管理员',
+      description: '拥有系统所有权限的超级管理员',
+      level: 100,
+      is_system: true,
+    },
+    {
+      name: 'admin',
+      display_name: '管理员',
+      description: '系统管理员，拥有大部分管理权限',
+      level: 80,
+      is_system: true,
+    },
+    {
+      name: 'editor',
+      display_name: '编辑员',
+      description: '内容编辑员，可以管理产品和新闻',
+      level: 50,
+      is_system: true,
+    },
+    {
+      name: 'user',
+      display_name: '普通用户',
+      description: '普通用户，只能查看和修改自己的信息',
+      level: 10,
+      is_system: true,
+    },
+  ]
+
+  console.log('创建角色...')
+  const createdRoles = []
+  for (const role of roles) {
+    const createdRole = await prisma.role.upsert({
+      where: { name: role.name },
+      update: role,
+      create: role,
+    })
+    createdRoles.push(createdRole)
+  }
+
+  // 为角色分配权限
+  console.log('为角色分配权限...')
+
+  // 超级管理员拥有所有权限
+  const allPermissions = await prisma.permission.findMany()
+  for (const permission of allPermissions) {
+    await prisma.rolePermission.upsert({
+      where: {
+        role_id_permission_id: {
+          role_id: createdRoles.find((r: any) => r.name === 'super_admin')!.id,
+          permission_id: permission.id,
+        },
+      },
+      update: {},
+      create: {
+        role_id: createdRoles.find((r: any) => r.name === 'super_admin')!.id,
+        permission_id: permission.id,
+      },
+    })
+  }
+
+  // 管理员权限（除了用户删除和角色管理之外的所有权限）
+  const adminPermissions = allPermissions.filter(p =>
+    !p.name.includes('user.delete') &&
+    !p.name.includes('role.delete') &&
+    !p.name.includes('system.settings')
+  )
+  for (const permission of adminPermissions) {
+    await prisma.rolePermission.upsert({
+      where: {
+        role_id_permission_id: {
+          role_id: createdRoles.find((r: any) => r.name === 'admin')!.id,
+          permission_id: permission.id,
+        },
+      },
+      update: {},
+      create: {
+        role_id: createdRoles.find((r: any) => r.name === 'admin')!.id,
+        permission_id: permission.id,
+      },
+    })
+  }
+
+  // 编辑员权限（产品和新闻管理）
+  const editorPermissions = allPermissions.filter(p =>
+    p.module === 'product' ||
+    p.module === 'news' ||
+    p.name === 'system.dashboard'
+  )
+  for (const permission of editorPermissions) {
+    await prisma.rolePermission.upsert({
+      where: {
+        role_id_permission_id: {
+          role_id: createdRoles.find((r: any) => r.name === 'editor')!.id,
+          permission_id: permission.id,
+        },
+      },
+      update: {},
+      create: {
+        role_id: createdRoles.find((r: any) => r.name === 'editor')!.id,
+        permission_id: permission.id,
+      },
+    })
+  }
+
+  // 普通用户权限（只能查看和修改自己的信息）
+  const userPermissions = allPermissions.filter(p =>
+    p.name === 'user.read.own' ||
+    p.name === 'user.update.own'
+  )
+  for (const permission of userPermissions) {
+    await prisma.rolePermission.upsert({
+      where: {
+        role_id_permission_id: {
+          role_id: createdRoles.find((r: any) => r.name === 'user')!.id,
+          permission_id: permission.id,
+        },
+      },
+      update: {},
+      create: {
+        role_id: createdRoles.find((r: any) => r.name === 'user')!.id,
+        permission_id: permission.id,
+      },
+    })
+  }
+
+  console.log('RBAC权限系统初始化完成！')
+
+  // 创建初始用户并分配角色
+  console.log('\n创建初始用户...')
+  const bcrypt = require('bcrypt')
+  const hashedPassword = await bcrypt.hash('admin123', 10)
+
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@unicechemical.com' },
+    update: {},
+    create: {
       username: 'admin',
       email: 'admin@unicechemical.com',
-      password_hash: '$2b$10$example_hash', // 这只是一个示例，实际应该使用bcrypt加密
+      password_hash: hashedPassword,
       role: 'administrator',
-      first_name: '管理员',
-      last_name: '系统',
-      is_active: true
-    }
+      first_name: '系统',
+      last_name: '管理员',
+      is_active: true,
+    },
   })
 
-  console.log(`Created user: ${user.username}`)
+  // 为超级管理员用户分配super_admin角色
+  const superAdminRole = createdRoles.find((r: any) => r.name === 'super_admin')!
+  await prisma.userRole.upsert({
+    where: {
+      user_id_role_id: {
+        user_id: adminUser.id,
+        role_id: superAdminRole.id,
+      },
+    },
+    update: {},
+    create: {
+      user_id: adminUser.id,
+      role_id: superAdminRole.id,
+    },
+  })
+
+  console.log(`Created user: ${adminUser.username} with super_admin role`)
 
   console.log('\n🎉 Database seeding completed!')
 }
