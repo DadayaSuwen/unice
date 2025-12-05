@@ -1,113 +1,126 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Plus, Search, Shield, Users, Settings, Edit, Trash2, Eye } from 'lucide-react'
+import { useState, useEffect } from "react";
+import {
+  Plus,
+  Search,
+  Shield,
+  Users,
+  Settings,
+  Edit,
+  Trash2,
+  Eye,
+} from "lucide-react";
+
+// 定义 Permission 类型以复用
+interface Permission {
+  id: number;
+  name: string;
+  display_name: string;
+  module: string;
+  action: string;
+}
 
 interface Role {
-  id: number
-  name: string
-  display_name: string
-  description?: string
-  level: number
-  is_system: boolean
-  is_active: boolean
-  created_at: string
-  updated_at: string
-  permissions: Array<{
-    id: number
-    name: string
-    display_name: string
-    module: string
-    action: string
-  }>
+  id: number;
+  name: string;
+  display_name: string;
+  description?: string;
+  level: number;
+  is_system: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  permissions: Permission[]; // 使用定义的 Permission 类型
   users: Array<{
-    id: number
-    username: string
-    email: string
-    first_name?: string
-    last_name?: string
-  }>
-  user_count: number
-  permission_count: number
+    id: number;
+    username: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+  }>;
+  user_count: number;
+  permission_count: number;
 }
 
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [showInactive, setShowInactive] = useState(false)
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showInactive, setShowInactive] = useState(false);
 
   // 获取角色列表
   const fetchRoles = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const params = new URLSearchParams({
-        page: '1',
-        limit: '50',
+        page: "1",
+        limit: "50",
         ...(searchTerm && { search: searchTerm }),
-        ...(showInactive && { isActive: 'false' })
-      })
+        ...(showInactive && { isActive: "false" }),
+      });
 
-      const response = await fetch(`/api/admin/roles?${params}`)
-      const data = await response.json()
+      const response = await fetch(`/api/admin/roles?${params}`);
+      const data = await response.json();
 
       if (data.success) {
-        setRoles(data.data.roles)
+        setRoles(data.data.roles);
       } else {
-        console.error('获取角色列表失败:', data.message)
+        console.error("获取角色列表失败:", data.message);
       }
     } catch (error) {
-      console.error('获取角色列表失败:', error)
+      console.error("获取角色列表失败:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchRoles()
-  }, [searchTerm, showInactive])
+    fetchRoles();
+  }, [searchTerm, showInactive]);
 
   // 获取角色级别颜色
   const getLevelColor = (level: number) => {
-    if (level >= 100) return 'bg-red-100 text-red-800 border-red-200'
-    if (level >= 80) return 'bg-orange-100 text-orange-800 border-orange-200'
-    if (level >= 50) return 'bg-blue-100 text-blue-800 border-blue-200'
-    return 'bg-gray-100 text-gray-800 border-gray-200'
-  }
+    if (level >= 100) return "bg-red-100 text-red-800 border-red-200";
+    if (level >= 80) return "bg-orange-100 text-orange-800 border-orange-200";
+    if (level >= 50) return "bg-blue-100 text-blue-800 border-blue-200";
+    return "bg-gray-100 text-gray-800 border-gray-200";
+  };
 
   // 获取角色级别名称
   const getLevelName = (level: number) => {
-    if (level >= 100) return '超级管理员'
-    if (level >= 80) return '管理员'
-    if (level >= 50) return '编辑员'
-    return '普通用户'
-  }
+    if (level >= 100) return "超级管理员";
+    if (level >= 80) return "管理员";
+    if (level >= 50) return "编辑员";
+    return "普通用户";
+  };
 
   // 格式化日期
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-CN')
-  }
+    return new Date(dateString).toLocaleDateString("zh-CN");
+  };
 
-  // 按模块分组权限
-  const groupPermissionsByModule = (permissions: Role['permissions']) => {
-    return permissions.reduce((acc: any, permission) => {
+  // 按模块分组权限 - 修复类型错误
+  const groupPermissionsByModule = (permissions: Permission[]) => {
+    // 使用 Record<string, Permission[]> 明确指定 reduce 的累加器类型
+    return permissions.reduce((acc, permission) => {
       if (!acc[permission.module]) {
-        acc[permission.module] = []
+        acc[permission.module] = [];
       }
-      acc[permission.module].push(permission)
-      return acc
-    }, {})
-  }
+      acc[permission.module].push(permission);
+      return acc;
+    }, {} as Record<string, Permission[]>);
+  };
 
   // 模块显示名称映射
   const moduleNames: Record<string, string> = {
-    'user': '用户管理',
-    'role': '角色管理',
-    'product': '产品管理',
-    'news': '新闻管理',
-    'career': '招聘管理',
-    'system': '系统管理'
-  }
+    user: "用户管理",
+    role: "角色管理",
+    product: "产品管理",
+    news: "新闻管理",
+    career: "招聘管理",
+    system: "系统管理",
+  };
 
   return (
     <div className="space-y-6">
@@ -172,7 +185,9 @@ export default function RolesPage() {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${getLevelColor(role.level)}`}>
+                    <div
+                      className={`p-2 rounded-lg ${getLevelColor(role.level)}`}
+                    >
                       <Shield className="w-5 h-5" />
                     </div>
                     <div>
@@ -188,12 +203,14 @@ export default function RolesPage() {
                         系统角色
                       </span>
                     )}
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
-                      role.is_active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {role.is_active ? '活跃' : '禁用'}
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
+                        role.is_active
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {role.is_active ? "活跃" : "禁用"}
                     </span>
                   </div>
                 </div>
@@ -225,7 +242,9 @@ export default function RolesPage() {
               {/* 权限列表 */}
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-medium text-gray-900">权限列表</h4>
+                  <h4 className="text-sm font-medium text-gray-900">
+                    权限列表
+                  </h4>
                   <button
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                     title="查看详情"
@@ -235,13 +254,17 @@ export default function RolesPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {Object.entries(groupPermissionsByModule(role.permissions)).map(([module, modulePermissions]) => (
+                  {/* 这里现在可以正确推断 modulePermissions 的类型为 Permission[] */}
+                  {Object.entries(
+                    groupPermissionsByModule(role.permissions)
+                  ).map(([module, modulePermissions]) => (
                     <div key={module} className="text-sm">
                       <div className="font-medium text-gray-700 mb-1">
                         {moduleNames[module] || module}
                       </div>
                       <div className="flex flex-wrap gap-1">
-                        {modulePermissions.slice(0, 5).map((permission: any) => (
+                        {/* 移除了 permission: any，现在 TypeScript 可以自动推断 */}
+                        {modulePermissions.slice(0, 5).map((permission) => (
                           <span
                             key={permission.id}
                             className="inline-flex px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded"
@@ -262,16 +285,22 @@ export default function RolesPage() {
                 {/* 用户预览 */}
                 {role.users.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-gray-200">
-                    <div className="text-sm font-medium text-gray-700 mb-2">分配用户</div>
+                    <div className="text-sm font-medium text-gray-700 mb-2">
+                      分配用户
+                    </div>
                     <div className="flex -space-x-2">
                       {role.users.slice(0, 6).map((user) => (
                         <div
                           key={user.id}
                           className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center"
-                          title={`${user.first_name || user.username} ${user.last_name || ''}`}
+                          title={`${user.first_name || user.username} ${
+                            user.last_name || ""
+                          }`}
                         >
                           <span className="text-xs font-medium text-gray-600">
-                            {(user.first_name || user.username).charAt(0).toUpperCase()}
+                            {(user.first_name || user.username)
+                              .charAt(0)
+                              .toUpperCase()}
                           </span>
                         </div>
                       ))}
@@ -321,5 +350,5 @@ export default function RolesPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

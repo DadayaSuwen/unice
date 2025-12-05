@@ -10,131 +10,96 @@ const config: Config = {
     extend: {
       colors: {
         // 淡金黄主题色系
-        'primary-gold': 'var(--primary-gold)',
-        'primary-gold-hover': 'var(--primary-gold-hover)',
-        'primary-gold-light': 'var(--primary-gold-light)',
-        'primary-gold-dark': 'var(--primary-gold-dark)',
+        "primary-gold": "var(--primary-gold)",
+        "primary-gold-hover": "var(--primary-gold-hover)",
+        "primary-gold-light": "var(--primary-gold-light)",
+        "primary-gold-dark": "var(--primary-gold-dark)",
 
         // 语义化颜色
-        'background': 'var(--background)',
-        'background-secondary': 'var(--background-secondary)',
-        'foreground': 'var(--foreground)',
-        'text-secondary': 'var(--text-secondary)',
-        'text-muted': 'var(--text-muted)',
-        'border-color': 'var(--border-color)',
-        'border-light': 'var(--border-light)',
-
-        // shadcn/ui 标准颜色
-        'border': 'hsl(var(--border))',
-        'input': 'hsl(var(--input))',
-        'ring': 'hsl(var(--ring))',
-        'background': 'hsl(var(--background))',
-        'foreground': 'hsl(var(--foreground))',
-        'primary': {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        'secondary': {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        'destructive': {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        'muted': {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        'accent': {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        'popover': {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        'card': {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
+        background: "var(--background)",
+        "background-secondary": "var(--background-secondary)",
+        foreground: "var(--foreground)",
+        "text-secondary": "var(--text-secondary)",
+        "text-muted": "var(--text-muted)",
+        "border-color": "var(--border-color)",
+        "border-light": "var(--border-light)",
 
         // 兼容旧版本
-        'brand-primary': 'var(--primary-gold)',
-        'brand-secondary': 'var(--text-secondary)',
-        'bg-primary': 'var(--background)',
-        'bg-secondary': 'var(--background-secondary)',
-        'text-primary': 'var(--foreground)',
+        "brand-primary": "var(--primary-gold)",
+        "brand-secondary": "var(--text-secondary)",
+        "bg-primary": "var(--background)",
+        "bg-secondary": "var(--background-secondary)",
+        "text-primary": "var(--foreground)",
       },
       backgroundImage: {
-        'primary-gold-gradient': 'var(--primary-gold-gradient)',
+        "primary-gold-gradient": "var(--primary-gold-gradient)",
       },
       boxShadow: {
-        'gold': 'var(--shadow-gold)',
-        'color': 'var(--shadow-color)',
+        gold: "var(--shadow-gold)",
+        color: "var(--shadow-color)",
       },
       fontFamily: {
-        'sans': [
-          '-apple-system',
-          'BlinkMacSystemFont',
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
           '"SF Pro Display"',
           '"Segoe UI"',
-          'Roboto',
+          "Roboto",
           '"Helvetica Neue"',
-          'Arial',
-          'sans-serif'
+          "Arial",
+          "sans-serif",
         ],
       },
       animation: {
-        'float': 'float 3s ease-in-out infinite',
-        'fadeInUp': 'fadeInUp 1s ease-out forwards',
-        'fadeInLeft': 'fadeInLeft 1s ease-out forwards',
-        'fadeInRight': 'fadeInRight 1s ease-out forwards',
-        'scaleIn': 'scaleIn 0.8s ease-out forwards',
+        float: "float 3s ease-in-out infinite",
+        fadeInUp: "fadeInUp 1s ease-out forwards",
+        fadeInLeft: "fadeInLeft 1s ease-out forwards",
+        fadeInRight: "fadeInRight 1s ease-out forwards",
+        scaleIn: "scaleIn 0.8s ease-out forwards",
       },
       keyframes: {
         float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
         },
         fadeInUp: {
           from: {
-            opacity: '0',
-            transform: 'translateY(30px)',
+            opacity: "0",
+            transform: "translateY(30px)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0)',
+            opacity: "1",
+            transform: "translateY(0)",
           },
         },
         fadeInLeft: {
           from: {
-            opacity: '0',
-            transform: 'translateX(-30px)',
+            opacity: "0",
+            transform: "translateX(-30px)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateX(0)',
+            opacity: "1",
+            transform: "translateX(0)",
           },
         },
         fadeInRight: {
           from: {
-            opacity: '0',
-            transform: 'translateX(30px)',
+            opacity: "0",
+            transform: "translateX(30px)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateX(0)',
+            opacity: "1",
+            transform: "translateX(0)",
           },
         },
         scaleIn: {
           from: {
-            opacity: '0',
-            transform: 'scale(0.9)',
+            opacity: "0",
+            transform: "scale(0.9)",
           },
           to: {
-            opacity: '1',
-            transform: 'scale(1)',
+            opacity: "1",
+            transform: "scale(1)",
           },
         },
       },
