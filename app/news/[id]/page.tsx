@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import DarkModeToggle from "@/components/DarkModeToggle";
+import DarkModeToggle from "@/components/dark-mode-toggle";
 
 interface NewsDetail {
   id: number;
@@ -53,11 +53,11 @@ export default function NewsDetailPage() {
         // 获取相关新闻
         try {
           const relatedResponse = await fetch(`/api/news/${newsId}`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify({ limit: 4 })
+            body: JSON.stringify({ limit: 4 }),
           });
 
           if (relatedResponse.ok) {
@@ -109,19 +109,29 @@ export default function NewsDetailPage() {
             <div className="empty-content">
               <div className="empty-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
               <h3 className="empty-title">新闻未找到</h3>
-              <p className="empty-description">
-                抱歉，找不到对应的新闻内容。
-              </p>
-              <a
-                href="/news"
-                className="back-button"
-              >
-                <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <p className="empty-description">抱歉，找不到对应的新闻内容。</p>
+              <a href="/news" className="back-button">
+                <svg
+                  className="button-arrow"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
                 </svg>
                 返回新闻列表
               </a>
@@ -145,8 +155,18 @@ export default function NewsDetailPage() {
               <a href="/news" className="breadcrumb-link">
                 新闻中心
               </a>
-              <svg className="breadcrumb-separator" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="breadcrumb-separator"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
               <span className="breadcrumb-current">{news.title}</span>
             </nav>
@@ -160,27 +180,45 @@ export default function NewsDetailPage() {
             <h1 className="news-detail-title">{news.title}</h1>
 
             {/* News Excerpt */}
-            <p className="news-detail-excerpt">
-              {news.excerpt}
-            </p>
+            <p className="news-detail-excerpt">{news.excerpt}</p>
 
             {/* News Meta */}
             <div className="news-detail-meta">
               <div className="meta-item">
-                <svg className="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <svg
+                  className="meta-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
                 {new Date(news.publish_date).toLocaleDateString("zh-CN", {
                   year: "numeric",
                   month: "long",
-                  day: "numeric"
+                  day: "numeric",
                 })}
               </div>
 
               {news.author && (
                 <div className="meta-item">
-                  <svg className="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <svg
+                    className="meta-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                   {news.author}
                 </div>
@@ -188,8 +226,18 @@ export default function NewsDetailPage() {
 
               {news.read_time && (
                 <div className="meta-item">
-                  <svg className="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="meta-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   阅读时间 {news.read_time} 分钟
                 </div>
@@ -208,7 +256,12 @@ export default function NewsDetailPage() {
               <div className="news-detail-image-placeholder">
                 <div className="news-detail-icon">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                    />
                   </svg>
                 </div>
                 <p className="image-placeholder-text">新闻配图</p>
@@ -223,20 +276,36 @@ export default function NewsDetailPage() {
         <div className="container">
           <article className={`news-article ${isLoaded ? "loaded" : ""}`}>
             <div className="article-content">
-              {news.content.includes('<') ? (
+              {news.content.includes("<") ? (
                 <div dangerouslySetInnerHTML={{ __html: news.content }} />
               ) : (
-                news.content.split('\n\n').map((paragraph, index) => {
+                news.content.split("\n\n").map((paragraph, index) => {
                   if (paragraph.trim()) {
-                    if (paragraph.startsWith('##')) {
-                      return <h3 key={index}>{paragraph.replace('##', '').trim()}</h3>;
-                    } else if (paragraph.startsWith('-')) {
-                      const items = paragraph.split('\n').filter(item => item.trim().startsWith('-'));
+                    if (paragraph.startsWith("##")) {
                       return (
-                        <ul key={index} style={{ listStyle: 'none', padding: 0 }}>
+                        <h3 key={index}>
+                          {paragraph.replace("##", "").trim()}
+                        </h3>
+                      );
+                    } else if (paragraph.startsWith("-")) {
+                      const items = paragraph
+                        .split("\n")
+                        .filter((item) => item.trim().startsWith("-"));
+                      return (
+                        <ul
+                          key={index}
+                          style={{ listStyle: "none", padding: 0 }}
+                        >
                           {items.map((item, itemIndex) => (
-                            <li key={itemIndex} style={{ marginBottom: '0.5rem', paddingLeft: '1.5rem', position: 'relative' }}>
-                              • {item.replace('-', '').trim()}
+                            <li
+                              key={itemIndex}
+                              style={{
+                                marginBottom: "0.5rem",
+                                paddingLeft: "1.5rem",
+                                position: "relative",
+                              }}
+                            >
+                              • {item.replace("-", "").trim()}
                             </li>
                           ))}
                         </ul>
@@ -269,20 +338,38 @@ export default function NewsDetailPage() {
               <h3 className="share-title">分享这篇文章</h3>
               <div className="share-buttons">
                 <button className="share-button share-facebook">
-                  <svg className="share-icon" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  <svg
+                    className="share-icon"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                   Facebook
                 </button>
                 <button className="share-button share-twitter">
-                  <svg className="share-icon" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  <svg
+                    className="share-icon"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
                   </svg>
                   Twitter
                 </button>
                 <button className="share-button share-copy">
-                  <svg className="share-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326m0 0A9.001 9.001 0 0012 21c4.474 0 8.268-3.12 9.032-7.326" />
+                  <svg
+                    className="share-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326m0 0A9.001 9.001 0 0012 21c4.474 0 8.268-3.12 9.032-7.326"
+                    />
                   </svg>
                   复制链接
                 </button>
@@ -304,8 +391,17 @@ export default function NewsDetailPage() {
                     <div className="related-news-image">
                       <div className="related-news-image-bg"></div>
                       <div className="related-news-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        <svg
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                          />
                         </svg>
                       </div>
                       <div className="related-news-type">
@@ -315,32 +411,62 @@ export default function NewsDetailPage() {
                     <div className="related-news-content">
                       <div className="related-news-meta">
                         <div className="meta-date">
-                          <svg className="meta-small-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            className="meta-small-icon"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
-                          {new Date(item.publish_date).toLocaleDateString("zh-CN")}
+                          {new Date(item.publish_date).toLocaleDateString(
+                            "zh-CN"
+                          )}
                         </div>
                         {item.read_time && (
                           <div className="meta-read-time">
-                            <svg className="meta-small-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg
+                              className="meta-small-icon"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
                             </svg>
                             {item.read_time} 分钟
                           </div>
                         )}
                       </div>
                       <h3 className="related-news-title">{item.title}</h3>
-                      <p className="related-news-excerpt">
-                        {item.excerpt}
-                      </p>
+                      <p className="related-news-excerpt">{item.excerpt}</p>
                       <div className="related-news-footer">
                         <a
                           href={`/news/${item.id}`}
                           className="related-news-link"
                         >
                           阅读全文
-                          <svg className="link-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          <svg
+                            className="link-arrow"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
                           </svg>
                         </a>
                       </div>
@@ -359,8 +485,18 @@ export default function NewsDetailPage() {
         <div className="container">
           <div className="back-to-news-content">
             <a href="/news" className="back-to-news-button">
-              <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                className="button-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               返回新闻列表
             </a>

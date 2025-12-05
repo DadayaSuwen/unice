@@ -6,16 +6,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "CI=true node -r dotenv/config node_modules/.bin/prisma migrate dev --name add-rbac-permission-system",
+    "db:generate": "node -r dotenv/config node_modules/.bin/prisma generate",
+    "db:studio": "node -r dotenv/config node_modules/.bin/prisma studio",
+    "db:seed": "npx tsx -r dotenv/config prisma/seed.ts"
   },
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.553.0",
     "next": "16.0.1",
     "pg": "^8.16.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "sass": "^1.94.0"
+    "react-hook-form": "^7.66.0",
+    "react-hot-toast": "^2.6.0",
+    "recharts": "^3.4.1",
+    "sass": "^1.94.0",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@prisma/client": "^6.19.0",
