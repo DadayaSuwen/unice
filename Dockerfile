@@ -23,6 +23,7 @@ RUN npx prisma generate
 COPY . .
 
 # 设置环境变量
+ENV DATABASE_URL="postgresql://postgres:housuwen@localhost:5432/unice"
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
