@@ -75,6 +75,7 @@
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.1;
+  transition: opacity 0.3s ease;
 }
 
 .hero-radial-gradient {
@@ -82,6 +83,25 @@
   inset: 0;
   opacity: 0.2;
   transition: all 0.7s ease-out;
+}
+
+// 暗色模式适配
+.dark .hero-background-image {
+  opacity: 0.05;
+}
+
+.dark .hero-radial-gradient {
+  opacity: 0.15;
+}
+
+// 为暗色模式添加黑色背景
+.dark .hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--background);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .hero-content {
@@ -288,16 +308,22 @@
   display: flex;
   justify-content: center;
   margin-bottom: 8px;
-  background: rgba(212, 175, 55, 0.05);
+  background: var(--primary-gold-light);
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 20px var(--shadow-gold);
   transition: all 0.3s ease;
 }
 
 .scroll-mouse:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 6px 25px var(--shadow-gold);
   border-color: var(--primary-gold);
+}
+
+// 暗色模式下的滚动指示器
+.dark .scroll-mouse {
+  background: rgba(212, 175, 55, 0.1);
+  opacity: 0.9;
 }
 
 .scroll-dot {
@@ -307,7 +333,12 @@
   border-radius: 6px;
   margin-top: 6px;
   animation: scrollBounce 2s infinite ease-in-out;
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 2px 8px var(--shadow-gold);
+}
+
+// 暗色模式下的滚动点
+.dark .scroll-dot {
+  opacity: 0.9;
 }
 
 .scroll-text {
@@ -318,7 +349,12 @@
   color: var(--primary-gold);
   text-transform: uppercase;
   animation: textPulse 2s infinite ease-in-out;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 10px var(--shadow-gold);
+}
+
+// 暗色模式下的滚动文字
+.dark .scroll-text {
+  opacity: 0.9;
 }
 
 @keyframes scrollBounce {
@@ -337,11 +373,11 @@
 @keyframes textPulse {
   0%, 100% {
     opacity: 0.8;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 10px var(--shadow-gold);
   }
   50% {
     opacity: 1;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    text-shadow: 0 0 20px var(--shadow-gold);
   }
 }
 
@@ -513,7 +549,7 @@
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.015em;
-  color: #1d1d1f;
+  color: var(--foreground);
   margin-bottom: 1.5rem;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
 
@@ -608,7 +644,7 @@
 .section-title {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
-  color: #1d1d1f;
+  color: var(--foreground);
   margin-bottom: 1rem;
   letter-spacing: -0.01em;
 

@@ -81,7 +81,7 @@ export default function Home() {
             style={{
               background: `radial-gradient(ellipse at ${50 + scrollY * 0.02}% ${
                 40 + scrollY * 0.01
-              }%, rgba(212, 175, 55, 0.08) 0%, transparent 60%)`,
+              }%, var(--shadow-gold) 0%, transparent 60%)`,
             }}
           />
         </div>
@@ -90,7 +90,7 @@ export default function Home() {
         <div className="container-large hero-content">
           <div className={`hero-main-content ${isLoaded ? "loaded" : ""}`}>
             {/* Apple-style large headline */}
-            <h1 className="hero-title">联合化工</h1>
+            <h1 className="hero-title">江西联合化工</h1>
 
             {/* Apple-style subtitle */}
             <p className="hero-subtitle">
@@ -397,7 +397,7 @@ export default function Home() {
               transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
-            <h2 className="section-title">为什么选择联合化工</h2>
+            <h2 className="section-title">为什么选择江西联合化工</h2>
             <p className="section-subtitle">
               我们专注于品质、创新和服务，为客户创造持久价值
             </p>
@@ -588,7 +588,11 @@ export default function Home() {
       </section>
 
       {/* Apple-style Showcase Section with Image */}
-      <section ref={showcaseRef} className="section py-section bg-white">
+      <section
+        ref={showcaseRef}
+        className="section py-section"
+        style={{ backgroundColor: "var(--background)" }}
+      >
         <div className="container">
           <div
             className={`section-header mb-16 ${
@@ -624,8 +628,17 @@ export default function Home() {
                 backgroundImage: `url('/uniche.png')`,
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-white max-w-md">
+            <div
+              className="absolute inset-0 bg-gradient-to-t to-transparent"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent)",
+              }}
+            />
+            <div
+              className="absolute bottom-8 left-8 max-w-md"
+              style={{ color: "#ffffff" }}
+            >
               <h3 className="text-3xl font-bold mb-2">智能化工园区</h3>
               <p className="text-lg opacity-90">
                 占地500亩的现代化生产基地，配备最先进的生产设备和技术
@@ -636,7 +649,11 @@ export default function Home() {
       </section>
 
       {/* Apple-style Statistics Section */}
-      <section ref={statsRef} className="section py-section bg-gray-50">
+      <section
+        ref={statsRef}
+        className="section py-section"
+        style={{ backgroundColor: "var(--background-secondary)" }}
+      >
         <div className="container">
           <div
             className={`section-header mb-16 ${

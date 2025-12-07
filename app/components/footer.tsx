@@ -1,152 +1,182 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
   MapPin,
   Phone,
   Mail,
-  Beaker,
-  Microscope,
-  TestTube,
-  Target,
-  Building,
-  Palette,
-  TrendingUp,
-  Rocket,
+  ChevronRight,
+  Users,
+  Award,
+  Shield,
 } from "lucide-react";
 
-import Link from "next/link";
-import Image from "next/image";
-
 export default function Footer() {
-  return (
-    <footer
-      className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(135deg, var(--footer-bg-primary) 0%, var(--footer-bg-secondary) 50%, var(--footer-bg-primary) 100%)",
-      }}
-    >
-      {/* 背景装饰 */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "var(--gold-gradient-subtle)",
-        }}
-      ></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,var(--footer-gold)_0%,transparent_60%)]"></div>
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at top left, rgba(212, 175, 55, 0.08) 0%, transparent 40%)",
-        }}
-      ></div>
-      <div
-        className="absolute inset-0 bg-gradient-to-t to-transparent"
-        style={{
-          background:
-            "linear-gradient(to top, var(--footer-border), transparent)",
-        }}
-      ></div>
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [productLinks, setProductLinks] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
 
-      <div className="relative container mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* 公司信息 */}
-          <div className="space-y-6 footer-section">
-            <div className="flex items-center space-x-4 group gap-6">
-              <div className="relative w-12 h-12 bg-gradient-to-br from-primary-gold to-amber-600 rounded-2xl overflow-hidden shadow-xl group-hover:scale-110 transition-transform duration-300">
-                <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 从数据库获取产品数据
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setProductsLoading(true);
+        const response = await fetch("/api/products?featured=true&limit=4");
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.products || data; // 处理不同的数据结构
+          const formattedProducts = (products || [])
+            .slice(0, 4)
+            .map((product: any) => ({
+              href: `/products/${product.id}`,
+              title: product.name,
+              description: product.description
+                ? product.description.length > 30
+                  ? product.description.substring(0, 30) + "..."
+                  : product.description
+                : "高性能化工产品",
+            }));
+          setProductLinks(formattedProducts);
+        } else {
+          // API请求失败，使用默认数据
+          setProductLinks([
+            {
+              href: "/products",
+              title: "丙烯酸树脂",
+              description: "高性能树脂材料",
+            },
+            { href: "/products", title: "PP树脂", description: "聚丙烯树脂" },
+            {
+              href: "/products",
+              title: "触变型树脂",
+              description: "特种功能树脂",
+            },
+            {
+              href: "/products",
+              title: "水分散体",
+              description: "环保型水分散体",
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        // 如果获取失败，使用默认数据
+        setProductLinks([
+          {
+            href: "/products",
+            title: "丙烯酸树脂",
+            description: "高性能树脂材料",
+          },
+          { href: "/products", title: "PP树脂", description: "聚丙烯树脂" },
+          {
+            href: "/products",
+            title: "触变型树脂",
+            description: "特种功能树脂",
+          },
+          {
+            href: "/products",
+            title: "水分散体",
+            description: "环保型水分散体",
+          },
+        ]);
+      } finally {
+        setProductsLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  const companyLinks = [
+    { href: "/about", title: "公司简介", icon: Building },
+    { href: "/about", title: "企业文化", icon: Users },
+    { href: "/careers", title: "加入我们", icon: Award },
+    { href: "/contact", title: "联系我们", icon: Mail },
+  ];
+
+  const legalLinks = [
+    { href: "#", title: "隐私政策" },
+    { href: "#", title: "服务条款" },
+    { href: "#", title: "网站地图" },
+    { href: "#", title: "法律声明" },
+  ];
+
+  return (
+    <footer className="apple-footer">
+      {/* Background decoration */}
+      <div className="apple-footer__bg-decoration" />
+      <div className="apple-footer__bg-decoration-secondary" />
+
+      <div className="container mx-auto px-6 py-20">
+        {/* Main Footer Content */}
+        <div className={`apple-footer__main ${isLoaded ? "loaded" : ""}`}>
+          {/* Company Info */}
+          <div className="apple-footer__section">
+            <Link href="/" className="apple-footer__logo-link">
+              <div className="apple-footer__logo">
                 <Image
                   src="/logo.jpg"
-                  alt="联合化工"
-                  width={48}
-                  height={48}
-                  className="object-contain p-1.5 relative z-10"
+                  alt="江西联合化工"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-contain"
                 />
               </div>
-              <div>
-                <h3
-                  className="text-xl font-bold"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold-bright) 50%, var(--footer-text-primary) 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  联合化工
-                </h3>
-                <p
-                  className="text-xs mt-0.5"
-                  style={{
-                    color: "var(--footer-text-muted)",
-                  }}
-                >
-                  创新化学科技
-                </p>
+              <div className="apple-footer__brand">
+                <h3 className="apple-footer__brand-name">江西联合化工</h3>
+                <p className="apple-footer__brand-tagline">专业树脂制造商</p>
               </div>
-            </div>
-            <p
-              className="leading-relaxed text-sm transition-colors duration-300"
-              style={{
-                color: "var(--footer-text-secondary)",
-              }}
-            >
-              专业的化工企业，致力于为客户提供高质量的产品和创新解决方案。
+            </Link>
+
+            <p className="apple-footer__description">
+              成立于2002年，专注化工树脂研发生产20余年，年产值达8亿元人民币，为全球客户提供高品质的化工产品解决方案。
             </p>
+
+            <div className="apple-footer__quality-mark">
+              <span className="apple-footer__quality-text">ISO 9001</span>
+              <span className="apple-footer__quality-desc">质量认证企业</span>
+            </div>
           </div>
 
-          {/* 快速链接 */}
-          <div className="space-y-6 footer-section">
-            <h4
-              className="font-bold text-lg"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              产品服务
-            </h4>
-            <ul className="space-y-4">
-              {[
-                { href: "/products", text: "化工原料", icon: Beaker },
-                {
-                  href: "/products",
-                  text: "精细化学品",
-                  icon: Microscope,
-                },
-                { href: "/products", text: "专用化学品", icon: TestTube },
-                { href: "/products", text: "定制解决方案", icon: Target },
-              ].map((item, index) => (
-                <li key={index} className="group/link">
-                  <Link
-                    href={item.href}
-                    className="flex items-center space-x-3 text-gray-400 hover:text-white transition-all duration-300 group-hover/link:translate-x-1 transform"
-                  >
-                    <item.icon
-                      className="w-5 h-5 transition-colors duration-300 transform group-hover/link:rotate-12"
-                      style={{
-                        color: "var(--footer-text-secondary)",
-                      }}
-                      strokeWidth={2}
-                    />
-                    <span
-                      className="relative"
-                      style={{
-                        color: "var(--footer-text-secondary)",
-                      }}
-                    >
-                      {item.text}
-                      <span
-                        className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
-                        style={{
-                          background: "var(--gold-gradient-strong)",
-                        }}
-                      ></span>
+          {/* Products */}
+          <div className="apple-footer__section">
+            <h4 className="apple-footer__section-title">核心产品</h4>
+            <ul className="apple-footer__link-list">
+              {productLinks.map((link, index) => (
+                <li key={index}>
+                  <Link href={link.href} className="apple-footer__product-link">
+                    <ChevronRight className="apple-footer__link-icon" />
+                    <div className="apple-footer__product-content">
+                      <p className="apple-footer__product-title">
+                        {link.title}
+                      </p>
+                      <p className="apple-footer__product-desc">
+                        {link.description}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div className="apple-footer__section">
+            <h4 className="apple-footer__section-title">关于我们</h4>
+            <ul className="apple-footer__link-list">
+              {companyLinks.map((link, index) => (
+                <li key={index}>
+                  <Link href={link.href} className="apple-footer__company-link">
+                    <link.icon className="apple-footer__link-icon" />
+                    <span className="apple-footer__link-text">
+                      {link.title}
                     </span>
                   </Link>
                 </li>
@@ -154,196 +184,45 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 关于我们 */}
-          <div className="space-y-6 footer-section">
-            <h4
-              className="font-bold text-lg"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              关于
-            </h4>
-            <ul className="space-y-4">
-              {[
-                { href: "/about", text: "公司简介", icon: Building },
-                { href: "/about", text: "企业文化", icon: Palette },
-                { href: "/about", text: "发展历程", icon: TrendingUp },
-                { href: "/careers", text: "加入我们", icon: Rocket },
-              ].map((item, index) => (
-                <li key={index} className="group/link">
-                  <Link
-                    href={item.href}
-                    className="flex items-center space-x-3 text-gray-400 hover:text-white transition-all duration-300 group-hover/link:translate-x-1 transform"
-                  >
-                    <item.icon
-                      className="w-5 h-5 transition-colors duration-300 transform group-hover/link:rotate-12"
-                      style={{
-                        color: "var(--footer-text-secondary)",
-                      }}
-                      strokeWidth={2}
-                    />
-                    <span
-                      className="relative"
-                      style={{
-                        color: "var(--footer-text-secondary)",
-                      }}
-                    >
-                      {item.text}
-                      <span
-                        className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
-                        style={{
-                          background: "var(--gold-gradient-strong)",
-                        }}
-                      ></span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 联系信息 */}
-          <div className="space-y-6 footer-section">
-            <h4
-              className="font-bold text-lg"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--footer-text-primary) 0%, var(--primary-gold) 50%, var(--footer-text-primary) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              联系方式
-            </h4>
-            <div className="space-y-4 flex flex-col gap-2">
-              <div
-                className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
-                style={{
-                  background: "var(--footer-bg-accent)",
-                  border: "1px solid var(--footer-border)",
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
-                  }}
-                >
-                  <MapPin
-                    className="w-5 h-5 transition-colors"
-                    style={{
-                      color: "var(--primary-gold)",
-                    }}
-                    strokeWidth={2}
-                  />
+          {/* Contact Info */}
+          <div className="apple-footer__section">
+            <h4 className="apple-footer__section-title">联系方式</h4>
+            <div className="apple-footer__contact-list">
+              <div className="apple-footer__contact-item">
+                <div className="apple-footer__contact-icon-wrapper">
+                  <MapPin className="apple-footer__contact-icon" />
                 </div>
-                <div className="space-y-1">
-                  <p
-                    className="font-medium"
-                    style={{
-                      color: "var(--footer-text-primary)",
-                    }}
-                  >
-                    办公地址
-                  </p>
-                  <p
-                    className="text-sm transition-colors"
-                    style={{
-                      color: "var(--footer-text-secondary)",
-                    }}
-                  >
-                    北京市朝阳区化工路123号
+                <div className="apple-footer__contact-content">
+                  <p className="apple-footer__contact-label">公司地址</p>
+                  <p className="apple-footer__contact-text">
+                    江西省九江市永修县艾城镇
+                    <br />
+                    星火工业园荣祺大道16号
                   </p>
                 </div>
               </div>
 
-              <div
-                className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
-                style={{
-                  background: "var(--footer-bg-accent)",
-                  border: "1px solid var(--footer-border)",
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
-                  }}
-                >
-                  <Phone
-                    className="w-5 h-5 transition-colors"
-                    style={{
-                      color: "var(--primary-gold)",
-                    }}
-                    strokeWidth={2}
-                  />
+              <div className="apple-footer__contact-item">
+                <div className="apple-footer__contact-icon-wrapper">
+                  <Phone className="apple-footer__contact-icon" />
                 </div>
-                <div className="space-y-1">
-                  <p
-                    className="font-medium"
-                    style={{
-                      color: "var(--footer-text-primary)",
-                    }}
-                  >
-                    联系电话
-                  </p>
-                  <p
-                    className="text-sm transition-colors"
-                    style={{
-                      color: "var(--footer-text-secondary)",
-                    }}
-                  >
-                    010-12345678
+                <div className="apple-footer__contact-content">
+                  <p className="apple-footer__contact-label">联系电话</p>
+                  <p className="apple-footer__contact-text">18162108792</p>
+                  <p className="apple-footer__contact-text">
+                    传真：0792-3053111
                   </p>
                 </div>
               </div>
 
-              <div
-                className="group/contact flex items-start space-x-4 p-3 rounded-xl transition-all duration-300 cursor-pointer"
-                style={{
-                  background: "var(--footer-bg-accent)",
-                  border: "1px solid var(--footer-border)",
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0 mt-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--primary-gold/20), var(--primary-gold/10))",
-                  }}
-                >
-                  <Mail
-                    className="w-5 h-5 transition-colors"
-                    style={{
-                      color: "var(--primary-gold)",
-                    }}
-                    strokeWidth={2}
-                  />
+              <div className="apple-footer__contact-item">
+                <div className="apple-footer__contact-icon-wrapper">
+                  <Mail className="apple-footer__contact-icon" />
                 </div>
-                <div className="space-y-1">
-                  <p
-                    className="font-medium"
-                    style={{
-                      color: "var(--footer-text-primary)",
-                    }}
-                  >
-                    电子邮箱
-                  </p>
-                  <p
-                    className="text-sm transition-colors"
-                    style={{
-                      color: "var(--footer-text-secondary)",
-                    }}
-                  >
-                    info@unicechemical.com
+                <div className="apple-footer__contact-content">
+                  <p className="apple-footer__contact-label">电子邮箱</p>
+                  <p className="apple-footer__contact-text">
+                    1179002658@qq.com
                   </p>
                 </div>
               </div>
@@ -351,60 +230,29 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 版权信息 */}
-        <div
-          className="mt-16 pt-8"
-          style={{
-            borderTop: "1px solid var(--footer-border)",
-          }}
-        >
-          <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
-            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-center lg:text-left">
-              <p
-                className="text-sm flex items-center space-x-2"
-                style={{
-                  color: "var(--footer-text-secondary)",
-                }}
-              >
-                <span>© {new Date().getFullYear()} 联合化工</span>
-                <span style={{ color: "var(--primary-gold)" }}>•</span>
-                <span>保留所有权利</span>
+        {/* Bottom Bar */}
+        <div className="apple-footer__bottom">
+          <div className="apple-footer__bottom-content">
+            {/* Copyright */}
+            <div className="apple-footer__copyright">
+              <p className="apple-footer__copyright-text">
+                © {new Date().getFullYear()} 江西联合化学有限公司. 保留所有权利.
               </p>
-              <div className="flex items-center space-x-1">
-                <span style={{ color: "var(--primary-gold)" }}>♥</span>
-                <span
-                  className="text-xs"
-                  style={{
-                    color: "var(--footer-text-muted)",
-                  }}
-                >
-                  用心服务每一个客户
-                </span>
-              </div>
+              <p className="apple-footer__copyright-tagline">
+                专业 · 创新 · 品质 · 服务
+              </p>
             </div>
-            <div className="flex flex-wrap justify-center lg:justify-end items-center gap-6 text-sm">
-              {[
-                { href: "#", text: "隐私政策" },
-                { href: "#", text: "服务条款" },
-                { href: "#", text: "网站地图" },
-                { href: "#", text: "法律声明" },
-              ].map((item, index) => (
-                <a
+
+            {/* Legal Links */}
+            <div className="apple-footer__legal-links">
+              {legalLinks.map((link, index) => (
+                <Link
                   key={index}
-                  href={item.href}
-                  className="relative group hover:scale-105 transition-all duration-300"
-                  style={{
-                    color: "var(--footer-text-secondary)",
-                  }}
+                  href={link.href}
+                  className="apple-footer__legal-link"
                 >
-                  {item.text}
-                  <span
-                    className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300"
-                    style={{
-                      background: "var(--gold-gradient-strong)",
-                    }}
-                  ></span>
-                </a>
+                  {link.title}
+                </Link>
               ))}
             </div>
           </div>
@@ -413,3 +261,20 @@ export default function Footer() {
     </footer>
   );
 }
+
+// Icon components
+const Building = ({ className }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+    />
+  </svg>
+);

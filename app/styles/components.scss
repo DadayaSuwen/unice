@@ -34,7 +34,7 @@
   &:hover {
     background: var(--primary-gold-hover);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px 0 rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 25px 0 var(--shadow-gold);
 
     &::before {
       left: 100%;
@@ -43,12 +43,12 @@
 
   &:active {
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px 0 rgba(212, 175, 55, 0.25);
+    box-shadow: 0 4px 15px 0 var(--shadow-gold);
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 0 4px var(--shadow-gold);
   }
 
   svg {
@@ -82,7 +82,7 @@
     background: var(--primary-gold);
     color: var(--gray-800);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px 0 rgba(212, 175, 55, 0.25);
+    box-shadow: 0 8px 20px 0 var(--shadow-gold);
   }
 
   &:active {
@@ -91,7 +91,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 0 4px var(--shadow-gold);
   }
 
   svg {
@@ -130,8 +130,8 @@
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 25px 50px -12px var(--shadow-color);
+    background: var(--background);
 
     &::before {
       opacity: 1;
@@ -167,19 +167,19 @@
   &.gold {
     background: var(--primary-gold-gradient);
     color: var(--gray-800);
-    box-shadow: 0 12px 30px -8px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 12px 30px -8px var(--shadow-gold);
   }
 
   &.secondary {
     background: var(--primary-gold-light);
     color: var(--primary-gold-dark);
-    box-shadow: 0 8px 25px -5px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 8px 25px -5px var(--shadow-gold);
   }
 
   &.accent {
     background: linear-gradient(135deg, var(--primary-gold) 0%, #f4e4a6 100%);
     color: var(--gray-800);
-    box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 10px 25px -5px var(--shadow-gold);
   }
 
   &:hover {
@@ -190,15 +190,15 @@
     }
 
     &.gold {
-      box-shadow: 0 16px 40px -8px rgba(212, 175, 55, 0.5);
+      box-shadow: 0 16px 40px -8px var(--shadow-gold);
     }
 
     &.secondary {
-      box-shadow: 0 12px 30px -5px rgba(212, 175, 55, 0.3);
+      box-shadow: 0 12px 30px -5px var(--shadow-gold);
     }
 
     &.accent {
-      box-shadow: 0 14px 35px -5px rgba(212, 175, 55, 0.45);
+      box-shadow: 0 14px 35px -5px var(--shadow-gold);
     }
   }
 }
@@ -206,14 +206,14 @@
 .apple-feature-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: var(--foreground);
   margin-bottom: 0.75rem;
   letter-spacing: -0.01em;
 }
 
 .apple-feature-description {
   font-size: 1rem;
-  color: #86868b;
+  color: var(--text-secondary);
   line-height: 1.5;
   font-weight: 400;
 }
@@ -443,7 +443,7 @@
 .popular-product-card {
   background: var(--background);
   border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 30px var(--shadow-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
@@ -590,12 +590,12 @@
   border-radius: 25px;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px var(--shadow-gold);
 }
 
 .product-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 8px 25px var(--shadow-gold);
 }
 
 .button-arrow {
@@ -674,7 +674,7 @@
   background: var(--background);
   border-radius: 20px;
   padding: 32px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 30px var(--shadow-color);
   max-width: 400px;
   margin: 0 auto;
 }
@@ -745,6 +745,13 @@
   background: var(--primary-gold-gradient);
   color: var(--gray-800);
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+// 暗色模式下的CTA Section
+.dark .cta-section {
+  background: var(--gold-gradient-strong);
+  color: var(--gray-800);
 }
 
 .cta-title {
@@ -782,13 +789,24 @@
   border-radius: 50px;
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px var(--shadow-color);
   min-width: 160px;
 }
 
 .cta-button-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+// 暗色模式下的主要CTA按钮
+.dark .cta-button-primary {
+  background: var(--gray-800);
+  color: var(--primary-gold);
+}
+
+.dark .cta-button-primary:hover {
+  background: var(--gray-700);
+  box-shadow: 0 12px 35px var(--shadow-gold);
 }
 
 .cta-button-secondary {
@@ -811,6 +829,18 @@
   background: var(--gray-800);
   color: var(--primary-gold);
   transform: translateY(-3px);
+}
+
+// 暗色模式下的次要CTA按钮
+.dark .cta-button-secondary {
+  color: var(--gray-300);
+  border-color: var(--gray-300);
+}
+
+.dark .cta-button-secondary:hover {
+  background: var(--gray-300);
+  color: var(--gray-800);
+  box-shadow: 0 4px 15px var(--shadow-gold);
 }
 
 .icon-phone {
@@ -922,13 +952,13 @@
   justify-content: center;
   font-size: 2rem;
   color: white;
-  box-shadow: 0 0.625rem 1.875rem rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0.625rem 1.875rem var(--shadow-gold);
 }
 
 .product-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #5a5a5a;
   margin-bottom: 0.75rem;
 }
 
@@ -966,7 +996,7 @@
 .feature-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #5a5a5a;
   margin-bottom: 0.5rem;
 }
 
@@ -1036,7 +1066,7 @@
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #5a5a5a;
   margin-bottom: 0.5rem;
 
   &.text-white {
@@ -1328,7 +1358,7 @@
 .careers-loading .spinner-ring {
   width: 100%;
   height: 100%;
-  border: 3px solid rgba(212, 175, 55, 0.1);
+  border: 3px solid var(--shadow-gold);
   border-top: 3px solid var(--primary-gold);
   border-radius: 50%;
   animation: spin 1s linear infinite;

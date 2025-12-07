@@ -273,7 +273,7 @@ export default function AdminDashboard() {
                   <div className="status-indicator">
                     <div
                       className="status-dot online"
-                      style={{ background: "#3b82f6" }}
+                      style={{ background: "var(--info)" }}
                     ></div>
                     <div className="status-info">
                       <div className="status-title text-blue-800">缓存系统</div>
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
                     <div className="status-indicator">
                       <div
                         className="status-dot warning"
-                        style={{ background: "#f59e0b" }}
+                        style={{ background: "var(--warning)" }}
                       ></div>
                       <AlertCircle className="w-4 h-4 text-amber-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                       <div className="status-info">

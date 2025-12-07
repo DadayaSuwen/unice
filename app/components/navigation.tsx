@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import ThemeToggle from "./theme-toggle";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,7 +46,7 @@ export default function Navigation() {
                   priority
                 />
               </div>
-              <span className="nav-logo-name">联合化工</span>
+              <span className="nav-logo-name">江西联合化工</span>
             </Link>
 
             {/* 桌面导航 */}
@@ -58,24 +59,36 @@ export default function Navigation() {
                 { href: "/careers", label: "加入我们" },
                 { href: "/contact", label: "联系我们" },
               ].map((item) => (
-                <Link key={item.href} href={item.href} className="nav-link group">
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="nav-link group"
+                >
                   {item.label}
                   <span className="nav-link-underline"></span>
                 </Link>
               ))}
             </div>
 
-            {/* 移动端菜单按钮 */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`nav-mobile-toggle ${isMobileMenuOpen ? "active" : ""}`}
-            >
-              <div className="nav-mobile-icon">
-                <span className="nav-mobile-line"></span>
-                <span className="nav-mobile-line"></span>
-                <span className="nav-mobile-line"></span>
-              </div>
-            </button>
+            {/* 右侧按钮组 */}
+            <div className="flex items-center gap-4">
+              {/* 主题切换按钮 */}
+              <ThemeToggle />
+
+              {/* 移动端菜单按钮 */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`nav-mobile-toggle ${
+                  isMobileMenuOpen ? "active" : ""
+                }`}
+              >
+                <div className="nav-mobile-icon">
+                  <span className="nav-mobile-line"></span>
+                  <span className="nav-mobile-line"></span>
+                  <span className="nav-mobile-line"></span>
+                </div>
+              </button>
+            </div>
           </div>
         </nav>
       </header>
@@ -88,24 +101,23 @@ export default function Navigation() {
         />
       )}
       <div className={`nav-mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
-        {/* 关闭按钮 */}
-        <button
-          className="nav-mobile-close"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* 关闭按钮和主题切换 */}
+        <div className="flex items-center justify-between p-6 border-b border-light">
+          <button
+            className="nav-mobile-close"
+            onClick={() => setIsMobileMenuOpen(false)}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <ThemeToggle />
+        </div>
 
         <div className="nav-mobile-links">
           {[

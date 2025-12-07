@@ -33,15 +33,18 @@ export default function NewsPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const fetchNews = async (page: number = 1, category: string = selectedCategory) => {
+  const fetchNews = async (
+    page: number = 1,
+    category: string = selectedCategory
+  ) => {
     try {
       setLoading(true);
 
       // 构建查询参数
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '12',
-        category: category
+        limit: "12",
+        category: category,
       });
 
       // Fetch data from the API route
@@ -72,7 +75,7 @@ export default function NewsPage() {
     setCurrentPage(page);
     fetchNews(page, selectedCategory);
     // 滚动到页面顶部
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // 处理分类变化
@@ -110,7 +113,7 @@ export default function NewsPage() {
           <div className={`hero-content-news ${isLoaded ? "loaded" : ""}`}>
             <h1 className="page-title">新闻中心</h1>
             <p className="page-subtitle">
-              关注联合化工最新动态，把握化工行业发展脉搏
+              关注江西联合化工最新动态，把握化工行业发展脉搏
             </p>
           </div>
         </div>
@@ -145,7 +148,12 @@ export default function NewsPage() {
             <div className="no-news">
               <div className="no-news-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
               <h3 className="no-news-title">暂无相关新闻</h3>
@@ -166,8 +174,17 @@ export default function NewsPage() {
                     <div className="news-image-bg"></div>
                     <div className="news-image-placeholder">
                       <div className="news-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                       </div>
                     </div>
@@ -181,11 +198,14 @@ export default function NewsPage() {
                   <div className="news-content-area">
                     <div className="news-meta">
                       <time className="news-date">
-                        {new Date(item.publish_date).toLocaleDateString("zh-CN", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric"
-                        })}
+                        {new Date(item.publish_date).toLocaleDateString(
+                          "zh-CN",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
                       </time>
                       {item.author && (
                         <span className="news-author">by {item.author}</span>
@@ -204,8 +224,18 @@ export default function NewsPage() {
                         className="news-button-primary"
                       >
                         阅读全文
-                        <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <svg
+                          className="button-arrow"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
                         </svg>
                       </a>
                     </div>

@@ -42,7 +42,7 @@ services:
     networks:
       - unice_network
     volumes:
-      - ./uploads:/app/uploads:ro
+      - ./uploads:/app/uploads
 
 volumes:
   postgres_data:

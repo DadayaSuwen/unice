@@ -18,7 +18,7 @@ export default function AboutPage() {
           <div className={`hero-content-about ${isLoaded ? "loaded" : ""}`}>
             <h1 className="page-title">关于我们</h1>
             <p className="page-subtitle">
-              了解联合化工的企业文化与发展历程，探索我们20年来的专业与创新
+              了解江西联合化工的企业文化与发展历程，探索我们20年来的专业与创新
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@ export default function AboutPage() {
               <h2 className="section-title">公司简介</h2>
               <div className="intro-description">
                 <p>
-                  江西联合化学有限公司分别成立于2002年，总部设在国家级新型工业化产业示范基地——星火工业园。
+                  江西联合化工有限公司分别成立于2002年，总部设在国家级新型工业化产业示范基地——星火工业园。
                   公司主要经营生产：丙烯酸树脂，PP树脂，触变型树脂，丙烯酸水分散体，聚酯树脂，氨基树脂，环氧磷酸酯，蜡分散体等。预计年产值可达8亿元人民币。
                 </p>
                 <p>
@@ -53,7 +53,7 @@ export default function AboutPage() {
               <div className="company-image-container">
                 <Image
                   src="/company.jpg"
-                  alt="联合化工公司形象"
+                  alt="江西联合化工公司形象"
                   width={600}
                   height={320}
                   className="company-image"
@@ -134,7 +134,7 @@ export default function AboutPage() {
                   year: "2002",
                   title: "公司成立",
                   description:
-                    "江西联合化学有限公司正式成立，总部设在国家级新型工业化产业示范基地——星火工业园，专注树脂产品研发生产",
+                    "江西联合化工有限公司正式成立，总部设在国家级新型工业化产业示范基地——星火工业园，专注树脂产品研发生产",
                   icon: (
                     <svg
                       className="milestone-icon"

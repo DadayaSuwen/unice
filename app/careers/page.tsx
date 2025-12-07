@@ -36,7 +36,6 @@ export default function CareersPage() {
           throw new Error(data.error || "Failed to fetch careers");
         }
 
-  
         setJobs(data);
         setLoading(false);
       } catch (err) {
@@ -55,9 +54,11 @@ export default function CareersPage() {
 
   const handleApply = (job: Job) => {
     // 创建邮件主题
-    const subject = encodeURIComponent(`应聘${job.position} - ${job.department}`);
+    const subject = encodeURIComponent(
+      `应聘${job.position} - ${job.department}`
+    );
     const body = encodeURIComponent(
-      `尊敬的江西联合化学有限公司招聘团队：
+      `尊敬的江西联合化工有限公司招聘团队：
 
 我想应聘贵公司的${job.position}职位。
 
@@ -86,7 +87,7 @@ export default function CareersPage() {
             <div className={`hero-content-careers ${isLoaded ? "loaded" : ""}`}>
               <h1 className="page-title">加入我们</h1>
               <p className="page-subtitle">
-                江西联合化学有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
+                江西联合化工有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
               </p>
             </div>
           </div>
@@ -117,7 +118,7 @@ export default function CareersPage() {
             <div className={`hero-content-careers ${isLoaded ? "loaded" : ""}`}>
               <h1 className="page-title">加入我们</h1>
               <p className="page-subtitle">
-                江西联合化学有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
+                江西联合化工有限公司成立于2002年，专注树脂研发生产20余年，诚邀优秀人才加入星火工业园团队
               </p>
             </div>
           </div>
@@ -130,7 +131,12 @@ export default function CareersPage() {
               <div className="error-card">
                 <div className="error-icon">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
                   </svg>
                 </div>
                 <p className="error-message">{error}</p>
@@ -150,7 +156,7 @@ export default function CareersPage() {
           <div className={`hero-content-careers ${isLoaded ? "loaded" : ""}`}>
             <h1 className="page-title">加入我们</h1>
             <p className="page-subtitle">
-              寻找志同道合的优秀人才，在联合化工开启您的职业新征程
+              寻找志同道合的优秀人才，在江西联合化工开启您的职业新征程
             </p>
           </div>
         </div>
@@ -160,12 +166,22 @@ export default function CareersPage() {
       <section className="why-join-section">
         <div className="container">
           <div className={`why-join-content ${isLoaded ? "loaded" : ""}`}>
-            <h2 className="section-title">为什么选择江西联合化学？</h2>
+            <h2 className="section-title">为什么选择江西联合化工？</h2>
             <div className="benefits-grid">
               <div className="benefit-card">
                 <div className="apple-icon-wrapper gold">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
                 <h3 className="benefit-title">专业技术发展</h3>
@@ -176,8 +192,18 @@ export default function CareersPage() {
 
               <div className="benefit-card">
                 <div className="apple-icon-wrapper gold">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
                 <h3 className="benefit-title">工作环境</h3>
@@ -188,8 +214,18 @@ export default function CareersPage() {
 
               <div className="benefit-card">
                 <div className="apple-icon-wrapper gold">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
                   </svg>
                 </div>
                 <h3 className="benefit-title">团队文化</h3>
@@ -224,14 +260,26 @@ export default function CareersPage() {
                         <span className="job-tag">{job.experience}</span>
                         {job.application_deadline && (
                           <span className="job-tag deadline">
-                            截止: {new Date(job.application_deadline).toLocaleDateString('zh-CN')}
+                            截止:{" "}
+                            {new Date(
+                              job.application_deadline
+                            ).toLocaleDateString("zh-CN")}
                           </span>
                         )}
                       </div>
                     </div>
                     <div className="job-icon">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      <svg
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -242,12 +290,14 @@ export default function CareersPage() {
                     <div className="job-detail-column">
                       <h4 className="job-detail-title">岗位职责</h4>
                       <ul className="job-detail-list">
-                        {Array.isArray(job.responsibilities) && job.responsibilities.slice(0, 3).map((resp, idx) => (
-                          <li key={idx}>{resp}</li>
-                        ))}
-                        {Array.isArray(job.responsibilities) && job.responsibilities.length > 3 && (
-                          <li className="job-detail-more">...</li>
-                        )}
+                        {Array.isArray(job.responsibilities) &&
+                          job.responsibilities
+                            .slice(0, 3)
+                            .map((resp, idx) => <li key={idx}>{resp}</li>)}
+                        {Array.isArray(job.responsibilities) &&
+                          job.responsibilities.length > 3 && (
+                            <li className="job-detail-more">...</li>
+                          )}
                         {!Array.isArray(job.responsibilities) && (
                           <li>岗位职责信息加载中...</li>
                         )}
@@ -256,12 +306,14 @@ export default function CareersPage() {
                     <div className="job-detail-column">
                       <h4 className="job-detail-title">任职要求</h4>
                       <ul className="job-detail-list">
-                        {Array.isArray(job.requirements) && job.requirements.slice(0, 3).map((req, idx) => (
-                          <li key={idx}>{req}</li>
-                        ))}
-                        {Array.isArray(job.requirements) && job.requirements.length > 3 && (
-                          <li className="job-detail-more">...</li>
-                        )}
+                        {Array.isArray(job.requirements) &&
+                          job.requirements
+                            .slice(0, 3)
+                            .map((req, idx) => <li key={idx}>{req}</li>)}
+                        {Array.isArray(job.requirements) &&
+                          job.requirements.length > 3 && (
+                            <li className="job-detail-more">...</li>
+                          )}
                         {!Array.isArray(job.requirements) && (
                           <li>任职要求信息加载中...</li>
                         )}
@@ -276,12 +328,19 @@ export default function CareersPage() {
                     >
                       {expandedJob === job.id ? "收起详情" : "查看详情"}
                       <svg
-                        className={`button-arrow ${expandedJob === job.id ? "rotated" : ""}`}
+                        className={`button-arrow ${
+                          expandedJob === job.id ? "rotated" : ""
+                        }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                     <button
@@ -289,8 +348,18 @@ export default function CareersPage() {
                       onClick={() => handleApply(job)}
                     >
                       申请职位
-                      <svg className="button-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <svg
+                        className="button-arrow"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -391,30 +460,54 @@ export default function CareersPage() {
               <div className="contact-info-card">
                 <div className="contact-icon">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
                 <h3>简历投递</h3>
                 <p>请将您的简历发送至我们的招聘邮箱</p>
-                <a href="mailto:hr@unicechemical.com" className="contact-link">hr@unicechemical.com</a>
+                <a href="mailto:hr@unicechemical.com" className="contact-link">
+                  hr@unicechemical.com
+                </a>
               </div>
 
               <div className="contact-info-card">
                 <div className="contact-icon">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
                   </svg>
                 </div>
                 <h3>电话咨询</h3>
                 <p>工作日 9:00-18:00 为您解答疑问</p>
-                <a href="tel:0791-88888888" className="contact-link">0791-88888888</a>
+                <a href="tel:0791-88888888" className="contact-link">
+                  0791-88888888
+                </a>
               </div>
 
               <div className="contact-info-card">
                 <div className="contact-icon">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                 </div>
                 <h3>公司地址</h3>

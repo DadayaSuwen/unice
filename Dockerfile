@@ -7,6 +7,9 @@ RUN apk add --no-cache openssl
 # 设置工作目录
 WORKDIR /app
 
+# 1. 全局安装 PM2
+RUN npm install --global pm2
+
 # 复制package文件
 COPY package*.json ./
 
@@ -22,8 +25,6 @@ RUN npx prisma generate
 # 复制源代码
 COPY . .
 
-# 设置环境变量
-ENV DATABASE_URL="postgresql://postgres:housuwen@localhost:5432/unice"
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -34,7 +35,11 @@ RUN npm run build
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# 设置正确的权限
+# 3. 设置 PM2 目录权限 (防止无权限写入日志)
+RUN mkdir -p /home/nextjs/.pm2 && \
+    chown -R nextjs:nodejs /home/nextjs
+
+# 设置项目目录权限
 RUN chown -R nextjs:nodejs /app
 
 # 切换到非root用户
@@ -46,5 +51,5 @@ EXPOSE 3000
 # 设置环境变量
 ENV PORT=3000
 
-# 启动应用
-CMD ["npm", "start"]
+# 4. 【修改】启动命令：直接加载配置文件
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]

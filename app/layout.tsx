@@ -5,7 +5,7 @@ import "./globals.scss";
 import RootClientWrapper from "./components/root-client-wrapper";
 
 export const metadata: Metadata = {
-  title: "联合化工官方网站",
+  title: "江西联合化工官方网站",
   description: "专业的化工企业官方网站",
 };
 

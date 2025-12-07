@@ -1,14 +1,36 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
 import { MobileMenuProvider, useMobileMenu } from "./MobileMenuProvider";
 import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
 function AdminLayoutContent({ children }: { children: ReactNode }) {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { isMobileMenuOpen } = useMobileMenu();
+  const router = useRouter();
+
+  // 检查认证状态
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("admin_token");
+      if (!token) {
+        router.push("/admin/login");
+        return;
+      }
+
+      // 这里可以添加token验证逻辑
+      // 简单起见，只检查token是否存在
+      setIsAuthenticated(true);
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     const checkDevice = () => {
@@ -23,6 +45,23 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
       window.removeEventListener("resize", checkDevice);
     };
   }, []);
+
+  // 如果正在加载，显示加载状态
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-gold)] mx-auto mb-4"></div>
+          <p className="text-gray-600">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 如果未认证，不渲染任何内容（重定向已在 useEffect 中处理）
+  if (!isAuthenticated) {
+    return null;
+  }
 
   // 只有桌面端需要根据菜单状态调整布局
   const shouldAdjustLayout = isDesktop;
@@ -44,12 +83,10 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
                     lg:min-h-[calc(100vh-4rem)]"
           style={{
             // 只有桌面端才需要动态调整 marginLeft
-            marginLeft: shouldAdjustLayout && !isMobileMenuOpen ? '16rem' : '0'
+            marginLeft: shouldAdjustLayout && !isMobileMenuOpen ? "16rem" : "0",
           }}
         >
-          <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
-            {children}
-          </div>
+          <div className="mx-auto space-y-6 sm:space-y-8">{children}</div>
         </main>
       </div>
     </div>
@@ -60,7 +97,9 @@ interface AdminLayoutClientProps {
   children: ReactNode;
 }
 
-export default function AdminLayoutClient({ children }: AdminLayoutClientProps) {
+export default function AdminLayoutClient({
+  children,
+}: AdminLayoutClientProps) {
   return (
     <MobileMenuProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
