@@ -66,16 +66,19 @@ export default function Home() {
 
   return (
     <div className="app-wrapper">
-      {/* Apple-style Hero Section */}
+      {/* Hero Section */}
       <section className="hero-section">
-        {/* High-quality background image with gradient overlay */}
         <div className="hero-background">
-          <div
-            className="hero-background-image"
-            style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1532187863486-abf98db72652?q=80&w=1974')`,
-            }}
-          />
+          <div className="hero-background-image-wrapper">
+            <Image
+              src="/uniche.png"
+              alt="江西联合化工背景"
+              fill
+              className="hero-background-img"
+              priority
+              sizes="100vw"
+            />
+          </div>
           <div
             className="hero-radial-gradient"
             style={{
@@ -153,7 +156,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Products Section - 优雅重新设计 */}
+      {/* Products Section */}
       <section ref={productsRef} className="products-section">
         <div className="container">
           <div
@@ -383,7 +386,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Apple-style Features Section */}
+      {/* Features Section */}
       <section ref={featuresRef} className="section py-section">
         <div className="container">
           <div

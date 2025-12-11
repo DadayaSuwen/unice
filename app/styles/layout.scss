@@ -68,13 +68,16 @@
   inset: 0;
 }
 
-.hero-background-image {
+.hero-background-image-wrapper {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.1;
+  z-index: 1;
+}
+
+.hero-background-img {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.50;
   transition: opacity 0.3s ease;
 }
 
@@ -85,24 +88,6 @@
   transition: all 0.7s ease-out;
 }
 
-// 暗色模式适配
-.dark .hero-background-image {
-  opacity: 0.05;
-}
-
-.dark .hero-radial-gradient {
-  opacity: 0.15;
-}
-
-// 为暗色模式添加黑色背景
-.dark .hero-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--background);
-  z-index: 2;
-  pointer-events: none;
-}
 
 .hero-content {
   position: relative;

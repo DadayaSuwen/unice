@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import ThemeToggle from "./theme-toggle";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -72,9 +71,6 @@ export default function Navigation() {
 
             {/* 右侧按钮组 */}
             <div className="flex items-center gap-4">
-              {/* 主题切换按钮 */}
-              <ThemeToggle />
-
               {/* 移动端菜单按钮 */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -101,8 +97,8 @@ export default function Navigation() {
         />
       )}
       <div className={`nav-mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
-        {/* 关闭按钮和主题切换 */}
-        <div className="flex items-center justify-between p-6 border-b border-light">
+        {/* 关闭按钮 */}
+        <div className="flex justify-end p-6 border-b border-light">
           <button
             className="nav-mobile-close"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -116,7 +112,6 @@ export default function Navigation() {
               />
             </svg>
           </button>
-          <ThemeToggle />
         </div>
 
         <div className="nav-mobile-links">

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import DarkModeToggle from "@/components/dark-mode-toggle";
 
 interface NewsDetail {
   id: number;
@@ -144,8 +143,6 @@ export default function NewsDetailPage() {
 
   return (
     <div className="app-wrapper">
-      <DarkModeToggle />
-
       {/* Hero Section */}
       <section className="hero-section-news-detail">
         <div className="container">

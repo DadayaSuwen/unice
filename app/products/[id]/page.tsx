@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import DarkModeToggle from "@/components/dark-mode-toggle";
 
 // 为不同应用领域提供不同的图标
 const getIndustryIcon = (index: number) => {
@@ -112,8 +111,6 @@ export default function ProductDetailPage() {
 
   return (
     <div className="app-wrapper">
-      <DarkModeToggle />
-
       {/* Hero Section */}
       <section className="hero-section-product-detail">
         <div className="container">
