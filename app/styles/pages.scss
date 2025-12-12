@@ -1643,6 +1643,58 @@
   transform: scale(1.1);
 }
 
+.news-no-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(135deg,
+    rgba(212, 175, 55, 0.08) 0%,
+    rgba(212, 175, 55, 0.04) 50%,
+    rgba(212, 175, 55, 0.08) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.news-no-image .news-icon {
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  margin-bottom: 12px;
+}
+
+.news-no-image .news-icon svg {
+  color: var(--primary-gold);
+  width: 36px;
+  height: 36px;
+}
+
+.news-no-image-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.news-type-name {
+  color: var(--primary-gold);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.news-preview-text {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 400;
+  margin: 0;
+}
+
 .news-type-badge {
   position: absolute;
   top: 16px;
@@ -1660,6 +1712,84 @@
   font-weight: 600;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+// 不同新闻类型的样式
+.news-type-badge span.type-company {
+  background: rgba(212, 175, 55, 0.9);
+  color: var(--gray-800);
+  border-color: var(--primary-gold);
+}
+
+.news-type-badge span.type-industry {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.news-type-badge span.type-product {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.news-type-badge span.type-tech {
+  background: rgba(139, 92, 246, 0.9);
+  color: white;
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.news-type-badge span.type-announcement {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.news-type-badge span.type-research {
+  background: rgba(245, 158, 11, 0.9);
+  color: white;
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.news-type-badge span.type-partnership {
+  background: rgba(236, 72, 153, 0.9);
+  color: white;
+  border-color: rgba(236, 72, 153, 0.5);
+}
+
+.news-type-badge span.type-award {
+  background: rgba(251, 146, 60, 0.9);
+  color: white;
+  border-color: rgba(251, 146, 60, 0.5);
+}
+
+.news-type-badge span.type-sustainability {
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.news-type-badge span.type-innovation {
+  background: rgba(168, 85, 247, 0.9);
+  color: white;
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.news-type-badge span.type-breaking {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .news-content-area {
@@ -3706,6 +3836,7 @@
   box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 // 新闻详情标题

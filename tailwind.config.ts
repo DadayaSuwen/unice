@@ -52,6 +52,7 @@ const config: Config = {
       },
       animation: {
         float: "float 3s ease-in-out infinite",
+        fadeIn: "fadeIn 0.5s ease-out forwards",
         fadeInUp: "fadeInUp 1s ease-out forwards",
         fadeInLeft: "fadeInLeft 1s ease-out forwards",
         fadeInRight: "fadeInRight 1s ease-out forwards",

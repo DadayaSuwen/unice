@@ -430,6 +430,16 @@
     color: var(--footer-text-muted);
   }
 
+  &__icp-number {
+    font-size: 0.75rem;
+    color: var(--footer-text-muted);
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--footer-text-secondary);
+    }
+  }
+
   // Legal links
   &__legal-links {
     display: flex;

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+import { getNewsTypeDisplayName, getNewsTypeClassName } from "@/lib/news-utils";
 
 interface NewsDetail {
   id: number;
@@ -118,7 +120,7 @@ export default function NewsDetailPage() {
               </div>
               <h3 className="empty-title">新闻未找到</h3>
               <p className="empty-description">抱歉，找不到对应的新闻内容。</p>
-              <a href="/news" className="back-button">
+              <Link href="/news" className="back-button">
                 <svg
                   className="button-arrow"
                   fill="none"
@@ -133,7 +135,7 @@ export default function NewsDetailPage() {
                   />
                 </svg>
                 返回新闻列表
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -149,9 +151,9 @@ export default function NewsDetailPage() {
           <div className={`news-hero-content ${isLoaded ? "loaded" : ""}`}>
             {/* Breadcrumb */}
             <nav className="news-breadcrumb">
-              <a href="/news" className="breadcrumb-link">
+              <Link href="/news" className="breadcrumb-link">
                 新闻中心
-              </a>
+              </Link>
               <svg
                 className="breadcrumb-separator"
                 fill="none"
@@ -170,7 +172,9 @@ export default function NewsDetailPage() {
 
             {/* News Type Badge */}
             <div className="news-type-badge-large">
-              <span>{news.type || "新闻"}</span>
+              <span className={getNewsTypeClassName(news.type)}>
+                {getNewsTypeDisplayName(news.type)}
+              </span>
             </div>
 
             {/* News Title */}
@@ -334,26 +338,6 @@ export default function NewsDetailPage() {
             <div className="article-share">
               <h3 className="share-title">分享这篇文章</h3>
               <div className="share-buttons">
-                <button className="share-button share-facebook">
-                  <svg
-                    className="share-icon"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                  </svg>
-                  Facebook
-                </button>
-                <button className="share-button share-twitter">
-                  <svg
-                    className="share-icon"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                  Twitter
-                </button>
                 <button className="share-button share-copy">
                   <svg
                     className="share-icon"
@@ -402,7 +386,9 @@ export default function NewsDetailPage() {
                         </svg>
                       </div>
                       <div className="related-news-type">
-                        <span>{item.type || "新闻"}</span>
+                        <span className={getNewsTypeClassName(item.type)}>
+                          {getNewsTypeDisplayName(item.type)}
+                        </span>
                       </div>
                     </div>
                     <div className="related-news-content">
@@ -481,7 +467,7 @@ export default function NewsDetailPage() {
       <section className="back-to-news-section">
         <div className="container">
           <div className="back-to-news-content">
-            <a href="/news" className="back-to-news-button">
+            <Link href="/news" className="back-to-news-button">
               <svg
                 className="button-arrow"
                 fill="none"
@@ -496,7 +482,7 @@ export default function NewsDetailPage() {
                 />
               </svg>
               返回新闻列表
-            </a>
+            </Link>
           </div>
         </div>
       </section>

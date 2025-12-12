@@ -241,6 +241,9 @@ export default function Footer() {
               <p className="apple-footer__copyright-tagline">
                 专业 · 创新 · 品质 · 服务
               </p>
+              <p className="apple-footer__icp-number">
+                赣ICP备2020014627号-2
+              </p>
             </div>
 
             {/* Legal Links */}
