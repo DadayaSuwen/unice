@@ -43,3 +43,10 @@ yarn-error.log*
 next-env.d.ts
 
 /app/generated/prisma
+
+# payload cms
+/.payload/
+/media/
+
+# sdd scratch (ledger/briefs/reports — do not commit)
+/.superpowers/
