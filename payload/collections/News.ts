@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { richTextEditor } from '../editor'
+import { seoFields } from '../fields/seo'
 import { isAdminOrEditor } from '../access'
 
 export const News: CollectionConfig = {
@@ -17,7 +18,7 @@ export const News: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
-      editor: lexicalEditor(),
+      editor: richTextEditor(),
       label: '正文',
     },
     { name: 'excerpt', type: 'textarea', label: '摘要' },
@@ -35,10 +36,9 @@ export const News: CollectionConfig = {
     { name: 'read_time', type: 'number', label: '阅读时间（分钟）' },
     { name: 'views_count', type: 'number', defaultValue: 0, label: '浏览次数' },
     { name: 'category', type: 'relationship', relationTo: 'news-categories', label: '新闻分类' },
-    { name: 'seo_title', type: 'text', label: 'SEO 标题' },
-    { name: 'seo_description', type: 'textarea', label: 'SEO 描述' },
     { name: 'featured', type: 'checkbox', defaultValue: false, label: '精选' },
     { name: 'sort_order', type: 'number', defaultValue: 0, label: '排序' },
+    ...seoFields,
   ],
   access: {
     read: () => true,
