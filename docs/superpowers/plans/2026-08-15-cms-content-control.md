@@ -34,8 +34,8 @@
 ```ts
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import {
+  EXPERIMENTAL_TableFeature,
   FixedToolbarFeature,
-  TableFeature,
   TextStateFeature,
 } from '@payloadcms/richtext-lexical'
 
@@ -50,11 +50,13 @@ export const richTextEditor = () =>
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       FixedToolbarFeature(),
-      TableFeature(),
+      EXPERIMENTAL_TableFeature(),
       TextStateFeature(),
     ],
   })
 ```
+
+> **注意：** 3.88 中表格特性的导出名是 `EXPERIMENTAL_TableFeature`（无别名 `TableFeature`），实现时已按此修正。
 
 - [ ] **Step 2: 类型检查**
 
