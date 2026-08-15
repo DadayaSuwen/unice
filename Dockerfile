@@ -16,12 +16,6 @@ COPY package*.json ./
 # 安装所有依赖
 RUN npm ci
 
-# 复制Prisma配置
-COPY prisma ./prisma/
-
-# 生成Prisma客户端
-RUN npx prisma generate
-
 # 复制源代码
 COPY . .
 
@@ -51,5 +45,5 @@ EXPOSE 3000
 # 设置环境变量
 ENV PORT=3000
 
-# 4. 【修改】启动命令：直接加载配置文件
-CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
+# 4. 【修改】启动命令：先跑 Payload 迁移（建表），再以集群模式启动
+CMD ["sh", "-c", "npx payload migrate && pm2-runtime start ecosystem.config.cjs"]
