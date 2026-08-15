@@ -1,66 +1,39 @@
-"use client";
+import type { Metadata } from "next";
+import ContactForm from "./ContactForm";
+import {
+  getContactPage,
+  getPageHeaders,
+  getSiteSettings,
+  seoToMetadata,
+} from "@/lib/globals";
 
-import { useState, useEffect } from "react";
+const FALLBACK_META = {
+  title: "联系我们 - 江西联合化工",
+  description: "期待与您的合作与交流，我们将竭诚为您提供专业的化工产品解决方案",
+};
 
-export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: "",
-  });
-  const [isLoaded, setIsLoaded] = useState(false);
+export async function generateMetadata(): Promise<Metadata> {
+  const headers = await getPageHeaders();
+  return seoToMetadata((headers as any).seo || {}, FALLBACK_META);
+}
 
-  useEffect(() => {
-    setTimeout(() => setIsLoaded(true), 100);
-  }, []);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "提交失败");
-      }
-      alert("感谢您的留言！我们会尽快回复您。");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        message: "",
-      });
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "提交失败，请稍后重试");
-    }
-  };
+export default async function ContactPage() {
+  const [contactPage, headers, settings] = await Promise.all([
+    getContactPage(),
+    getPageHeaders(),
+    getSiteSettings(),
+  ]);
+  const hero = headers.contactPage;
+  const c = settings.contact;
 
   return (
     <div className="app-wrapper">
       {/* Hero Section */}
       <section className="hero-section-contact">
         <div className="container-small">
-          <div className={`hero-content-contact ${isLoaded ? "loaded" : ""}`}>
-            <h1 className="page-title">联系我们</h1>
-            <p className="page-subtitle">
-              期待与您的合作与交流，我们将竭诚为您提供专业的化工产品解决方案
-            </p>
+          <div className="hero-content-contact loaded">
+            <h1 className="page-title">{hero.title}</h1>
+            <p className="page-subtitle">{hero.subtitle}</p>
           </div>
         </div>
       </section>
@@ -68,113 +41,16 @@ export default function ContactPage() {
       {/* Contact Content */}
       <section className="contact-main-section">
         <div className="container">
-          <div className={`contact-content ${isLoaded ? "loaded" : ""}`}>
+          <div className="contact-content loaded">
             {/* Contact Form */}
             <div className="contact-form-section">
-              <h2 className="section-title">发送消息</h2>
-              <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name" className="form-label">
-                      姓名 *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="form-input"
-                      placeholder="请输入您的姓名"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email" className="form-label">
-                      邮箱 *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="form-input"
-                      placeholder="请输入您的邮箱"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="phone" className="form-label">
-                      电话
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="请输入您的联系电话"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="company" className="form-label">
-                      公司
-                    </label>
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="请输入您的公司名称"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="message" className="form-label">
-                    留言内容 *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="form-textarea"
-                    placeholder="请详细描述您的需求或问题..."
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="contact-submit-button">
-                  <span>发送消息</span>
-                  <svg
-                    className="button-arrow"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
-                  </svg>
-                </button>
-              </form>
+              <h2 className="section-title">{contactPage.formTitle}</h2>
+              <ContactForm />
             </div>
 
             {/* Contact Information */}
             <div className="contact-info-section">
-              <h2 className="section-title">联系方式</h2>
+              <h2 className="section-title">{contactPage.infoTitle}</h2>
               <div className="contact-info-list">
                 <div className="contact-info-item">
                   <div className="apple-icon-wrapper gold">
@@ -201,9 +77,11 @@ export default function ContactPage() {
                   <div className="contact-info-content">
                     <h3 className="contact-info-title">公司地址</h3>
                     <p className="contact-info-description">
-                      江西省九江市永修县艾城镇星火工业园荣祺大道16号
+                      {c.address}
                       <br />
-                      邮编：330317
+                      {c.addressLine2}
+                      <br />
+                      邮编：{c.zipCode}
                     </p>
                   </div>
                 </div>
@@ -227,11 +105,11 @@ export default function ContactPage() {
                   <div className="contact-info-content">
                     <h3 className="contact-info-title">联系电话</h3>
                     <p className="contact-info-description">
-                      电话：18162108792
+                      电话：{c.phone}
                       <br />
-                      传真：0792-3053111
+                      传真：{c.fax}
                       <br />
-                      技术支持：18162108792
+                      技术支持：{c.techPhone}
                     </p>
                   </div>
                 </div>
@@ -255,11 +133,11 @@ export default function ContactPage() {
                   <div className="contact-info-content">
                     <h3 className="contact-info-title">电子邮箱</h3>
                     <p className="contact-info-description">
-                      商务合作：1179002658@qq.com
+                      商务合作：{c.email}
                       <br />
-                      技术咨询：1179002658@qq.com
+                      技术咨询：{c.email}
                       <br />
-                      客户服务：1179002658@qq.com
+                      客户服务：{c.email}
                     </p>
                   </div>
                 </div>
@@ -300,8 +178,8 @@ export default function ContactPage() {
       {/* Map Section */}
       <section className="contact-map-section">
         <div className="container">
-          <div className={`contact-map-content ${isLoaded ? "loaded" : ""}`}>
-            <h2 className="section-title">地理位置</h2>
+          <div className="contact-map-content loaded">
+            <h2 className="section-title">{contactPage.mapTitle}</h2>
             <div className="map-placeholder">
               <div className="map-icon">
                 <svg
@@ -324,9 +202,7 @@ export default function ContactPage() {
                   />
                 </svg>
               </div>
-              <p className="map-description">
-                江西联合化工有限公司位于国家级新型工业化产业示范基地——星火工业园，交通便利，配套设施完善
-              </p>
+              <p className="map-description">{contactPage.mapDescription}</p>
             </div>
           </div>
         </div>

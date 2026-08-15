@@ -19,6 +19,7 @@ import { Navigation } from './payload/globals/Navigation'
 import { PageHeaders } from './payload/globals/PageHeaders'
 import { HomePage } from './payload/globals/HomePage'
 import { AboutPage } from './payload/globals/AboutPage'
+import { ContactPage } from './payload/globals/ContactPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,7 +43,7 @@ export default buildConfig({
     ContactSubmissions,
   ],
   editor: lexicalEditor(),
-  globals: [SiteSettings, Navigation, PageHeaders, HomePage, AboutPage],
+  globals: [SiteSettings, Navigation, PageHeaders, HomePage, AboutPage, ContactPage],
   i18n: {
     fallbackLanguage: 'zh',
     supportedLanguages: {
