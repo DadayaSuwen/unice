@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Users } from './payload/collections/Users'
+import { Media } from './payload/collections/Media'
 import { Categories } from './payload/collections/Categories'
 import { Products } from './payload/collections/Products'
 import { NewsCategories } from './payload/collections/NewsCategories'
@@ -26,6 +27,7 @@ export default buildConfig({
   },
   collections: [
     Users,
+    Media,
     Categories,
     Products,
     NewsCategories,
