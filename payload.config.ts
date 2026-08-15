@@ -5,6 +5,13 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Users } from './payload/collections/Users'
+import { Categories } from './payload/collections/Categories'
+import { Products } from './payload/collections/Products'
+import { NewsCategories } from './payload/collections/NewsCategories'
+import { News } from './payload/collections/News'
+import { Careers } from './payload/collections/Careers'
+import { HeroBanners } from './payload/collections/HeroBanners'
+import { ContactSubmissions } from './payload/collections/ContactSubmissions'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -16,7 +23,16 @@ export default buildConfig({
       titleSuffix: '· 联合化工管理后台',
     },
   },
-  collections: [Users],
+  collections: [
+    Users,
+    Categories,
+    Products,
+    NewsCategories,
+    News,
+    Careers,
+    HeroBanners,
+    ContactSubmissions,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
