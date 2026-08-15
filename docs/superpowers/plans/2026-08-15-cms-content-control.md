@@ -1146,6 +1146,12 @@ export function seoToMetadata(
 
 > **说明：** `fallback` 参数类型为 `Metadata`（`{title, description}` 字面量也可赋值给 `Metadata`，因此后续任务沿用简写不受影响）。函数保留 fallback 的 openGraph/twitter 基础字段（images/type/locale/siteName/card），用解析后的 title/description 覆盖，关键词与 canonical 在 seo 未设置时回退到 fallback——确保兜底模式与现有硬编码 SEO 完全一致。
 
+> **补充（seo 映射，Task 14 审查发现）：** 各页面级 Global（home-page/about-page/page-headers/contact-page）都挂了 `...seoFields`，但四个 getter 的返回对象没有把 `g.seo` 映射进去，导致页面 `generateMetadata` 里的 `(x as any).seo` 恒为 `undefined`，页面级 SEO 字段失效。修正如下，全部落在 `app/lib/globals.ts`：
+> - 新增类型 `export interface SeoData { metaTitle?: string; metaDescription?: string; keywords?: string; canonical?: string; noindex?: boolean }`；在 `HomePageData`、`AboutPageData`、`PageHeadersData`、`ContactPageData` 末尾追加可选字段 `seo?: SeoData`。
+> - 新增工具函数 `normalizeSeo(raw: unknown): SeoData`，返回 `{ metaTitle: pick(raw,'metaTitle',''), metaDescription: pick(raw,'metaDescription',''), keywords: pick(raw,'keywords',''), canonical: pick(raw,'canonical',''), noindex: !!(raw && typeof raw==='object' && (raw as any).noindex) }`。
+> - 在四个 getter（getHomePage/getAboutPage/getPageHeaders/getContactPage）的 `return {...}` 对象末尾各加一行 `seo: normalizeSeo(g.seo),`。
+> 这样未 seed 时 `seo` 为全空对象，`seoToMetadata` 自动回退到 FALLBACK_META；seed 后后台可逐页覆盖 metaTitle/metaDescription/keywords/canonical/noindex。
+
 - [ ] **Step 2: 类型检查**
 
 Run: `npm run typecheck`
