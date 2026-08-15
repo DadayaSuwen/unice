@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { getPopularProducts } from "./lib/products";
-import HomepageClientWrapper from "./components/homepage-client-wrapper";
-import { ProductStructuredData, OrganizationStructuredData, WebsiteStructuredData } from "./components/structured-data";
+import { getPopularProducts } from "@/lib/products";
+import HomepageClientWrapper from "@/components/homepage-client-wrapper";
+import { ProductStructuredData, OrganizationStructuredData, WebsiteStructuredData } from "@/components/structured-data";
 
 export const metadata: Metadata = {
   title: "江西联合化工 - 专业化工原料与精细化学品制造商 | 首页",
