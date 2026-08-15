@@ -17,6 +17,7 @@ import { ContactSubmissions } from './payload/collections/ContactSubmissions'
 import { SiteSettings } from './payload/globals/SiteSettings'
 import { Navigation } from './payload/globals/Navigation'
 import { PageHeaders } from './payload/globals/PageHeaders'
+import { HomePage } from './payload/globals/HomePage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -40,7 +41,7 @@ export default buildConfig({
     ContactSubmissions,
   ],
   editor: lexicalEditor(),
-  globals: [SiteSettings, Navigation, PageHeaders],
+  globals: [SiteSettings, Navigation, PageHeaders, HomePage],
   i18n: {
     fallbackLanguage: 'zh',
     supportedLanguages: {
