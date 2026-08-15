@@ -34,6 +34,7 @@ export function mapProduct(p: any) {
     updated_at: p.updatedAt ? new Date(p.updatedAt) : undefined,
     is_active: p.is_active,
     category: p.category ? { name: relToName(p.category) ?? '' } : undefined,
+    seo: p.seo,
   }
 }
 

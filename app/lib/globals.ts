@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Metadata } from 'next'
 import { getPayloadClient } from './payload'
 import { lexicalToHtml } from './lexical'
@@ -172,6 +173,7 @@ export interface SeoData {
   keywords?: string
   canonical?: string
   noindex?: boolean
+  ogImageUrl?: string
 }
 
 // ---------- 兜底默认值（与当前硬编码完全一致） ----------
@@ -391,6 +393,7 @@ function normalizeSeo(raw: unknown): SeoData {
     keywords: pick(raw, 'keywords', ''),
     canonical: pick(raw, 'canonical', ''),
     noindex: !!(raw && typeof raw === 'object' && (raw as { noindex?: boolean }).noindex),
+    ogImageUrl: mediaUrl((raw as any)?.ogImage, ''),
   }
 }
 
@@ -405,7 +408,7 @@ async function findGlobal(slug: string, depth = 1): Promise<any> {
 
 // ---------- 获取函数（任何缺失回退到兜底） ----------
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   try {
     const g = await findGlobal('site-settings', 1)
     const contact = g.contact || {}
@@ -449,24 +452,26 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     console.error('getSiteSettings failed:', e)
     return FALLBACK_SITE_SETTINGS
   }
-}
+})
 
-export async function getNavigation(): Promise<NavItem[]> {
+export const getNavigation = cache(async (): Promise<NavItem[]> => {
   try {
     const g = await findGlobal('navigation', 0)
     if (Array.isArray(g.items) && g.items.length > 0) {
-      return g.items
+      const filtered = g.items
         .filter((i: any) => i?.isActive && i?.label && i?.href)
         .map((i: any) => ({ label: i.label, href: i.href }))
+      if (filtered.length === 0) return FALLBACK_NAV_ITEMS
+      return filtered
     }
     return FALLBACK_NAV_ITEMS
   } catch (e) {
     console.error('getNavigation failed:', e)
     return FALLBACK_NAV_ITEMS
   }
-}
+})
 
-export async function getPageHeaders(): Promise<PageHeadersData> {
+export const getPageHeaders = cache(async (): Promise<PageHeadersData> => {
   try {
     const g = await findGlobal('page-headers', 0)
     const h = (k: 'productsPage' | 'newsPage' | 'careersPage' | 'contactPage') => {
@@ -488,11 +493,11 @@ export async function getPageHeaders(): Promise<PageHeadersData> {
     console.error('getPageHeaders failed:', e)
     return FALLBACK_PAGE_HEADERS
   }
-}
+})
 
 const homeSection = (g: any, key: string) => g[key] || {}
 
-export async function getHomePage(): Promise<HomePageData> {
+export const getHomePage = cache(async (): Promise<HomePageData> => {
   try {
     const g = await findGlobal('home-page', 1)
     const F = FALLBACK_HOME_PAGE
@@ -570,9 +575,9 @@ export async function getHomePage(): Promise<HomePageData> {
     console.error('getHomePage failed:', e)
     return FALLBACK_HOME_PAGE
   }
-}
+})
 
-export async function getAboutPage(): Promise<AboutPageData> {
+export const getAboutPage = cache(async (): Promise<AboutPageData> => {
   try {
     const g = await findGlobal('about-page', 1)
     const F = FALLBACK_ABOUT_PAGE
@@ -613,9 +618,9 @@ export async function getAboutPage(): Promise<AboutPageData> {
     console.error('getAboutPage failed:', e)
     return FALLBACK_ABOUT_PAGE
   }
-}
+})
 
-export async function getContactPage(): Promise<ContactPageData> {
+export const getContactPage = cache(async (): Promise<ContactPageData> => {
   try {
     const g = await findGlobal('contact-page', 0)
     const F = FALLBACK_CONTACT_PAGE
@@ -630,12 +635,12 @@ export async function getContactPage(): Promise<ContactPageData> {
     console.error('getContactPage failed:', e)
     return FALLBACK_CONTACT_PAGE
   }
-}
+})
 
 // ---------- SEO → Next Metadata ----------
 
 export function seoToMetadata(
-  seo: { metaTitle?: string; metaDescription?: string; keywords?: string; canonical?: string; noindex?: boolean },
+  seo: { metaTitle?: string; metaDescription?: string; keywords?: string; canonical?: string; noindex?: boolean; ogImageUrl?: string },
   fallback: Metadata,
 ): Metadata {
   const fbTitle = typeof fallback.title === 'string' ? fallback.title : ''
@@ -659,7 +664,7 @@ export function seoToMetadata(
     ...(keywords && keywords.length ? { keywords } : {}),
     ...(canonical ? { alternates: { canonical } } : {}),
     ...(seo.noindex ? { robots: { index: false, follow: false } } : {}),
-    openGraph: { ...ogBase, title, description },
+    openGraph: { ...ogBase, title, description, ...(seo.ogImageUrl ? { images: [{ url: seo.ogImageUrl }] } : {}) },
     twitter: { ...twitterBase, title, description },
   }
 }

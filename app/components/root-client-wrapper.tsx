@@ -20,7 +20,13 @@ export default function RootClientWrapper({
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAdminRoute && <Navigation items={navigationItems} />}
+      {!isAdminRoute && (
+        <Navigation
+          items={navigationItems}
+          siteName={siteSettings.siteName}
+          logoUrl={siteSettings.logoUrl}
+        />
+      )}
       <main className={`flex-grow ${!isAdminRoute ? "pt-16" : ""}`}>
         {children}
       </main>

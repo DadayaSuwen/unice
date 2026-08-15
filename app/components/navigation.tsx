@@ -4,7 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import type { NavItem } from "@/lib/globals";
 
-export default function Navigation({ items }: { items: NavItem[] }) {
+export default function Navigation({
+  items,
+  siteName = "江西联合化工",
+  logoUrl = "/logo.jpg",
+}: {
+  items: NavItem[];
+  siteName?: string;
+  logoUrl?: string;
+}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -38,15 +46,15 @@ export default function Navigation({ items }: { items: NavItem[] }) {
             <Link href="/" className="nav-logo group">
               <div className="nav-logo-image">
                 <Image
-                  src="/logo.jpg"
-                  alt="联合化工"
+                  src={logoUrl}
+                  alt={siteName}
                   width={40}
                   height={40}
                   className="logo-img"
                   priority
                 />
               </div>
-              <span className="nav-logo-name">江西联合化工</span>
+              <span className="nav-logo-name">{siteName}</span>
             </Link>
 
             {/* 桌面导航 */}

@@ -18,10 +18,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const payload = await getPayloadClient();
 
-    const [products, news, careers] = await Promise.all([
+    const [products, news] = await Promise.all([
       payload.find({ collection: "products", where: { is_active: { equals: true } }, limit: 500, depth: 0 }),
       payload.find({ collection: "news", where: { is_published: { equals: true } }, limit: 500, depth: 0 }),
-      payload.find({ collection: "careers", where: { is_active: { equals: true } }, limit: 500, depth: 0 }),
     ]);
 
     const productRoutes = products.docs.map((p: any) => ({
@@ -36,14 +35,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily" as const,
       priority: 0.7,
     }));
-    const careerRoutes = careers.docs.map((c: any) => ({
-      url: `${BASE}/careers`,
-      lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.5,
-    }));
 
-    return [...staticRoutes, ...productRoutes, ...newsRoutes, ...careerRoutes];
+    return [...staticRoutes, ...productRoutes, ...newsRoutes];
   } catch (e) {
     console.error("sitemap generation failed:", e);
     return staticRoutes;

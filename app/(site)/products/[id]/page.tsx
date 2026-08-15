@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPayloadClient } from "@/lib/payload";
 import { mapProduct } from "@/lib/mappers";
+import { getSiteSettings } from "@/lib/globals";
 import ProductDetailClient from "./ProductDetailClient"; // 引入第一步创建的组件
 
 // 定义参数类型 (Next.js 15+)
@@ -96,12 +97,17 @@ export async function generateMetadata({
   const product = await getProduct(productId);
   if (!product) return { title: "产品未找到" };
 
+  const settings = await getSiteSettings();
+  const seo = (product as any).seo || {};
+
   return {
-    title: `${product.name} - ${
-      product.category?.name || "化工产品"
-    } | 公司名称`,
+    title:
+      seo.metaTitle ||
+      `${product.name} - ${product.category?.name || "化工产品"} | ${settings.siteName}`,
     description:
-      product.description || `查看 ${product.name} 的详细技术参数与应用领域。`,
+      seo.metaDescription ||
+      product.description ||
+      `查看 ${product.name} 的详细技术参数与应用领域。`,
   };
 }
 
