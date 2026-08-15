@@ -2920,6 +2920,7 @@ git commit -m "docs: 官网内容后台化回归测试报告"
 
 **注意事项：**
 - 6 个 Globals 的注册顺序：site-settings/navigation/page-headers 在 Task 5-7，home-page/about-page 在 Task 10/13，contact-page 在 Task 20。`app/lib/globals.ts`（Task 8）的 `findGlobal` 封装对 slug 用 `as any`，未注册/未 seed 时抛错被 catch 回退兜底，不会白屏，也保证 typecheck 与注册顺序无关。
-- `home-page`/`about-page`/`page-headers`/`contact-page` 的 `seo` 组在对应的 `HomePageData`/`AboutPageData` 等类型上未体现——Task 12/14/20/21 用 `(x as any).seo` 读取；如需完整类型可在实现时给接口追加 `seo?: {...}` 可选字段。
+- **部署前提（Task 15 审查确认）：** 生产环境必须以**全新数据库**执行 `npx payload migrate` 全链迁移（init → 010250 → 035530 → 073328）。073328 的 up() 会 CREATE TABLE 全部 globals 表（Payload v3 每 global 一个独立表，非 payload_globals 表）。若数据库已由 dev-push 建好 globals 但该迁移未记录，`payload migrate` 会因表已存在而失败。回滚（migrate:down）存在级联删除 globals 数据与 035530 down() 顺序缺陷，生产不建议回滚。
+- `home-page`/`about-page`/`page-headers`/`contact-page` 的 `seo` 组已通过 Task 14 的修复映射进 `SeoData` 返回对象（见 Task 8 补充说明），页面级 SEO 可后台配置。
 - Products 迁移会导致旧 JSON 数据丢失，Task 15 已注明需 seed 重建（Task 23）。
 - `about-page` 的简介字段在 Global 中位于 `introGroup` group 内，`getAboutPage` 已按 `g.introGroup.*` 读取，与 seed 写入一致。
