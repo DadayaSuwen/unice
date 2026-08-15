@@ -79,7 +79,7 @@ async function main() {
     { name: '功能性树脂', slug: 'functional-resins', description: '具有触变、附着力促进等特殊功能的树脂' },
     { name: '助剂与添加剂', slug: 'additives', description: '蜡分散体、特殊单体及改性剂' },
   ]
-  const categoryIds: Record<string, number> = {}
+  const categoryIds: Record<string, number | string> = {}
   for (const c of categoryDefs) {
     const existing = await payload.find({ collection: 'categories', where: { slug: { equals: c.slug } }, limit: 1 })
     if (existing.docs.length > 0) {
@@ -100,7 +100,7 @@ async function main() {
     { name: '技术创新', slug: 'technology-innovation', description: '技术研发和创新成果', color: '#9b59b6', sort_order: 5, is_active: true },
     { name: '社会责任', slug: 'social-responsibility', description: '社会责任与公益活动', color: '#16a085', sort_order: 6, is_active: true },
   ]
-  const newsCategoryIds: Record<string, number> = {}
+  const newsCategoryIds: Record<string, number | string> = {}
   for (const c of newsCategoryDefs) {
     const existing = await payload.find({ collection: 'news-categories', where: { slug: { equals: c.slug } }, limit: 1 })
     if (existing.docs.length > 0) {

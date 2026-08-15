@@ -55,3 +55,6 @@ coverage
 
 # Linting
 .eslintcache
+# Payload 生成物
+.payload
+media
