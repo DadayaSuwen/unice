@@ -45,6 +45,7 @@ export interface PageHeadersData {
   newsPage: PageHeader
   careersPage: PageHeader
   contactPage: PageHeader
+  seo?: SeoData
 }
 
 export interface HomeHero {
@@ -127,6 +128,7 @@ export interface HomePageData {
   factory: HomeFactorySection
   stats: HomeStatsSection
   cta: HomeCtaSection
+  seo?: SeoData
 }
 
 export type MilestoneColor = 'gold' | 'secondary' | 'accent'
@@ -153,6 +155,7 @@ export interface AboutPageData {
   stats: { number: string; label: string }[]
   rdTitle: string
   rdCards: { icon: string; title: string; description: string }[]
+  seo?: SeoData
 }
 
 export interface ContactPageData {
@@ -160,6 +163,15 @@ export interface ContactPageData {
   infoTitle: string
   mapTitle: string
   mapDescription: string
+  seo?: SeoData
+}
+
+export interface SeoData {
+  metaTitle?: string
+  metaDescription?: string
+  keywords?: string
+  canonical?: string
+  noindex?: boolean
 }
 
 // ---------- 兜底默认值（与当前硬编码完全一致） ----------
@@ -372,6 +384,16 @@ function pick(o: unknown, key: string, fallback: string): string {
   return fallback
 }
 
+function normalizeSeo(raw: unknown): SeoData {
+  return {
+    metaTitle: pick(raw, 'metaTitle', ''),
+    metaDescription: pick(raw, 'metaDescription', ''),
+    keywords: pick(raw, 'keywords', ''),
+    canonical: pick(raw, 'canonical', ''),
+    noindex: !!(raw && typeof raw === 'object' && (raw as { noindex?: boolean }).noindex),
+  }
+}
+
 /**
  * 统一封装 findGlobal。slug 用 as any 绕过类型联合校验，
  * 使本文件可在全局未全部注册前通过 typecheck（未注册/未 seed 时抛错被调用方 catch 回退兜底）。
@@ -447,7 +469,7 @@ export async function getNavigation(): Promise<NavItem[]> {
 export async function getPageHeaders(): Promise<PageHeadersData> {
   try {
     const g = await findGlobal('page-headers', 0)
-    const h = (k: keyof PageHeadersData) => {
+    const h = (k: 'productsPage' | 'newsPage' | 'careersPage' | 'contactPage') => {
       const fallback = FALLBACK_PAGE_HEADERS[k]
       return {
         enabled: g[k]?.enabled !== false,
@@ -460,6 +482,7 @@ export async function getPageHeaders(): Promise<PageHeadersData> {
       newsPage: { ...FALLBACK_PAGE_HEADERS.newsPage, ...h('newsPage') },
       careersPage: { ...FALLBACK_PAGE_HEADERS.careersPage, ...h('careersPage') },
       contactPage: { ...FALLBACK_PAGE_HEADERS.contactPage, ...h('contactPage') },
+      seo: normalizeSeo(g.seo),
     }
   } catch (e) {
     console.error('getPageHeaders failed:', e)
@@ -541,6 +564,7 @@ export async function getHomePage(): Promise<HomePageData> {
         secondaryButtonText: pick(homeSection(g, 'cta'), 'secondaryButtonText', F.cta.secondaryButtonText),
         secondaryButtonHref: pick(homeSection(g, 'cta'), 'secondaryButtonHref', F.cta.secondaryButtonHref),
       },
+      seo: normalizeSeo(g.seo),
     }
   } catch (e) {
     console.error('getHomePage failed:', e)
@@ -583,6 +607,7 @@ export async function getAboutPage(): Promise<AboutPageData> {
             description: pick(c, 'description', ''),
           }))
         : F.rdCards,
+      seo: normalizeSeo(g.seo),
     }
   } catch (e) {
     console.error('getAboutPage failed:', e)
@@ -599,6 +624,7 @@ export async function getContactPage(): Promise<ContactPageData> {
       infoTitle: pick(g, 'infoTitle', F.infoTitle),
       mapTitle: pick(g, 'mapTitle', F.mapTitle),
       mapDescription: pick(g, 'mapDescription', F.mapDescription),
+      seo: normalizeSeo(g.seo),
     }
   } catch (e) {
     console.error('getContactPage failed:', e)
