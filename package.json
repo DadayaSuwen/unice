@@ -2,20 +2,23 @@
   "name": "unice",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:migrate": "CI=true node -r dotenv/config node_modules/.bin/prisma migrate dev --name add-rbac-permission-system",
-    "db:generate": "node -r dotenv/config node_modules/.bin/prisma generate",
-    "db:studio": "node -r dotenv/config node_modules/.bin/prisma studio",
-    "db:seed": "npx tsx -r dotenv/config prisma/seed.ts"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "typecheck": "tsc --noEmit",
+    "payload:generate:types": "payload generate:types",
+    "payload:migrate": "payload migrate",
+    "payload:migrate:create": "payload migrate:create",
+    "payload:migrate:push": "payload migrate:push",
+    "payload:seed": "tsx -r dotenv/config payload/seed.ts"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "^3.88.0",
+    "@payloadcms/next": "^3.88.0",
+    "@payloadcms/richtext-lexical": "^3.88.0",
     "@prisma/client": "^5.22.0",
     "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "^2.4.6",
@@ -23,9 +26,11 @@
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
+    "graphql": "^16.14.2",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.553.0",
     "next": "^16.0.8",
+    "payload": "^3.88.0",
     "pg": "^8.16.3",
     "prisma": "^5.22.0",
     "react": "^19.2.1",
@@ -34,6 +39,7 @@
     "react-hot-toast": "^2.6.0",
     "recharts": "^3.4.1",
     "sass": "^1.94.0",
+    "sharp": "^0.35.3",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.12"
   },

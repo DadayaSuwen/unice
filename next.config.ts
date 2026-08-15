@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
+import { withPayload } from '@payloadcms/next/withPayload'
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     domains: [],
     formats: ['image/webp', 'image/avif'],
@@ -9,6 +9,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
-};
+}
 
-export default nextConfig;
+export default withPayload(nextConfig)

@@ -24,7 +24,8 @@
       "@/*": ["./app/*"],
       "@/components/*": ["./app/components/*"],
       "@/lib/*": ["./app/lib/*"],
-      "public@/*": ["./public/*"]
+      "public@/*": ["./public/*"],
+      "@payload-config": ["./payload.config.ts"]
     }
   },
   "include": [

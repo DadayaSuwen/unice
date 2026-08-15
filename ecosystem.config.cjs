@@ -19,7 +19,7 @@ module.exports = {
   apps: [
     {
       name: "next-app",
-      script: "./server.js",
+      script: "./server.cjs",
       cwd: "/app",
       instances: "max",
       exec_mode: "cluster",

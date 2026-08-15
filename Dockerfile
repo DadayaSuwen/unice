@@ -52,4 +52,4 @@ EXPOSE 3000
 ENV PORT=3000
 
 # 4. 【修改】启动命令：直接加载配置文件
-CMD ["pm2-runtime", "start", "ecosystem.config.js"]
+CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
