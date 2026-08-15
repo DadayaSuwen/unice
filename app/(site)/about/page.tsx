@@ -7,6 +7,8 @@ const FALLBACK_META: Metadata = {
   description: "了解江西联合化工的企业文化与发展历程，探索我们20年来的专业与创新",
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const about = await getAboutPage();
   return seoToMetadata((about as any).seo || {}, FALLBACK_META);

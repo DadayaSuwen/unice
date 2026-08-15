@@ -25,6 +25,8 @@ const FALLBACK_META: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const headers = await getPageHeaders();
   return seoToMetadata((headers as any).seo || {}, FALLBACK_META);

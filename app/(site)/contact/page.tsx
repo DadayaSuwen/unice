@@ -12,6 +12,8 @@ const FALLBACK_META = {
   description: "期待与您的合作与交流，我们将竭诚为您提供专业的化工产品解决方案",
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const headers = await getPageHeaders();
   return seoToMetadata((headers as any).seo || {}, FALLBACK_META);

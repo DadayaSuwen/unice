@@ -86,6 +86,8 @@ export const dynamicParams = true; // 允许构建时未生成的 ID 在运行�
 // 3. Metadata 生成 (SEO)
 // --------------------------------------------------------
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {

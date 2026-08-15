@@ -7,6 +7,8 @@ const FALLBACK_META: Metadata = {
   description: "寻找志同道合的优秀人才，在江西联合化工开启您的职业新征程",
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const headers = await getPageHeaders();
   return seoToMetadata((headers as any).seo || {}, FALLBACK_META);
