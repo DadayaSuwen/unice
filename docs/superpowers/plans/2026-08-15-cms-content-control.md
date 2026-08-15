@@ -1115,21 +1115,36 @@ export async function getContactPage(): Promise<ContactPageData> {
 
 export function seoToMetadata(
   seo: { metaTitle?: string; metaDescription?: string; keywords?: string; canonical?: string; noindex?: boolean },
-  fallback: { title: string; description: string },
+  fallback: Metadata,
 ): Metadata {
-  const title = seo.metaTitle || fallback.title
-  const description = seo.metaDescription || fallback.description
-  const keywords = seo.keywords
-    ? seo.keywords.split(/[,，]/).map((k) => k.trim()).filter(Boolean)
-    : undefined
+  const fbTitle = typeof fallback.title === 'string' ? fallback.title : ''
+  const fbDesc = typeof fallback.description === 'string' ? fallback.description : ''
+  const title = seo.metaTitle || fbTitle
+  const description = seo.metaDescription || fbDesc
+  const keywords =
+    seo.keywords
+      ? seo.keywords.split(/[,，]/).map((k) => k.trim()).filter(Boolean)
+      : Array.isArray(fallback.keywords) && fallback.keywords.length
+        ? fallback.keywords
+        : undefined
+  const canonical =
+    seo.canonical ||
+    (typeof fallback.alternates?.canonical === 'string' ? fallback.alternates.canonical : undefined)
+  const ogBase = (fallback.openGraph as Record<string, unknown> | undefined) || {}
+  const twitterBase = (fallback.twitter as Record<string, unknown> | undefined) || {}
   return {
     title,
     description,
-    keywords,
+    ...(keywords && keywords.length ? { keywords } : {}),
+    ...(canonical ? { alternates: { canonical } } : {}),
     ...(seo.noindex ? { robots: { index: false, follow: false } } : {}),
-    ...(seo.canonical ? { alternates: { canonical: seo.canonical } } : {}),
+    openGraph: { ...ogBase, title, description },
+    twitter: { ...twitterBase, title, description },
   }
 }
+```
+
+> **说明：** `fallback` 参数类型为 `Metadata`（`{title, description}` 字面量也可赋值给 `Metadata`，因此后续任务沿用简写不受影响）。函数保留 fallback 的 openGraph/twitter 基础字段（images/type/locale/siteName/card），用解析后的 title/description 覆盖，关键词与 canonical 在 seo 未设置时回退到 fallback——确保兜底模式与现有硬编码 SEO 完全一致。
 ```
 
 - [ ] **Step 2: 类型检查**
@@ -1521,9 +1536,25 @@ import { getHomePage, seoToMetadata } from "@/lib/globals";
 import HomepageClientWrapper from "@/components/homepage-client-wrapper";
 import { ProductStructuredData, OrganizationStructuredData, WebsiteStructuredData } from "@/components/structured-data";
 
-const FALLBACK_META = {
+const FALLBACK_META: Metadata = {
   title: "江西联合化工 - 专业化工原料与精细化学品制造商 | 首页",
   description: "江西联合化工是一家专业的化工企业，致力于提供高品质的化工原料、精细化学品和专用化学品。我们拥有20年行业经验，为全球客户提供卓越的化工解决方案。",
+  keywords: ["化工原料", "精细化学品", "专用化学品", "江西联合化工", "化工企业", "化学品制造商", "化工解决方案", "CAS号"],
+  openGraph: {
+    title: "江西联合化工 - 专业化工原料与精细化学品制造商",
+    description: "致力于提供卓越的化工解决方案，为全球客户创造持久价值",
+    type: "website",
+    locale: "zh_CN",
+    siteName: "江西联合化工",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "江西联合化工 - 专业化工企业",
+    description: "创新化学科技，引领行业未来。提供高品质化工原料和精细化学品。",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export async function generateMetadata(): Promise<Metadata> {
