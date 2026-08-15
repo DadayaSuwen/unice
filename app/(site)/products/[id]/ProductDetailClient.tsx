@@ -50,12 +50,6 @@ export default function ProductDetailClient({
     );
   }
 
-  // 辅助解析 JSON
-  const parseJsonData = (data: any) => {
-    if (!data) return null;
-    return typeof data === "string" ? JSON.parse(data) : data;
-  };
-
   return (
     <div className="app-wrapper">
       {/* Hero Section */}
@@ -235,7 +229,14 @@ export default function ProductDetailClient({
                   <div className="product-overview-content">
                     <div className="overview-description">
                       <h2 className="section-title">产品概述</h2>
-                      <p className="overview-text">{product.description}</p>
+                      {product.descriptionHtml ? (
+                        <div
+                          className="overview-text"
+                          dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                        />
+                      ) : (
+                        <p className="overview-text">{product.description}</p>
+                      )}
                     </div>
                     <div className="product-features">
                       <div className="features-grid">
@@ -264,21 +265,19 @@ export default function ProductDetailClient({
               )}
 
               {/* Specs Tab */}
-              {activeTab === "specs" && product.details && (
+              {activeTab === "specs" && product.details && product.details.length > 0 && (
                 <div className="tab-pane tab-pane-specs animate-[fadeIn_0.3s_ease-out]">
                   <h2 className="section-title">技术指标</h2>
                   <div className="specs-grid">
-                    {Object.entries(parseJsonData(product.details) || {}).map(
-                      ([key, value]) => (
-                        <div key={key} className="spec-item">
-                          <div className="spec-header">
-                            <h3 className="spec-name">{key}</h3>
-                            <div className="spec-badge">标准</div>
-                          </div>
-                          <p className="spec-value">{String(value)}</p>
+                    {product.details.map((item: { name: string; value: string }, index: number) => (
+                      <div key={index} className="spec-item">
+                        <div className="spec-header">
+                          <h3 className="spec-name">{item.name}</h3>
+                          <div className="spec-badge">标准</div>
                         </div>
-                      )
-                    )}
+                        <p className="spec-value">{item.value}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -287,39 +286,35 @@ export default function ProductDetailClient({
               {activeTab === "applications" && (
                 <div className="tab-pane tab-pane-applications animate-[fadeIn_0.3s_ease-out]">
                   <h2 className="section-title">应用领域</h2>
-                  {product.applications ? (
+                  {product.applications && product.applications.length > 0 ? (
                     <div className="applications-list">
-                      {parseJsonData(product.applications)?.map(
-                        (app: any, index: number) => (
-                          <div key={index} className="application-item">
-                            <div className="application-icon-wrapper">
-                              <svg
-                                className="application-icon"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d={getIndustryIcon(index)}
-                                />
-                              </svg>
-                            </div>
-                            <div className="application-content">
-                              <h3 className="application-title">
-                                {typeof app === "object" ? app.name : app}
-                              </h3>
-                              <p className="application-description">
-                                {typeof app === "object"
-                                  ? app.description
-                                  : app}
-                              </p>
-                            </div>
+                      {product.applications.map((app: { name: string; description?: string }, index: number) => (
+                        <div key={index} className="application-item">
+                          <div className="application-icon-wrapper">
+                            <svg
+                              className="application-icon"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d={getIndustryIcon(index)}
+                              />
+                            </svg>
                           </div>
-                        )
-                      )}
+                          <div className="application-content">
+                            <h3 className="application-title">{app.name}</h3>
+                            {app.description && (
+                              <p className="application-description">
+                                {app.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="empty-text">暂无应用领域信息</div>
@@ -331,7 +326,7 @@ export default function ProductDetailClient({
               {/* Safety Tab - 修复样式版 */}
               {activeTab === "safety" && (
                 <div className="tab-pane tab-pane-safety animate-[fadeIn_0.3s_ease-out]">
-                  {product.safety_info ? (
+                  {product.safety_info && product.safety_info.length > 0 ? (
                     <div className="safety-notice">
                       {/* 1. 顶部标题和图标 */}
                       <div className="safety-header">
@@ -355,71 +350,9 @@ export default function ProductDetailClient({
 
                       {/* 2. 内容列表渲染 */}
                       <div className="safety-list">
-                        {(() => {
-                          const safetyData = parseJsonData(product.safety_info);
-
-                          // 情况 A: 对象 (Key-Value)
-                          if (
-                            typeof safetyData === "object" &&
-                            !Array.isArray(safetyData) &&
-                            safetyData !== null
-                          ) {
-                            return Object.entries(safetyData).map(
-                              ([key, value], index) => (
-                                <div key={index} className="safety-item">
-                                  <svg
-                                    className="safety-check"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M5 13l4 4L19 7"
-                                    />
-                                  </svg>
-                                  <div className="safety-content">
-                                    <strong className="safety-key">
-                                      {key}:
-                                    </strong>
-                                    <span className="safety-value">
-                                      {String(value)}
-                                    </span>
-                                  </div>
-                                </div>
-                              )
-                            );
-                          }
-
-                          // 情况 B: 数组 (List)
-                          if (Array.isArray(safetyData)) {
-                            return safetyData.map(
-                              (info: string, index: number) => (
-                                <div key={index} className="safety-item">
-                                  <svg
-                                    className="safety-check"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M5 13l4 4L19 7"
-                                    />
-                                  </svg>
-                                  <span className="safety-text">{info}</span>
-                                </div>
-                              )
-                            );
-                          }
-
-                          // 情况 C: 纯字符串
-                          return (
-                            <div className="safety-item">
+                        {product.safety_info.map(
+                          (item: { title: string; content: string }, index: number) => (
+                            <div key={index} className="safety-item">
                               <svg
                                 className="safety-check"
                                 fill="none"
@@ -433,12 +366,17 @@ export default function ProductDetailClient({
                                   d="M5 13l4 4L19 7"
                                 />
                               </svg>
-                              <span className="safety-text">
-                                {String(safetyData)}
-                              </span>
+                              <div className="safety-content">
+                                <strong className="safety-key">
+                                  {item.title}:
+                                </strong>
+                                <span className="safety-value">
+                                  {item.content}
+                                </span>
+                              </div>
                             </div>
-                          );
-                        })()}
+                          )
+                        )}
                       </div>
                     </div>
                   ) : (

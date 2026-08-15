@@ -12,14 +12,24 @@ export function relToName(rel: unknown): string | undefined {
 }
 
 export function mapProduct(p: any) {
+  const plain = lexicalToPlaintext(p.description) || p.description || ''
   return {
     id: p.id,
     name: p.name,
     cas_no: p.cas_no ?? undefined,
     category_id: relToId(p.category),
-    description: p.description ?? undefined,
-    details: p.details ?? null,
-    image_url: p.image_url ?? undefined,
+    summary: p.summary ?? undefined,
+    description: p.summary || plain,
+    descriptionHtml: lexicalToHtml(p.description) || (p.description && typeof p.description === 'string' ? p.description : ''),
+    details: Array.isArray(p.details) ? p.details.map((d: any) => ({ name: d.name ?? '', value: d.value ?? '' })) : [],
+    features: Array.isArray(p.features) ? p.features.map((f: any) => ({ text: f.text ?? '' })) : [],
+    applications: Array.isArray(p.applications)
+      ? p.applications.map((a: any) => ({ name: a.name ?? '', description: a.description ?? '' }))
+      : [],
+    safety_info: Array.isArray(p.safety_info)
+      ? p.safety_info.map((s: any) => ({ title: s.title ?? '', content: s.content ?? '' }))
+      : [],
+    image_url: (p.image?.url || p.image_url) ?? undefined,
     created_at: p.createdAt ? new Date(p.createdAt) : undefined,
     updated_at: p.updatedAt ? new Date(p.updatedAt) : undefined,
     is_active: p.is_active,
