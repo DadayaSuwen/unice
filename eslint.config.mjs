@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Payload 自动生成的迁移文件
+    "migrations/**",
   ]),
   {
     // 假设这是包含 TypeScript 解析器的配置对象

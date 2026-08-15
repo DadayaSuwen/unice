@@ -51,7 +51,7 @@ async function getRelatedProducts(
       limit: 4,
     });
     return result.docs.map(mapProduct);
-  } catch (e) {
+  } catch {
     return [];
   }
 }

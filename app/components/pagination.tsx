@@ -26,7 +26,7 @@ export default function Pagination({
     } else {
       // 显示当前页附近的页码
       let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
       // 调整起始页，确保显示足够的页码
       if (endPage - startPage + 1 < maxVisiblePages) {
