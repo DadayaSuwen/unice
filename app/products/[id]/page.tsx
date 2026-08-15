@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma"; // 确保路径正确
+import { getPayloadClient } from "@/lib/payload";
+import { mapProduct } from "@/lib/mappers";
 import ProductDetailClient from "./ProductDetailClient"; // 引入第一步创建的组件
 
 // 定义参数类型 (Next.js 15+)
@@ -11,17 +12,20 @@ interface PageProps {
 }
 
 // --------------------------------------------------------
-// 1. 数据获取逻辑 (服务端直连数据库，代替 fetch API)
+// 1. 数据获取逻辑 (服务端直连 Payload，代替 Prisma)
 // --------------------------------------------------------
 
 async function getProduct(id: number) {
   try {
-    return await prisma.product.findUnique({
-      where: { id, is_active: true },
-      include: {
-        category: { select: { name: true } },
-      },
+    const payload = await getPayloadClient();
+    const product = await payload.findByID({
+      collection: "products",
+      id,
+      depth: 1,
+      disableErrors: true,
     });
+    if (!product || !product.is_active) return null;
+    return mapProduct(product);
   } catch (error) {
     console.error("Product fetch error:", error);
     return null;
@@ -34,16 +38,19 @@ async function getRelatedProducts(
 ) {
   if (!categoryId) return [];
   try {
-    return await prisma.product.findMany({
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "products",
       where: {
-        category_id: categoryId,
-        id: { not: currentId },
-        is_active: true,
+        category: { equals: categoryId },
+        id: { not_equals: currentId },
+        is_active: { equals: true },
       },
-      take: 4,
-      orderBy: { created_at: "desc" },
-      include: { category: { select: { name: true } } },
+      depth: 1,
+      sort: "-createdAt",
+      limit: 4,
     });
+    return result.docs.map(mapProduct);
   } catch (e) {
     return [];
   }
@@ -55,14 +62,16 @@ async function getRelatedProducts(
 
 export async function generateStaticParams() {
   try {
-    const products = await prisma.product.findMany({
-      where: { is_active: true },
-      select: { id: true },
-      orderBy: { created_at: "desc" },
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "products",
+      where: { is_active: { equals: true } },
+      depth: 0,
+      limit: 500,
     });
 
-    return products.map((product) => ({
-      id: product.id.toString(),
+    return result.docs.map((p: any) => ({
+      id: p.id.toString(),
     }));
   } catch (error) {
     console.error("SSG generation failed:", error);

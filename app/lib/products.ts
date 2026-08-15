@@ -1,161 +1,130 @@
-import { prisma } from '@/lib/prisma';
+import { getPayloadClient } from './payload'
+import { mapNews, mapProduct } from './mappers'
 
 export async function getPopularProducts() {
   try {
-    // Get top 3 popular products (for homepage preview)
-    const popularProducts = await prisma.product.findMany({
-      where: { is_active: true },
-      include: {
-        category: {
-          select: {
-            name: true
-          }
-        }
-      },
-      orderBy: { created_at: "desc" },
-      take: 3,
-    });
-
-    return popularProducts;
+    const payload = await getPayloadClient()
+    const { docs } = await payload.find({
+      collection: 'products',
+      where: { is_active: { equals: true } },
+      depth: 1,
+      sort: '-createdAt',
+      limit: 3,
+    })
+    return docs.map(mapProduct)
   } catch (error) {
-    console.error('Failed to fetch popular products:', error);
-    return [];
+    console.error('Failed to fetch popular products:', error)
+    return []
   }
 }
 
-export async function getProducts(page: number = 1, limit: number = 12, category?: string) {
+export async function getProducts(page = 1, limit = 12, category?: string) {
   try {
-    const skip = (page - 1) * limit;
+    const payload = await getPayloadClient()
 
-    // Build where clause
-    const where: any = { is_active: true };
-    if (category && category !== "全部类别") {
-      where.category = {
-        name: category
-      };
+    let categoryId: number | string | undefined
+    if (category && category !== '全部类别') {
+      const cat = await payload.find({
+        collection: 'categories',
+        where: { name: { equals: category } },
+        limit: 1,
+      })
+      categoryId = cat.docs[0]?.id
     }
 
-    // Get products and total count
-    const [products, totalCount] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: {
-          category: {
-            select: {
-              name: true
-            }
-          }
-        },
-        orderBy: { created_at: "desc" },
-        skip,
-        take: limit,
-      }),
-      prisma.product.count({ where })
-    ]);
+    const where: Record<string, unknown> = { is_active: { equals: true } }
+    if (categoryId !== undefined) where.category = { equals: categoryId }
 
-    // Get all categories for filter
-    const categories = await prisma.category.findMany({
-      where: {
-        products: {
-          some: {
-            is_active: true
-          }
-        }
-      },
-      select: {
-        name: true
-      },
-      orderBy: { name: "asc" }
-    });
+    const result = await payload.find({
+      collection: 'products',
+      where,
+      depth: 1,
+      sort: '-createdAt',
+      page,
+      limit,
+    })
 
-    const categoryNames = categories.map(cat => cat.name);
-
-    const totalPages = Math.ceil(totalCount / limit);
+    const cats = await payload.find({
+      collection: 'categories',
+      where: { is_active: { equals: true } },
+      limit: 100,
+      sort: 'name',
+    })
 
     return {
-      products,
-      categories: categoryNames,
+      products: result.docs.map(mapProduct),
+      categories: cats.docs.map((c: any) => c.name),
       pagination: {
-        currentPage: page,
-        totalPages,
-        totalCount,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1
-      }
-    };
+        currentPage: result.page,
+        totalPages: result.totalPages,
+        totalCount: result.totalDocs,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+      },
+    }
   } catch (error) {
-    console.error('Failed to fetch products:', error);
-    return {
-      products: [],
-      categories: [],
-      pagination: null
-    };
+    console.error('Failed to fetch products:', error)
+    return { products: [], categories: [], pagination: null }
   }
 }
 
 export async function getProductById(id: number) {
   try {
-    const product = await prisma.product.findUnique({
-      where: { id, is_active: true },
-      include: {
-        category: {
-          select: {
-            name: true
-          }
-        }
-      }
-    });
-
-    return product;
+    const payload = await getPayloadClient()
+    const product = await payload.findByID({
+      collection: 'products',
+      id,
+      depth: 1,
+      disableErrors: true,
+    })
+    if (!product || !product.is_active) return null
+    return mapProduct(product)
   } catch (error) {
-    console.error('Failed to fetch product:', error);
-    return null;
+    console.error('Failed to fetch product:', error)
+    return null
   }
 }
 
-export async function getNews(page: number = 1, limit: number = 10) {
+export async function getNews(page = 1, limit = 10) {
   try {
-    const skip = (page - 1) * limit;
-
-    const [news, totalCount] = await Promise.all([
-      prisma.news.findMany({
-        orderBy: { created_at: "desc" },
-        skip,
-        take: limit,
-      }),
-      prisma.news.count()
-    ]);
-
-    const totalPages = Math.ceil(totalCount / limit);
-
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'news',
+      where: { is_published: { equals: true } },
+      depth: 1,
+      sort: '-createdAt',
+      page,
+      limit,
+    })
     return {
-      news,
+      news: result.docs.map(mapNews),
       pagination: {
-        currentPage: page,
-        totalPages,
-        totalCount,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1
-      }
-    };
+        currentPage: result.page,
+        totalPages: result.totalPages,
+        totalCount: result.totalDocs,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+      },
+    }
   } catch (error) {
-    console.error('Failed to fetch news:', error);
-    return {
-      news: [],
-      pagination: null
-    };
+    console.error('Failed to fetch news:', error)
+    return { news: [], pagination: null }
   }
 }
 
 export async function getNewsById(id: number) {
   try {
-    const newsItem = await prisma.news.findUnique({
-      where: { id }
-    });
-
-    return newsItem;
+    const payload = await getPayloadClient()
+    const news = await payload.findByID({
+      collection: 'news',
+      id,
+      depth: 1,
+      disableErrors: true,
+    })
+    if (!news) return null
+    return mapNews(news)
   } catch (error) {
-    console.error('Failed to fetch news item:', error);
-    return null;
+    console.error('Failed to fetch news item:', error)
+    return null
   }
 }
