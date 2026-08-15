@@ -15,6 +15,7 @@ import { Careers } from './payload/collections/Careers'
 import { HeroBanners } from './payload/collections/HeroBanners'
 import { ContactSubmissions } from './payload/collections/ContactSubmissions'
 import { SiteSettings } from './payload/globals/SiteSettings'
+import { Navigation } from './payload/globals/Navigation'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -38,7 +39,7 @@ export default buildConfig({
     ContactSubmissions,
   ],
   editor: lexicalEditor(),
-  globals: [SiteSettings],
+  globals: [SiteSettings, Navigation],
   i18n: {
     fallbackLanguage: 'zh',
     supportedLanguages: {
