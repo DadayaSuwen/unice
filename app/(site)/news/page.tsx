@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getNews } from "@/lib/products";
+import { getPageHeaders, seoToMetadata } from "@/lib/globals";
 import NewsClientWrapper from "./news-client-wrapper";
 
 // Function to generate structured data for news
@@ -42,7 +43,7 @@ function NewsStructuredData({ news }: { news: any[] }) {
   );
 }
 
-export const metadata: Metadata = {
+const FALLBACK_META: Metadata = {
   title: "新闻中心 - 江西联合化工 | 企业动态与行业资讯",
   description: "江西联合化工新闻中心，提供最新的企业动态、行业资讯和产品信息。了解化工行业发展趋势，掌握江西联合化工最新进展。",
   keywords: ["新闻中心", "企业动态", "行业资讯", "化工新闻", "公司新闻", "江西联合化工", "化工行业", "企业发展"],
@@ -63,9 +64,17 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const headers = await getPageHeaders();
+  return seoToMetadata((headers as any).seo || {}, FALLBACK_META);
+}
+
 export default async function NewsPage() {
-  // Server-side data fetching for news
-  const newsData = await getNews(1, 12);
+  // Server-side data fetching for news + page headers (并行获取)
+  const [newsData, headers] = await Promise.all([
+    getNews(1, 12),
+    getPageHeaders(),
+  ]);
 
   // Transform news data to match expected format
   const transformedNews = newsData.news.map(item => ({
@@ -82,11 +91,14 @@ export default async function NewsPage() {
       <NewsStructuredData news={transformedNews} />
 
       {/* Main Content */}
-      <NewsClientWrapper initialData={{
-        news: transformedNews,
-        categories: categoriesWithDefault,
-        pagination: newsData.pagination
-      }} />
+      <NewsClientWrapper
+        initialData={{
+          news: transformedNews,
+          categories: categoriesWithDefault,
+          pagination: newsData.pagination
+        }}
+        pageHeader={headers.newsPage}
+      />
     </>
   );
 }

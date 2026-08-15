@@ -31,11 +31,21 @@ interface NewsData {
   pagination: PaginationInfo | null;
 }
 
-interface NewsClientWrapperProps {
-  initialData: NewsData;
+interface PageHeader {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
 }
 
-export default function NewsClientWrapper({ initialData }: NewsClientWrapperProps) {
+interface NewsClientWrapperProps {
+  initialData: NewsData;
+  pageHeader: PageHeader;
+}
+
+const DEFAULT_TITLE = "新闻中心";
+const DEFAULT_SUBTITLE = "关注江西联合化工最新动态，把握化工行业发展脉搏";
+
+export default function NewsClientWrapper({ initialData, pageHeader }: NewsClientWrapperProps) {
   const [news, setNews] = useState<NewsItem[]>(initialData.news);
   const [categories] = useState<string[]>(initialData.categories);
   const [selectedCategory, setSelectedCategory] = useState("全部类别");
@@ -114,9 +124,9 @@ export default function NewsClientWrapper({ initialData }: NewsClientWrapperProp
       <section className="hero-section-news">
         <div className="container-small">
           <div className={`hero-content-news ${isLoaded ? "loaded" : ""}`}>
-            <h1 className="page-title">新闻中心</h1>
+            <h1 className="page-title">{pageHeader.enabled ? pageHeader.title : DEFAULT_TITLE}</h1>
             <p className="page-subtitle">
-              关注江西联合化工最新动态，把握化工行业发展脉搏
+              {pageHeader.enabled ? pageHeader.subtitle : DEFAULT_SUBTITLE}
             </p>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { getProducts } from "@/lib/products";
+import { getPageHeaders, seoToMetadata } from "@/lib/globals";
 import ProductsClientWrapper from "./products-client-wrapper";
 import { ProductStructuredData } from "@/components/structured-data";
 
-export const metadata: Metadata = {
+const FALLBACK_META: Metadata = {
   title: "产品中心 - 江西联合化工 | 专业化工原料与精细化学品",
   description: "江西联合化工产品中心提供完整的化工产品系列，包括化工原料、精细化学品和专用化学品。所有产品均通过严格的质量控制，为各行业提供可靠的解决方案。",
   keywords: ["化工产品", "化工原料", "精细化学品", "专用化学品", "CAS号", "化学品目录", "产品列表", "江西联合化工"],
@@ -24,9 +25,17 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const headers = await getPageHeaders();
+  return seoToMetadata((headers as any).seo || {}, FALLBACK_META);
+}
+
 export default async function ProductsPage() {
-  // Server-side data fetching for products
-  const productsData = await getProducts(1, 12);
+  // Server-side data fetching for products + page headers (并行获取)
+  const [productsData, headers] = await Promise.all([
+    getProducts(1, 12),
+    getPageHeaders(),
+  ]);
 
   return (
     <>
@@ -34,7 +43,10 @@ export default async function ProductsPage() {
       <ProductStructuredData products={productsData.products} />
 
       {/* Main Content */}
-      <ProductsClientWrapper initialData={productsData} />
+      <ProductsClientWrapper
+        initialData={productsData}
+        pageHeader={headers.productsPage}
+      />
     </>
   );
 }

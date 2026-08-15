@@ -35,11 +35,21 @@ interface ProductsData {
   pagination: PaginationInfo | null;
 }
 
-interface ProductsClientWrapperProps {
-  initialData: ProductsData;
+interface PageHeader {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
 }
 
-export default function ProductsClientWrapper({ initialData }: ProductsClientWrapperProps) {
+interface ProductsClientWrapperProps {
+  initialData: ProductsData;
+  pageHeader: PageHeader;
+}
+
+const DEFAULT_TITLE = "产品中心";
+const DEFAULT_SUBTITLE = "探索我们完整的化工产品系列，为各行业提供高品质的解决方案";
+
+export default function ProductsClientWrapper({ initialData, pageHeader }: ProductsClientWrapperProps) {
   const [products, setProducts] = useState<Product[]>(initialData.products);
   const [categories] = useState<string[]>(initialData.categories);
   const [selectedCategory, setSelectedCategory] = useState("全部类别");
@@ -135,9 +145,9 @@ export default function ProductsClientWrapper({ initialData }: ProductsClientWra
       <section className="hero-section-products">
         <div className="container-small">
           <div className={`hero-content ${isLoaded ? "loaded" : ""}`}>
-            <h1 className="page-title">产品中心</h1>
+            <h1 className="page-title">{pageHeader.enabled ? pageHeader.title : DEFAULT_TITLE}</h1>
             <p className="page-subtitle">
-              探索我们完整的化工产品系列，为各行业提供高品质的解决方案
+              {pageHeader.enabled ? pageHeader.subtitle : DEFAULT_SUBTITLE}
             </p>
           </div>
         </div>
