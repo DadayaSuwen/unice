@@ -206,7 +206,7 @@ export const FALLBACK_PAGE_HEADERS: PageHeadersData = {
   productsPage: {
     enabled: true,
     title: '产品中心',
-    subtitle: '精心研发的化工产品，为各行业提供可靠的解决方案',
+    subtitle: '探索我们完整的化工产品系列，为各行业提供高品质的解决方案',
   },
   newsPage: {
     enabled: true,
