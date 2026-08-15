@@ -3,6 +3,10 @@ import { isAdmin } from '../access'
 
 export const ContactSubmissions: CollectionConfig = {
   slug: 'contact-submissions',
+  labels: {
+    singular: '联系提交',
+    plural: '联系提交',
+  },
   admin: {
     useAsTitle: 'name',
     group: '客服',

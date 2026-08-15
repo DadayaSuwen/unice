@@ -3,6 +3,10 @@ import { isAdminOrEditor } from '../access'
 
 export const HeroBanners: CollectionConfig = {
   slug: 'hero-banners',
+  labels: {
+    singular: '首页轮播',
+    plural: '首页轮播',
+  },
   admin: {
     useAsTitle: 'title',
     group: '首页',

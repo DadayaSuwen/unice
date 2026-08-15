@@ -3,6 +3,10 @@ import { isAdminOrEditor } from '../access'
 
 export const Careers: CollectionConfig = {
   slug: 'careers',
+  labels: {
+    singular: '招聘职位',
+    plural: '招聘职位',
+  },
   admin: {
     useAsTitle: 'position',
     group: '招聘',

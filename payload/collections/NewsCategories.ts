@@ -3,6 +3,10 @@ import { isAdminOrEditor } from '../access'
 
 export const NewsCategories: CollectionConfig = {
   slug: 'news-categories',
+  labels: {
+    singular: '新闻分类',
+    plural: '新闻分类',
+  },
   admin: {
     useAsTitle: 'name',
     group: '新闻',

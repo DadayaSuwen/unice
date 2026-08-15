@@ -4,6 +4,10 @@ import { isAdminOrEditor } from '../access'
 
 export const News: CollectionConfig = {
   slug: 'news',
+  labels: {
+    singular: '新闻',
+    plural: '新闻',
+  },
   admin: {
     useAsTitle: 'title',
     group: '新闻',
