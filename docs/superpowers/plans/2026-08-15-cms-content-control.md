@@ -1145,7 +1145,6 @@ export function seoToMetadata(
 ```
 
 > **说明：** `fallback` 参数类型为 `Metadata`（`{title, description}` 字面量也可赋值给 `Metadata`，因此后续任务沿用简写不受影响）。函数保留 fallback 的 openGraph/twitter 基础字段（images/type/locale/siteName/card），用解析后的 title/description 覆盖，关键词与 canonical 在 seo 未设置时回退到 fallback——确保兜底模式与现有硬编码 SEO 完全一致。
-```
 
 - [ ] **Step 2: 类型检查**
 
