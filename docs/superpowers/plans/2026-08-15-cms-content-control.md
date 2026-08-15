@@ -714,7 +714,7 @@ export const FALLBACK_PAGE_HEADERS: PageHeadersData = {
   productsPage: {
     enabled: true,
     title: '产品中心',
-    subtitle: '精心研发的化工产品，为各行业提供可靠的解决方案',
+    subtitle: '探索我们完整的化工产品系列，为各行业提供高品质的解决方案',
   },
   newsPage: {
     enabled: true,
@@ -2667,7 +2667,7 @@ git commit -m "feat: 生成 sitemap.xml 与 robots.txt"
   await payload.updateGlobal({
     slug: 'page-headers',
     data: {
-      productsPage: { enabled: true, title: '产品中心', subtitle: '精心研发的化工产品，为各行业提供可靠的解决方案' },
+      productsPage: { enabled: true, title: '产品中心', subtitle: '探索我们完整的化工产品系列，为各行业提供高品质的解决方案' },
       newsPage: { enabled: true, title: '新闻中心', subtitle: '关注江西联合化工最新动态，把握化工行业发展脉搏' },
       careersPage: { enabled: true, title: '加入我们', subtitle: '寻找志同道合的优秀人才，在江西联合化工开启您的职业新征程' },
       contactPage: { enabled: true, title: '联系我们', subtitle: '期待与您的合作与交流，我们将竭诚为您提供专业的化工产品解决方案' },
