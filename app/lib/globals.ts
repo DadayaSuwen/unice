@@ -610,18 +610,30 @@ export async function getContactPage(): Promise<ContactPageData> {
 
 export function seoToMetadata(
   seo: { metaTitle?: string; metaDescription?: string; keywords?: string; canonical?: string; noindex?: boolean },
-  fallback: { title: string; description: string },
+  fallback: Metadata,
 ): Metadata {
-  const title = seo.metaTitle || fallback.title
-  const description = seo.metaDescription || fallback.description
-  const keywords = seo.keywords
-    ? seo.keywords.split(/[,，]/).map((k) => k.trim()).filter(Boolean)
-    : undefined
+  const fbTitle = typeof fallback.title === 'string' ? fallback.title : ''
+  const fbDesc = typeof fallback.description === 'string' ? fallback.description : ''
+  const title = seo.metaTitle || fbTitle
+  const description = seo.metaDescription || fbDesc
+  const keywords =
+    seo.keywords
+      ? seo.keywords.split(/[,，]/).map((k) => k.trim()).filter(Boolean)
+      : Array.isArray(fallback.keywords) && fallback.keywords.length
+        ? fallback.keywords
+        : undefined
+  const canonical =
+    seo.canonical ||
+    (typeof fallback.alternates?.canonical === 'string' ? fallback.alternates.canonical : undefined)
+  const ogBase = (fallback.openGraph as Record<string, unknown> | undefined) || {}
+  const twitterBase = (fallback.twitter as Record<string, unknown> | undefined) || {}
   return {
     title,
     description,
-    keywords,
+    ...(keywords && keywords.length ? { keywords } : {}),
+    ...(canonical ? { alternates: { canonical } } : {}),
     ...(seo.noindex ? { robots: { index: false, follow: false } } : {}),
-    ...(seo.canonical ? { alternates: { canonical: seo.canonical } } : {}),
+    openGraph: { ...ogBase, title, description },
+    twitter: { ...twitterBase, title, description },
   }
 }
