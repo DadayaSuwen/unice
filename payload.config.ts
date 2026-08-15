@@ -1,6 +1,7 @@
 import path from 'path'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { zh } from '@payloadcms/translations/languages/zh'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
@@ -34,6 +35,12 @@ export default buildConfig({
     ContactSubmissions,
   ],
   editor: lexicalEditor(),
+  i18n: {
+    fallbackLanguage: 'zh',
+    supportedLanguages: {
+      zh,
+    },
+  },
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, '.payload/types.ts'),

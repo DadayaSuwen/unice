@@ -1,15 +1,99 @@
-:root {
-  // 联合化工品牌金主题
-  --theme-success-500: #d4af37;
-  --theme-success-600: #c9a12e;
-  --theme-success-700: #b8941f;
-  --theme-success-100: #f9f5e7;
-  --theme-success-150: #f3ecd2;
-  --theme-success-200: #eadfc0;
-  --theme-success-300: #dccf9e;
+/* 联合化工品牌金主题 — Payload 后台 */
+/* 覆盖 @payloadcms/next/css 的主题变量：暖金色系明暗双模式 */
+
+:root,
+html[data-theme='light'] {
+  /* 品牌金主色（主按钮 / 链接 / 选中态） */
+  --theme-success-50: #fbf7ea;
+  --theme-success-100: #f7efd4;
+  --theme-success-150: #f2e6bd;
+  --theme-success-200: #ecdaa4;
+  --theme-success-250: #e6cd8b;
+  --theme-success-300: #e0c274;
+  --theme-success-400: #dcb549;
+  --theme-success-500: #d4af37; /* 品牌金 */
+  --theme-success-550: #c9a12e;
+  --theme-success-600: #bd9428;
+  --theme-success-650: #af8624;
+  --theme-success-700: #9e781f;
+  --theme-success-750: #8b6a1b;
+  --theme-success-800: #775b17;
+  --theme-success-850: #614c13;
+  --theme-success-900: #4a3b0f;
+  --theme-success-950: #33290a;
+
+  /* 暖白背景与中性色阶 */
+  --theme-bg: #faf8f1;
+  --theme-text: #38321f;
+  --theme-border-color: #e5dbb8;
+  --theme-input-bg: #ffffff;
+
   --theme-elevation-0: #ffffff;
-  --theme-elevation-50: #fbf9f1;
-  --theme-elevation-100: #f5f0dd;
-  --theme-elevation-150: #efe8c8;
-  --theme-elevation-200: #e7ddb0;
+  --theme-elevation-50: #fbf8f0;
+  --theme-elevation-100: #f6f1e0;
+  --theme-elevation-150: #f0e9cf;
+  --theme-elevation-200: #e9dfbb;
+  --theme-elevation-250: #e0d4a6;
+  --theme-elevation-300: #d6c791;
+  --theme-elevation-350: #cbb97c;
+  --theme-elevation-400: #beab69;
+  --theme-elevation-450: #b09c57;
+  --theme-elevation-500: #a08c47;
+  --theme-elevation-550: #8f7b3a;
+  --theme-elevation-600: #7d6b30;
+  --theme-elevation-650: #6b5b28;
+  --theme-elevation-700: #594b21;
+  --theme-elevation-750: #473c1b;
+  --theme-elevation-800: #352d15;
+  --theme-elevation-850: #231e0f;
+  --theme-elevation-900: #131007;
+  --theme-elevation-950: #090803;
+  --theme-elevation-1000: #000000;
+}
+
+html[data-theme='dark'] {
+  /* 深色模式：暖棕金调 */
+  --theme-success-50: #3e3210;
+  --theme-success-100: #574613;
+  --theme-success-150: #6f5a19;
+  --theme-success-200: #866d1f;
+  --theme-success-300: #9c7e24;
+  --theme-success-400: #b18f29;
+  --theme-success-500: #d4af37; /* 品牌金 */
+  --theme-success-550: #ddbb4a;
+  --theme-success-600: #e2c45d;
+  --theme-success-650: #e7cd71;
+  --theme-success-700: #ecd785;
+  --theme-success-750: #f1e09a;
+  --theme-success-800: #f5e9af;
+  --theme-success-850: #faf2c5;
+  --theme-success-900: #fdf8db;
+  --theme-success-950: #fffdf0;
+
+  --theme-bg: #17140d;
+  --theme-text: #f2ead6;
+  --theme-border-color: #3a321f;
+  --theme-input-bg: #1f1b12;
+
+  --theme-elevation-0: #1a160e;
+  --theme-elevation-50: #201b12;
+  --theme-elevation-100: #262016;
+  --theme-elevation-150: #2c261b;
+  --theme-elevation-200: #332c20;
+  --theme-elevation-250: #3a3225;
+  --theme-elevation-300: #41392b;
+  --theme-elevation-350: #493f31;
+  --theme-elevation-400: #514637;
+  --theme-elevation-450: #594d3d;
+  --theme-elevation-500: #615544;
+  --theme-elevation-550: #6a5c4b;
+  --theme-elevation-600: #726552;
+  --theme-elevation-650: #7b6d59;
+  --theme-elevation-700: #847661;
+  --theme-elevation-750: #8d7f69;
+  --theme-elevation-800: #978872;
+  --theme-elevation-850: #a0927b;
+  --theme-elevation-900: #aa9c85;
+  --theme-elevation-950: #b4a68f;
+  --theme-elevation-1000: #beb09a;
 }
