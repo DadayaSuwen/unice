@@ -22,6 +22,10 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# 站点 URL（构建时注入，用于 sitemap/robots；可用 --build-arg 或 compose build.args 覆盖）
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 # 构建应用
 RUN npm run build
 
