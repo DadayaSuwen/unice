@@ -56,6 +56,7 @@ export function mapNews(n: any) {
     category: relToName(n.category) || getNewsCategory(n.type),
     category_id: relToId(n.category),
     featured: n.featured || false,
+    seo: n.seo,
   }
 }
 
