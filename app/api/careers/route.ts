@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayloadClient } from '@/lib/payload'
+import { lexicalToPlaintext } from '@/lib/lexical'
 
 export async function GET(_request: NextRequest) {
   try {
@@ -19,7 +20,8 @@ export async function GET(_request: NextRequest) {
       location: career.location || '星火工业园',
       type: getJobTypeLabel(career.type),
       experience: career.experience_requirement || '经验不限',
-      description: career.description || '我们正在寻找优秀的人才加入我们的团队。',
+      description:
+        lexicalToPlaintext(career.description) || '我们正在寻找优秀的人才加入我们的团队。',
       requirements: (career.requirements || []).map((r: any) => r.text),
       responsibilities: (career.responsibilities || []).map((r: any) => r.text),
       application_deadline: career.application_deadline ?? null,

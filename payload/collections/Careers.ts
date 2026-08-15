@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { richTextEditor } from '../editor'
+import { seoFields } from '../fields/seo'
 import { isAdminOrEditor } from '../access'
 
 export const Careers: CollectionConfig = {
@@ -29,7 +31,7 @@ export const Careers: CollectionConfig = {
       ],
     },
     { name: 'experience_requirement', type: 'text', label: '经验要求' },
-    { name: 'description', type: 'textarea', label: '职位描述' },
+    { name: 'description', type: 'richText', editor: richTextEditor(), label: '职位描述' },
     {
       name: 'requirements',
       type: 'array',
@@ -45,7 +47,7 @@ export const Careers: CollectionConfig = {
     { name: 'application_deadline', type: 'date', label: '申请截止日期' },
     { name: 'salary_range', type: 'text', label: '薪资范围' },
     { name: 'education_requirement', type: 'text', label: '学历要求' },
-    { name: 'work_environment', type: 'textarea', label: '工作环境' },
+    { name: 'work_environment', type: 'richText', editor: richTextEditor(), label: '工作环境' },
     {
       name: 'career_benefits',
       type: 'array',
@@ -56,6 +58,7 @@ export const Careers: CollectionConfig = {
     { name: 'contact_phone', type: 'text', label: '联系电话' },
     { name: 'is_active', type: 'checkbox', defaultValue: true, label: '启用' },
     { name: 'sort_order', type: 'number', defaultValue: 0, label: '排序' },
+    ...seoFields,
   ],
   access: {
     read: () => true,
