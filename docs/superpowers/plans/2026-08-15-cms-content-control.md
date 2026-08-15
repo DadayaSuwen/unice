@@ -435,13 +435,13 @@ git commit -m "feat: 导航菜单 Global"
 - [ ] **Step 1: 创建 `payload/globals/PageHeaders.ts`**
 
 ```ts
-import type { GlobalConfig } from 'payload'
+import type { Field, GlobalConfig } from 'payload'
 import { isAdminOrEditor } from '../access'
 import { seoFields } from '../fields/seo'
 
-const pageHeaderGroup = (key: string, label: string) => ({
+const pageHeaderGroup = (key: string, label: string): Field => ({
   name: key,
-  type: 'group' as const,
+  type: 'group',
   label,
   fields: [
     { name: 'enabled', type: 'checkbox', defaultValue: true, label: '启用页头' },
