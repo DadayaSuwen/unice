@@ -1,31 +1,30 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Navigation from "./navigation"; // 根布局导入的组件
-import Footer from "./footer"; // 根布局导入的组件
+import Navigation from "./navigation";
+import Footer from "./footer";
 import { ReactNode } from "react";
+import type { SiteSettings, NavItem } from "@/lib/globals";
 
 export default function RootClientWrapper({
   children,
+  siteSettings,
+  navigationItems,
 }: {
   children: ReactNode;
+  siteSettings: SiteSettings;
+  navigationItems: NavItem[];
 }) {
   const pathname = usePathname();
-
-  // 检查当前路径是否以 '/admin' 开头
   const isAdminRoute = pathname.startsWith("/admin");
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* 只有在非管理后台路径时才渲染 Navigation */}
-      {!isAdminRoute && <Navigation />}
-
+      {!isAdminRoute && <Navigation items={navigationItems} />}
       <main className={`flex-grow ${!isAdminRoute ? "pt-16" : ""}`}>
         {children}
       </main>
-
-      {/* 只有在非管理后台路径时才渲染 Footer */}
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <Footer settings={siteSettings} />}
     </div>
   );
 }

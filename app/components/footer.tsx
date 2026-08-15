@@ -12,8 +12,9 @@ import {
   Award,
   Shield,
 } from "lucide-react";
+import type { SiteSettings } from "@/lib/globals";
 
-export default function Footer() {
+export default function Footer({ settings }: { settings: SiteSettings }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [productLinks, setProductLinks] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
@@ -94,20 +95,6 @@ export default function Footer() {
     fetchProducts();
   }, []);
 
-  const companyLinks = [
-    { href: "/about", title: "公司简介", icon: Building },
-    { href: "/about", title: "企业文化", icon: Users },
-    { href: "/careers", title: "加入我们", icon: Award },
-    { href: "/contact", title: "联系我们", icon: Mail },
-  ];
-
-  const legalLinks = [
-    { href: "#", title: "隐私政策" },
-    { href: "#", title: "服务条款" },
-    { href: "#", title: "网站地图" },
-    { href: "#", title: "法律声明" },
-  ];
-
   return (
     <footer className="apple-footer">
       {/* Background decoration */}
@@ -122,26 +109,32 @@ export default function Footer() {
             <Link href="/" className="apple-footer__logo-link">
               <div className="apple-footer__logo">
                 <Image
-                  src="/logo.jpg"
-                  alt="江西联合化工"
+                  src={settings.logoUrl}
+                  alt={settings.siteName}
                   width={64}
                   height={64}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="apple-footer__brand">
-                <h3 className="apple-footer__brand-name">江西联合化工</h3>
-                <p className="apple-footer__brand-tagline">专业树脂制造商</p>
+                <h3 className="apple-footer__brand-name">{settings.siteName}</h3>
+                <p className="apple-footer__brand-tagline">
+                  {settings.siteTagline}
+                </p>
               </div>
             </Link>
 
             <p className="apple-footer__description">
-              成立于2002年，专注化工树脂研发生产20余年，年产值达8亿元人民币，为全球客户提供高品质的化工产品解决方案。
+              {settings.footerDescription}
             </p>
 
             <div className="apple-footer__quality-mark">
-              <span className="apple-footer__quality-text">ISO 9001</span>
-              <span className="apple-footer__quality-desc">质量认证企业</span>
+              <span className="apple-footer__quality-text">
+                {settings.qualityMark}
+              </span>
+              <span className="apple-footer__quality-desc">
+                {settings.qualityDesc}
+              </span>
             </div>
           </div>
 
@@ -171,7 +164,12 @@ export default function Footer() {
           <div className="apple-footer__section">
             <h4 className="apple-footer__section-title">关于我们</h4>
             <ul className="apple-footer__link-list">
-              {companyLinks.map((link, index) => (
+              {[
+                { href: "/about", title: "公司简介", icon: Building },
+                { href: "/about", title: "企业文化", icon: Users },
+                { href: "/careers", title: "加入我们", icon: Award },
+                { href: "/contact", title: "联系我们", icon: Mail },
+              ].map((link, index) => (
                 <li key={index}>
                   <Link href={link.href} className="apple-footer__company-link">
                     <link.icon className="apple-footer__link-icon" />
@@ -195,9 +193,9 @@ export default function Footer() {
                 <div className="apple-footer__contact-content">
                   <p className="apple-footer__contact-label">公司地址</p>
                   <p className="apple-footer__contact-text">
-                    江西省九江市永修县艾城镇
+                    {settings.contact.address}
                     <br />
-                    星火工业园荣祺大道16号
+                    {settings.contact.addressLine2}
                   </p>
                 </div>
               </div>
@@ -208,9 +206,11 @@ export default function Footer() {
                 </div>
                 <div className="apple-footer__contact-content">
                   <p className="apple-footer__contact-label">联系电话</p>
-                  <p className="apple-footer__contact-text">18162108792</p>
                   <p className="apple-footer__contact-text">
-                    传真：0792-3053111
+                    {settings.contact.phone}
+                  </p>
+                  <p className="apple-footer__contact-text">
+                    传真：{settings.contact.fax}
                   </p>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function Footer() {
                 <div className="apple-footer__contact-content">
                   <p className="apple-footer__contact-label">电子邮箱</p>
                   <p className="apple-footer__contact-text">
-                    1179002658@qq.com
+                    {settings.contact.email}
                   </p>
                 </div>
               </div>
@@ -236,25 +236,25 @@ export default function Footer() {
             {/* Copyright */}
             <div className="apple-footer__copyright">
               <p className="apple-footer__copyright-text">
-                © {new Date().getFullYear()} 江西联合化学有限公司. 保留所有权利.
+                {settings.copyrightText}
               </p>
               <p className="apple-footer__copyright-tagline">
                 专业 · 创新 · 品质 · 服务
               </p>
               <p className="apple-footer__icp-number">
-                赣ICP备2020014627号-2
+                {settings.icpNumber}
               </p>
             </div>
 
             {/* Legal Links */}
             <div className="apple-footer__legal-links">
-              {legalLinks.map((link, index) => (
+              {settings.legalLinks.map((link, index) => (
                 <Link
                   key={index}
-                  href={link.href}
+                  href={link.url}
                   className="apple-footer__legal-link"
                 >
-                  {link.title}
+                  {link.label}
                 </Link>
               ))}
             </div>

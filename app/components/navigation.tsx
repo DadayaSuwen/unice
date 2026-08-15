@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { NavItem } from "@/lib/globals";
 
-export default function Navigation() {
+export default function Navigation({ items }: { items: NavItem[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -50,14 +51,7 @@ export default function Navigation() {
 
             {/* 桌面导航 */}
             <div className="nav-desktop">
-              {[
-                { href: "/", label: "首页" },
-                { href: "/products", label: "产品中心" },
-                { href: "/about", label: "关于我们" },
-                { href: "/news", label: "新闻中心" },
-                { href: "/careers", label: "加入我们" },
-                { href: "/contact", label: "联系我们" },
-              ].map((item) => (
+              {items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -115,14 +109,7 @@ export default function Navigation() {
         </div>
 
         <div className="nav-mobile-links">
-          {[
-            { href: "/", label: "首页" },
-            { href: "/products", label: "产品中心" },
-            { href: "/about", label: "关于我们" },
-            { href: "/news", label: "新闻中心" },
-            { href: "/careers", label: "加入我们" },
-            { href: "/contact", label: "联系我们" },
-          ].map((item) => (
+          {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
