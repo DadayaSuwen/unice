@@ -1,67 +1,58 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { NextResponse } from 'next/server'
+import { getPayloadClient } from '@/lib/payload'
+import { mapProduct } from '@/lib/mappers'
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "12");
-    const category = searchParams.get("category") || "";
-    const featured = searchParams.get("featured") === "true";
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') || '1') || 1
+    const limit = parseInt(searchParams.get('limit') || '12') || 12
+    const category = searchParams.get('category') || ''
 
-    const skip = (page - 1) * limit;
+    const payload = await getPayloadClient()
 
-    // 构建查询条件
-    const where: any = { is_active: true };
-    if (category && category !== "全部类别") {
-      where.category = {
-        name: category,
-      };
+    let categoryId: number | string | undefined
+    if (category && category !== '全部类别') {
+      const cat = await payload.find({
+        collection: 'categories',
+        where: { name: { equals: category }, is_active: { equals: true } },
+        limit: 1,
+      })
+      categoryId = cat.docs[0]?.id
     }
 
-    // 如果是featured产品，获取最新的4个产品作为推荐
-    const orderBy: Prisma.ProductOrderByWithRelationInput = featured
-      ? { created_at: "desc" }
-      : { created_at: "desc" };
+    const where: Record<string, unknown> = { is_active: { equals: true } }
+    if (categoryId !== undefined) where.category = { equals: categoryId }
 
-    // 获取分页产品数据
-    const [products, totalCount] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: { category: true },
-        orderBy,
-        skip,
-        take: limit,
-      }),
-      prisma.product.count({ where }),
-    ]);
+    const result = await payload.find({
+      collection: 'products',
+      where,
+      depth: 1,
+      sort: '-createdAt',
+      page,
+      limit,
+    })
 
-    // Get all active categories
-    const categories = await prisma.category.findMany({
-      where: { is_active: true },
-      select: { name: true },
-    });
+    const cats = await payload.find({
+      collection: 'categories',
+      where: { is_active: { equals: true } },
+      limit: 100,
+      sort: 'name',
+    })
 
-    const totalPages = Math.ceil(totalCount / limit);
-
-    // Return the data
     return NextResponse.json({
-      products,
-      categories: [...categories.map((cat) => cat.name)],
+      products: result.docs.map(mapProduct),
+      categories: cats.docs.map((c: any) => c.name),
       pagination: {
-        currentPage: page,
-        totalPages: totalPages,
-        totalCount: totalCount,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
+        currentPage: result.page,
+        totalPages: result.totalPages,
+        totalCount: result.totalDocs,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
       },
-    });
+    })
   } catch (error) {
-    console.error("Failed to fetch products:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch products" },
-      { status: 500 }
-    );
+    console.error('Failed to fetch products:', error)
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 })
   }
 }
