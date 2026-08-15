@@ -16,6 +16,7 @@ import { HeroBanners } from './payload/collections/HeroBanners'
 import { ContactSubmissions } from './payload/collections/ContactSubmissions'
 import { SiteSettings } from './payload/globals/SiteSettings'
 import { Navigation } from './payload/globals/Navigation'
+import { PageHeaders } from './payload/globals/PageHeaders'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -39,7 +40,7 @@ export default buildConfig({
     ContactSubmissions,
   ],
   editor: lexicalEditor(),
-  globals: [SiteSettings, Navigation],
+  globals: [SiteSettings, Navigation, PageHeaders],
   i18n: {
     fallbackLanguage: 'zh',
     supportedLanguages: {
