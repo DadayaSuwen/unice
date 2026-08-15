@@ -101,3 +101,16 @@
 ## 部署前提
 
 生产环境必须以**全新数据库**执行 `npx payload migrate` 全链迁移（init → 010250 → 035530 → 073328 → 083819 → 084752 → 091550）。073328 的 `up()` 会 CREATE TABLE 全部 Globals 表（Payload v3 每 Global 一个独立表）。若数据库已由 dev-push 建好 Globals 但迁移未记录，`payload migrate` 会因表已存在而失败。回滚（`migrate:down`）存在级联删除 Globals 数据与 035530 `down()` 顺序缺陷，生产不建议回滚。部署后需执行 seed 以填充 Globals 与结构化内容（Task 23 的 seed 脚本）。
+
+## 最终审查后修复（提交 `da0b7d0`）
+
+最终全分支审查（Ready to merge: Yes，无 Critical）后，一次性修复了以下 Minor 项：
+
+- ✅ 六个 Globals getter 用 React `cache()` 包裹，消除每次请求的重复 fetch（原"已知遗留问题"中的双 fetch 项）。
+- ✅ `seoToMetadata` 现支持 `ogImageUrl` → `openGraph.images`，后台 `seoFields.ogImage` 真正生效。
+- ✅ sitemap 移除重复的 careerRoutes（`/careers` 只在静态路由出现一次）。
+- ✅ `getNavigation` 在过滤结果为空时回退到 `FALLBACK_NAV_ITEMS`，避免空菜单。
+- ✅ 导航品牌（logo + 站点名）改为读取 `site-settings`（`siteName`/`logoUrl`）。
+- ✅ 产品详情 `generateMetadata` 改用真实站点名与产品 `seo` 组，移除硬编码 `| 公司名称`。
+
+仍遗留（可接受）：importMap.js 跟踪导致 dirty、迁移单向门（需全新库 + 永不回滚）、`headScripts`/`contact-page.seo` 未被消费、careers 瞬态页头副标题、产品/招聘 description 迁移丢弃（seed 重建）。
