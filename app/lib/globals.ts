@@ -447,11 +447,14 @@ export async function getNavigation(): Promise<NavItem[]> {
 export async function getPageHeaders(): Promise<PageHeadersData> {
   try {
     const g = await findGlobal('page-headers', 0)
-    const h = (k: string) => ({
-      enabled: g[k]?.enabled !== false,
-      title: pick(g[k], 'title', ''),
-      subtitle: pick(g[k], 'subtitle', ''),
-    })
+    const h = (k: keyof PageHeadersData) => {
+      const fallback = FALLBACK_PAGE_HEADERS[k]
+      return {
+        enabled: g[k]?.enabled !== false,
+        title: pick(g[k], 'title', fallback.title),
+        subtitle: pick(g[k], 'subtitle', fallback.subtitle),
+      }
+    }
     return {
       productsPage: { ...FALLBACK_PAGE_HEADERS.productsPage, ...h('productsPage') },
       newsPage: { ...FALLBACK_PAGE_HEADERS.newsPage, ...h('newsPage') },
