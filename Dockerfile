@@ -49,5 +49,6 @@ EXPOSE 3000
 # 设置环境变量
 ENV PORT=3000
 
-# 4. 【修改】启动命令：先跑 Payload 迁移（建表），再以集群模式启动
-CMD ["sh", "-c", "npx payload migrate && pm2-runtime start ecosystem.config.cjs"]
+# 4. 【修改】启动命令：先跑 Payload 迁移（建表/补列），再以集群模式启动。
+#    --force-accept-warning：容器内无 TTY，避免 “dev mode / pushed changes” 交互提示导致迁移卡住、pm2 起不来。
+CMD ["sh", "-c", "npx payload migrate --force-accept-warning && pm2-runtime start ecosystem.config.cjs"]
