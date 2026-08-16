@@ -243,7 +243,7 @@ export const FALLBACK_HOME_PAGE: HomePageData = {
   hero: {
     enabled: true,
     title: '江西联合化工',
-    subtitleLine1: '创新化学科技，引领行业未来。',
+    subtitleLine1: '创新化学科技，助力行业发展。',
     subtitleLine2: '我们致力于提供卓越的化工解决方案，为全球客户创造持久价值。',
     bgImageUrl: '/uniche.png',
     primaryButtonText: '探索产品',
@@ -288,7 +288,7 @@ export const FALLBACK_HOME_PAGE: HomePageData = {
     subtitle: '我们专注于品质、创新和服务，为客户创造持久价值',
     features: [
       { icon: 'check', title: '卓越品质', description: '通过ISO9001质量管理体系认证，严格把控从原料到成品的每一个环节' },
-      { icon: 'bolt', title: '创新技术', description: '拥有50+项专利技术，持续投入研发，引领行业技术发展方向' },
+      { icon: 'bolt', title: '创新技术', description: '拥有50+项专利技术，持续投入研发，推动行业技术进步' },
       { icon: 'shield', title: '安全环保', description: '严格遵循EHS标准，绿色生产工艺，致力于可持续发展' },
       { icon: 'globe', title: '全球供应', description: '覆盖50+国家和地区的供应链网络，确保产品及时交付' },
       { icon: 'team', title: '专业团队', description: '200+专业技术人员，提供从咨询到售后的一站式服务' },
@@ -298,10 +298,10 @@ export const FALLBACK_HOME_PAGE: HomePageData = {
   factory: {
     enabled: true,
     title: '现代化生产基地',
-    subtitle: '世界一流的生产设施，确保产品质量与交付能力',
+    subtitle: '高标准的生产设施，确保产品质量与交付能力',
     imageUrl: '/uniche.png',
     overlayTitle: '智能化工园区',
-    overlayText: '占地500亩的现代化生产基地，配备最先进的生产设备和技术',
+    overlayText: '占地500亩的现代化生产基地，配备先进的生产设备和技术',
   },
   stats: {
     enabled: true,
@@ -333,13 +333,13 @@ export const FALLBACK_ABOUT_PAGE: AboutPageData = {
   introHtml:
     '<p>江西联合化工有限公司分别成立于2002年，总部设在国家级新型工业化产业示范基地——星火工业园。公司主要经营生产：丙烯酸树脂，PP树脂，触变型树脂，丙烯酸水分散体，聚酯树脂，氨基树脂，环氧磷酸酯，蜡分散体等。预计年产值可达8亿元人民币。</p>' +
     '<p>我司具有强大的研发团队，可以按照客户要求定制树脂，我司已跟跟国内外涂料厂建立合作。我司特别是在汽车内外饰件和原厂漆方面有大量的应用案例，这块积累了很多应用经验和成熟的案例。为客户解决难点和痛点，一直是联合人前进的方向。</p>' +
-    '<p>我们新建高标准厂房，DCS控制的设备、完善的质量保证体系是我们生产高性能树脂的保障。我们依托高科技，立足于高起点，借鉴现代管理理念，采用一流的研发和生产设备，拥有一流的研发团队。该项目的未来前景非常广阔。</p>' +
-    '<p>我们依托高科技、立足高起点，借鉴现代管理理念，采用一流生产和检测设备，致力于各种涂料的研发、生产和销售。逐步创建了一套既紧密联系中国国情，又充分反映企业实际的管理体系。</p>' +
-    '<p>高科技、高品质、高信誉是我们永恒的追求；"生产一流产品、提供一流服务"是我们庄严的承诺。愿我们不懈地努力，与您携手共同发展，共创辉煌！</p>',
+    '<p>我们新建高标准厂房，DCS控制的设备、完善的质量保证体系是我们生产高性能树脂的保障。我们依托高科技，立足于高起点，借鉴现代管理理念，采用先进的研发和生产设备，拥有专业的研发团队。该项目的未来前景非常广阔。</p>' +
+    '<p>我们依托高科技、立足高起点，借鉴现代管理理念，采用先进的生产和检测设备，致力于各种涂料的研发、生产和销售。逐步创建了一套既紧密联系中国国情，又充分反映企业实际的管理体系。</p>' +
+    '<p>高科技、高品质、高信誉是我们永恒的追求；"生产优质产品、提供专业服务"是我们庄严的承诺。愿我们不懈地努力，与您携手共同发展，共创辉煌！</p>',
   missionTitle: '公司使命',
   missionDescription: '通过提供高质量的化工产品和专业的技术服务，为客户创造价值，推动行业发展。',
   visionTitle: '公司愿景',
-  visionDescription: '成为全球领先的化工产品供应商，引领行业技术创新和可持续发展。',
+  visionDescription: '成为值得信赖的化工产品供应商，持续推动行业技术创新和可持续发展。',
   milestones: [
     { year: '2002', title: '公司成立', description: '江西联合化工有限公司正式成立，总部设在国家级新型工业化产业示范基地——星火工业园，专注树脂产品研发生产', badge: '创业启航', color: 'gold' },
     { year: '2005', title: '产品线完善', description: '形成完整的树脂产品体系：丙烯酸树脂、PP树脂、触变型树脂、丙烯酸水分散体、聚酯树脂、氨基树脂、环氧磷酸酯、蜡分散体等', badge: '产品矩阵', color: 'secondary' },
@@ -355,8 +355,8 @@ export const FALLBACK_ABOUT_PAGE: AboutPageData = {
   rdTitle: '研发与技术',
   rdCards: [
     { icon: 'flask', title: '技术研发', description: '拥有专业的研发团队，不断开发新产品，提升技术水平。' },
-    { icon: 'shield', title: '质量认证', description: '通过多项国际质量认证，确保产品质量达到世界先进水平。' },
-    { icon: 'team', title: '专家团队', description: '汇聚国内外化工领域顶尖专家，为产品研发提供强大支持。' },
+    { icon: 'shield', title: '质量认证', description: '通过多项国际质量认证，确保产品质量稳定可靠，符合国家及行业标准。' },
+    { icon: 'team', title: '专家团队', description: '汇聚国内外化工领域资深专家，为产品研发提供强大支持。' },
   ],
 }
 

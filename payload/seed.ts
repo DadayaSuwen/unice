@@ -223,7 +223,7 @@ async function main() {
       excerpt: '凭借在新材料研发领域的突出贡献，江西联合化工荣获中国化工协会颁发的年度创新奖。',
       content: `江西联合化工有限公司在2024年度中国化工协会评选中荣获"化工行业创新奖"，这是对公司在新材料研发领域卓越贡献的高度认可。
 
-本次获奖的创新项目主要涉及新型环保树脂的研发与应用。联合化工研发团队历时三年，成功开发出具有自主知识产权的新一代环保树脂产品，其性能指标达到国际领先水平。
+本次获奖的创新项目主要涉及新型环保树脂的研发与应用。联合化工研发团队历时三年，成功开发出具有自主知识产权的新一代环保树脂产品，其性能指标在同类产品中保持较高水平。
 
 该创新产品在以下方面实现了重大突破：
 - 挥发性有机化合物（VOC）含量降低80%以上
@@ -237,7 +237,7 @@ async function main() {
     },
     {
       title: '新一代汽车原厂漆树脂正式投产',
-      excerpt: '我公司研发团队历时三年开发的新一代汽车原厂漆专用树脂正式投产，性能达到国际领先水平。',
+      excerpt: '我公司研发团队历时三年开发的新一代汽车原厂漆专用树脂正式投产，性能达到较高水平。',
       content: `江西联合化工有限公司研发团队历时三年开发的新一代汽车原厂漆专用树脂正式投产，标志着我国在汽车涂料领域实现了重大技术突破。
 
 新一代汽车原厂漆树脂具有以下显著特点：
@@ -328,7 +328,7 @@ async function main() {
   // 7. 首页轮播
   const bannerDefs = [
     { title: '专业化工原料制造商', subtitle: '20年行业经验，为全球客户提供卓越化工解决方案', image_url: '/images/banners/hero-1.jpg', button_text: '了解更多', button_url: '/about', is_active: true, sort_order: 1 },
-    { title: '创新化学科技，引领行业未来', subtitle: '专注树脂研发，性能达到国际领先水平', image_url: '/images/banners/hero-2.jpg', button_text: '查看产品', button_url: '/products', is_active: true, sort_order: 2 },
+    { title: '创新化学科技，助力行业发展', subtitle: '专注树脂研发，性能达到较高水平', image_url: '/images/banners/hero-2.jpg', button_text: '查看产品', button_url: '/products', is_active: true, sort_order: 2 },
   ]
   for (const b of bannerDefs) {
     const existing = await payload.find({ collection: 'hero-banners', where: { title: { equals: b.title } }, limit: 1 })
@@ -401,7 +401,7 @@ async function main() {
       hero: {
         enabled: true,
         title: '江西联合化工',
-        subtitleLine1: '创新化学科技，引领行业未来。',
+        subtitleLine1: '创新化学科技，助力行业发展。',
         subtitleLine2: '我们致力于提供卓越的化工解决方案，为全球客户创造持久价值。',
         bgImageUrl: '/uniche.png',
         primaryButtonText: '探索产品',
@@ -428,7 +428,7 @@ async function main() {
         subtitle: '我们专注于品质、创新和服务，为客户创造持久价值',
         features: [
           { icon: 'check', title: '卓越品质', description: '通过ISO9001质量管理体系认证，严格把控从原料到成品的每一个环节' },
-          { icon: 'bolt', title: '创新技术', description: '拥有50+项专利技术，持续投入研发，引领行业技术发展方向' },
+          { icon: 'bolt', title: '创新技术', description: '拥有50+项专利技术，持续投入研发，推动行业技术进步' },
           { icon: 'shield', title: '安全环保', description: '严格遵循EHS标准，绿色生产工艺，致力于可持续发展' },
           { icon: 'globe', title: '全球供应', description: '覆盖50+国家和地区的供应链网络，确保产品及时交付' },
           { icon: 'team', title: '专业团队', description: '200+专业技术人员，提供从咨询到售后的一站式服务' },
@@ -438,10 +438,10 @@ async function main() {
       factory: {
         enabled: true,
         title: '现代化生产基地',
-        subtitle: '世界一流的生产设施，确保产品质量与交付能力',
+        subtitle: '高标准的生产设施，确保产品质量与交付能力',
         imageUrl: '/uniche.png',
         overlayTitle: '智能化工园区',
-        overlayText: '占地500亩的现代化生产基地，配备最先进的生产设备和技术',
+        overlayText: '占地500亩的现代化生产基地，配备先进的生产设备和技术',
       },
       stats: {
         enabled: true,
@@ -482,7 +482,7 @@ async function main() {
       missionTitle: '公司使命',
       missionDescription: '通过提供高质量的化工产品和专业的技术服务，为客户创造价值，推动行业发展。',
       visionTitle: '公司愿景',
-      visionDescription: '成为全球领先的化工产品供应商，引领行业技术创新和可持续发展。',
+      visionDescription: '成为值得信赖的化工产品供应商，持续推动行业技术创新和可持续发展。',
       milestones: [
         { year: '2002', title: '公司成立', description: '江西联合化工有限公司正式成立，总部设在国家级新型工业化产业示范基地——星火工业园，专注树脂产品研发生产', badge: '创业启航', color: 'gold' },
         { year: '2005', title: '产品线完善', description: '形成完整的树脂产品体系：丙烯酸树脂、PP树脂、触变型树脂、丙烯酸水分散体、聚酯树脂、氨基树脂、环氧磷酸酯、蜡分散体等', badge: '产品矩阵', color: 'secondary' },
@@ -498,8 +498,8 @@ async function main() {
       rdTitle: '研发与技术',
       rdCards: [
         { icon: 'flask', title: '技术研发', description: '拥有专业的研发团队，不断开发新产品，提升技术水平。' },
-        { icon: 'shield', title: '质量认证', description: '通过多项国际质量认证，确保产品质量达到世界先进水平。' },
-        { icon: 'team', title: '专家团队', description: '汇聚国内外化工领域顶尖专家，为产品研发提供强大支持。' },
+        { icon: 'shield', title: '质量认证', description: '通过多项国际质量认证，确保产品质量稳定可靠，符合国家及行业标准。' },
+        { icon: 'team', title: '专家团队', description: '汇聚国内外化工领域资深专家，为产品研发提供强大支持。' },
       ],
     },
   })
